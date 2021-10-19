@@ -1,0 +1,37 @@
+type FootballEvent {
+    id: ID!,
+    dateTime: String!,
+    location: String!,
+    note: String,
+    author: AppUser!
+    comments: [Comment]
+}
+
+type Comment {
+    id: ID!,
+    text: String,
+    footballEvent: FootballEvent
+}
+
+type AppUser {
+    id: ID!,
+    name: String,
+    footballEventsAuthor: [FootballEvent]
+}
+
+input AppUserInput {
+    name: String!
+}
+
+type Query{
+    getAllFootballEvent: [FootballEvent]
+}
+
+type Mutation{
+    createAppUser(input: AppUserInput): AppUser
+}
+
+schema {
+    query: Query
+    mutation: Mutation
+}

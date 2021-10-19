@@ -1,6 +1,6 @@
 package com.inz.PlayOut.Model.Entites;
 
-import com.inz.PlayOut.Model.SportEvent;
+import com.sun.istack.NotNull;
 
 import javax.persistence.*;
 
@@ -11,9 +11,10 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     private String text;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "SportEvent_id", nullable = false)
-    private SportEvent sportEvent;
+    @JoinColumn(name = "FootballEvent_id", nullable = false)
+    private FootballEvent footballEvent;
 }
