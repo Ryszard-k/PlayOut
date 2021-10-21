@@ -1,37 +1,48 @@
 type FootballEvent {
     id: ID!,
-    dateTime: String!,
-    location: String!,
+    date: String!,
+    time: String!,
+    latitude: Float!,
+    longitude: Float!,
     note: String,
-    author: AppUser!
+    author: AppUser!,
+    participants: [AppUser],
     comments: [Comment]
 }
 
 type Comment {
     id: ID!,
-    text: String,
-    footballEvent: FootballEvent
+    text: String!,
+    footballEvent: FootballEvent!
 }
 
 type AppUser {
     id: ID!,
-    name: String,
-    footballEventsAuthor: [FootballEvent]
+    username: String!,
+    password: String,
+    email: String!,
+    footballEventsAuthor: [FootballEvent],
+    footballEventsParticipants: [FootballEvent]
 }
 
 input AppUserInput {
-    name: String!
+    username: String!,
+    password: String,
+    email: String!
 }
 
-type Query{
-    getAllFootballEvent: [FootballEvent]
+type Queries{
+    getAllFootballEvent: [FootballEvent],
+    getAllAppUser: [AppUser],
+    findByIdAppUser(id: ID): AppUser
 }
 
-type Mutation{
-    createAppUser(input: AppUserInput): AppUser
+type Mutations{
+    createAppUser(input: AppUserInput): AppUser,
+    deleteAppUser(id: ID): AppUser
 }
 
 schema {
-    query: Query
-    mutation: Mutation
+    query: Queries
+    mutation: Mutations
 }

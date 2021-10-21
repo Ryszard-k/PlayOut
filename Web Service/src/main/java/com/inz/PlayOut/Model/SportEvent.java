@@ -3,62 +3,72 @@ package com.inz.PlayOut.Model;
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @MappedSuperclass
 public class SportEvent {
 
     @NotNull
-    private final LocalDateTime dateTime;
+    private LocalDate date;
 
     @NotNull
-    private final String location;
-    private final String note;
+    private LocalTime time;
 
-    protected SportEvent(Builder<?> builder) {
-        this.dateTime = builder.dateTime;
-        this.location = builder.location;
-        this.note = builder.note;
+    @NotNull
+    private double latitude;
+
+    @NotNull
+    private double longitude;
+    private String note;
+
+    public SportEvent(LocalDate date, LocalTime time, double latitude, double longitude) {
+        this.date = date;
+        this.time = time;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public SportEvent() {
     }
 
-    public String getLocation() {
-        return location;
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public LocalTime getTime() {
+        return time;
     }
 
     public String getNote() {
         return note;
     }
 
-    public static Builder builder() {
-        return new Builder();
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
-    public static class Builder<T extends Builder<T>>{
-        private LocalDateTime dateTime;
-        private String location;
-        private String note;
+    public void setTime(LocalTime time) {
+        this.time = time;
+    }
 
-        public T dateTime(final LocalDateTime dateTime) {
-            this.dateTime = dateTime;
-            return (T) this;
-        }
+    public double getLatitude() {
+        return latitude;
+    }
 
-        public T location(final String location) {
-            this.location = location;
-            return (T) this;
-        }
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
 
-        public T note(final String note) {
-            this.note = note;
-            return (T) this;
-        }
+    public double getLongitude() {
+        return longitude;
+    }
 
-        public SportEvent build() {
-            return new SportEvent(this);
-        }
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }

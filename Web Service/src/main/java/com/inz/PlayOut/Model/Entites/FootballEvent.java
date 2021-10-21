@@ -3,7 +3,9 @@ package com.inz.PlayOut.Model.Entites;
 import com.inz.PlayOut.Model.SportEvent;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Objects;
 import java.util.Set;
 
@@ -18,20 +20,19 @@ public class FootballEvent extends SportEvent {
     @JoinColumn(name = "User_id", nullable = false)
     private AppUser author;
 
-  /*  manytomany
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "Participants_id")
-    private AppUser participants;*/
+    @ManyToMany(mappedBy = "footballEventsParticipants")
+    private Set<AppUser> participants;
 
     @OneToMany(mappedBy = "footballEvent", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Comment> comments;
 
-    protected FootballEvent(final Builder builder) {
-        super(builder);
-        this.author = builder.author;
-     //   this.participants = builder.participants;
-        this.comments = builder.comments;
+    public FootballEvent(LocalDate date, LocalTime time, double latitude, double longitude, AppUser author) {
+        super(date, time, latitude, longitude);
+        this.author = author;
+    }
+
+    public FootballEvent() {
     }
 
     public Long getId() {
@@ -41,54 +42,24 @@ public class FootballEvent extends SportEvent {
     public AppUser getAuthor() {
         return author;
     }
-/*
-    public AppUser getParticipants() {
-        return participants;
-    }*/
+
+    public void setAuthor(AppUser author) {
+        this.author = author;
+    }
 
     public Set<Comment> getComments() {
         return comments;
     }
 
-    public static Builder builder() {
-        return new Builder();
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
     }
 
-    public static class Builder extends SportEvent.Builder<Builder> {
-        private AppUser author;
-     //   private AppUser participants;
-        private Set<Comment> comments;
-
-        public Builder author(final AppUser author) {
-            this.author = author;
-            return this;
-        }
-/*
-        public Builder participants(final AppUser participants) {
-            this.participants = participants;
-            return this;
-        }*/
-
-        public Builder comments(final Set<Comment> comments) {
-            this.comments = comments;
-            return this;
-        }
-
-        public FootballEvent build() {
-            return new FootballEvent(this);
-        }
+    public Set<AppUser> getParticipants() {
+        return participants;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        FootballEvent that = (FootballEvent) o;
-        return id.equals(that.id) && author.equals(that.author) && Objects.equals(comments, that.comments);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, author, comments);
+    public void setParticipants(Set<AppUser> participants) {
+        this.participants = participants;
     }
 }

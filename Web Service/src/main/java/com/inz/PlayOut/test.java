@@ -1,17 +1,15 @@
 package com.inz.PlayOut;
 
 import com.inz.PlayOut.Model.Entites.AppUser;
-import com.inz.PlayOut.Model.Entites.Comment;
-import com.inz.PlayOut.Model.Entites.FootballEvent;
 import com.inz.PlayOut.Service.AppUserService;
 import com.inz.PlayOut.Service.CommentService;
 import com.inz.PlayOut.Service.FootballEventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-
+@Component
 public class test {
 
     private final FootballEventService footballEventService;
@@ -27,13 +25,10 @@ public class test {
 
     @EventListener(ApplicationReadyEvent.class)
     public void fillDbWithExampleData(){
-        footballEventService.save(FootballEvent.builder()
-                .dateTime(LocalDateTime.parse("2021-10-15 12:00"))
-                .location("Cracow")
-                .author(new AppUser())
-                .build());
+       /* footballEventService.save(new FootballEvent(LocalDate.now(), LocalTime.now(), 12.343234, 45.345665,
+                appUserService.findById(1L).get()));*/
 
-        appUserService.save(new AppUser("Piotr"));
+        appUserService.save(new AppUser("Piotr", "password", "piotr@gmail.com"));
 
     }
 }

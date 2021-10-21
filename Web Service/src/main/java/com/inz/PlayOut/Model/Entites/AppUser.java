@@ -1,9 +1,9 @@
 package com.inz.PlayOut.Model.Entites;
 
-import com.inz.PlayOut.Model.Entites.FootballEvent;
-import com.inz.PlayOut.Model.SportEvent;
+import com.sun.istack.NotNull;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.util.Set;
 
 @Entity
@@ -13,19 +13,31 @@ public class AppUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    @NotNull
+    private String username;
+
+    private String password;
+
+    @NotNull
+    @Email
+    private String email;
 
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<FootballEvent> footballEventsAuthor;
-/*
-    @OneToMany(mappedBy = "participants", fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<FootballEvent> footballEventsParticipants;
-*/
 
-    public AppUser(String name) {
-        this.name = name;
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+            name = "Appuser_FootballEvent",
+            joinColumns = { @JoinColumn(name = "Appuser_id") },
+            inverseJoinColumns = { @JoinColumn(name = "FootballEvent_id") }
+    )
+    private Set<FootballEvent> footballEventsParticipants;
+
+    public AppUser(String name, String password, String email) {
+        this.username = name;
+        this.password = password;
+        this.email = email;
     }
 
     public AppUser() {
@@ -39,12 +51,12 @@ public class AppUser {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public Set<FootballEvent> getFootballEventsAuthor() {
@@ -53,5 +65,29 @@ public class AppUser {
 
     public void setFootballEventsAuthor(Set<FootballEvent> footballEventsAuthor) {
         this.footballEventsAuthor = footballEventsAuthor;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Set<FootballEvent> getFootballEventsParticipants() {
+        return footballEventsParticipants;
+    }
+
+    public void setFootballEventsParticipants(Set<FootballEvent> footballEventsParticipants) {
+        this.footballEventsParticipants = footballEventsParticipants;
     }
 }
