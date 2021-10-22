@@ -1,4 +1,4 @@
-package com.inz.PlayOut.Model.Entites;
+package com.inz.PlayOut.Model.entites;
 
 import com.sun.istack.NotNull;
 
@@ -22,7 +22,7 @@ public class AppUser {
     @Email
     private String email;
 
-    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY,
+    @OneToMany(mappedBy = "author", fetch = FetchType.EAGER,
             cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<FootballEvent> footballEventsAuthor;
 

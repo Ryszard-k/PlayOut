@@ -1,0 +1,20 @@
+scalar Date
+
+type FootballEvent {
+    id: ID!,
+    date: Date!,
+    time: String!,
+    latitude: Float!,
+    longitude: Float!,
+    note: String,
+    author: AppUser!,
+    participants: [AppUser],
+    comments: [Comment]
+}
+
+input FootballEventInput {
+    date: Date!,
+    time: String!,
+    latitude: Float!,
+    longitude: Float!
+}

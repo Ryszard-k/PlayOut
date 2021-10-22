@@ -1,0 +1,14 @@
+type AppUser {
+    id: ID!,
+    username: String!,
+    password: String,
+    email: String!,
+    footballEventsAuthor: [FootballEvent],
+    footballEventsParticipants: [FootballEvent]
+}
+
+input AppUserInput {
+    username: String!,
+    password: String,
+    email: String!
+}

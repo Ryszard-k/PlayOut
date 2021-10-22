@@ -1,4 +1,4 @@
-package com.inz.PlayOut.Model.Entites;
+package com.inz.PlayOut.Model.entites;
 
 import com.sun.istack.NotNull;
 

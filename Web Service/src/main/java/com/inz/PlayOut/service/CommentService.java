@@ -1,4 +1,4 @@
-package com.inz.PlayOut.Service;
+package com.inz.PlayOut.service;
 
 import org.springframework.stereotype.Service;
 

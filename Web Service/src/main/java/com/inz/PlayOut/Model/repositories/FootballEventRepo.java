@@ -1,6 +1,6 @@
-package com.inz.PlayOut.Model.Repositories;
+package com.inz.PlayOut.Model.repositories;
 
-import com.inz.PlayOut.Model.Entites.FootballEvent;
+import com.inz.PlayOut.Model.entites.FootballEvent;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

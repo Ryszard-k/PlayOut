@@ -1,12 +1,10 @@
-package com.inz.PlayOut.Model.Entites;
+package com.inz.PlayOut.Model.entites;
 
 import com.inz.PlayOut.Model.SportEvent;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -16,7 +14,7 @@ public class FootballEvent extends SportEvent {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "User_id", nullable = false)
     private AppUser author;
 
