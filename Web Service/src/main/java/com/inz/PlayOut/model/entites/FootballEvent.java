@@ -1,6 +1,7 @@
-package com.inz.PlayOut.Model.entites;
+package com.inz.PlayOut.model.entites;
 
-import com.inz.PlayOut.Model.SportEvent;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.inz.PlayOut.model.SportEvent;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -16,6 +17,7 @@ public class FootballEvent extends SportEvent {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "User_id", nullable = false)
+    @JsonBackReference
     private AppUser author;
 
     @ManyToMany(mappedBy = "footballEventsParticipants")
