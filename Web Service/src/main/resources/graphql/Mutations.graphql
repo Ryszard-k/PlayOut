@@ -1,6 +1,7 @@
 #All mutations
 type Mutations{
     createFootballEvent(input: FootballEventInput, id: ID): FootballEvent,
+    deleteFootballEvent(id: ID): AppUser,
 
     createAppUser(input: AppUserInput): AppUser,
     deleteAppUser(id: ID): AppUser

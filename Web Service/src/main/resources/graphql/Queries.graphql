@@ -8,6 +8,6 @@ type Queries{
 }
 
 schema {
-    query: Queries
+    query: Queries,
     mutation: Mutations
 }
