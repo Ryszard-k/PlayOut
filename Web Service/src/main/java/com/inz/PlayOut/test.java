@@ -1,7 +1,7 @@
 package com.inz.PlayOut;
 
-import com.inz.PlayOut.Model.entites.AppUser;
-import com.inz.PlayOut.Model.entites.FootballEvent;
+import com.inz.PlayOut.model.entites.AppUser;
+import com.inz.PlayOut.model.entites.FootballEvent;
 import com.inz.PlayOut.service.AppUserService;
 import com.inz.PlayOut.service.CommentService;
 import com.inz.PlayOut.service.FootballEventService;

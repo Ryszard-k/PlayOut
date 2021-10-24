@@ -1,7 +1,6 @@
-package com.inz.PlayOut.Model;
+package com.inz.PlayOut.model;
 
 import com.sun.istack.NotNull;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;

@@ -1,12 +1,17 @@
-package com.inz.PlayOut.Model.entites;
+package com.inz.PlayOut.model.entites;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
+//@JsonIgnoreProperties({"footballEventsAuthor", "footballEventsParticipants"})
 public class AppUser {
 
     @Id
@@ -24,6 +29,7 @@ public class AppUser {
 
     @OneToMany(mappedBy = "author", fetch = FetchType.EAGER,
             cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private Set<FootballEvent> footballEventsAuthor;
 
     @ManyToMany(cascade = { CascadeType.ALL })
@@ -89,5 +95,18 @@ public class AppUser {
 
     public void setFootballEventsParticipants(Set<FootballEvent> footballEventsParticipants) {
         this.footballEventsParticipants = footballEventsParticipants;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AppUser)) return false;
+        AppUser appUser = (AppUser) o;
+        return id.equals(appUser.id) && username.equals(appUser.username) && Objects.equals(password, appUser.password) && email.equals(appUser.email) && Objects.equals(footballEventsAuthor, appUser.footballEventsAuthor) && Objects.equals(footballEventsParticipants, appUser.footballEventsParticipants);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, username, password, email, footballEventsAuthor, footballEventsParticipants);
     }
 }

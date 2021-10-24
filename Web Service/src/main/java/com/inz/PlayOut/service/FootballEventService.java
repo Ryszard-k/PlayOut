@@ -1,8 +1,8 @@
 package com.inz.PlayOut.service;
 
-import com.inz.PlayOut.Model.entites.AppUser;
-import com.inz.PlayOut.Model.entites.FootballEvent;
-import com.inz.PlayOut.Model.repositories.FootballEventRepo;
+import com.inz.PlayOut.model.entites.AppUser;
+import com.inz.PlayOut.model.entites.FootballEvent;
+import com.inz.PlayOut.model.repositories.FootballEventRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
