@@ -20,13 +20,20 @@ public class SportEvent {
 
     @NotNull
     private double longitude;
+
+    @Enumerated(EnumType.STRING)
+    private EventLevel eventLevel;
+
+    private int vacancies;
     private String note;
 
-    public SportEvent(LocalDate date, LocalTime time, double latitude, double longitude) {
+    public SportEvent(LocalDate date, LocalTime time, double latitude, double longitude, EventLevel eventLevel, int vacancies) {
         this.date = date;
         this.time = time;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.eventLevel = eventLevel;
+        this.vacancies = vacancies;
     }
 
     public SportEvent() {
@@ -70,5 +77,21 @@ public class SportEvent {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public EventLevel getEventLevel() {
+        return eventLevel;
+    }
+
+    public void setEventLevel(EventLevel eventLevel) {
+        this.eventLevel = eventLevel;
+    }
+
+    public int getVacancies() {
+        return vacancies;
+    }
+
+    public void setVacancies(int vacancies) {
+        this.vacancies = vacancies;
     }
 }

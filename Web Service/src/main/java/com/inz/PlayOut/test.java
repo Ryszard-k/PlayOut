@@ -1,5 +1,6 @@
 package com.inz.PlayOut;
 
+import com.inz.PlayOut.model.EventLevel;
 import com.inz.PlayOut.model.entites.AppUser;
 import com.inz.PlayOut.model.entites.FootballEvent;
 import com.inz.PlayOut.service.AppUserService;
@@ -31,8 +32,8 @@ public class test {
     public void fillDbWithExampleData(){
         appUserService.save(new AppUser("Piotr", "password", "piotr@gmail.com"));
 
-        footballEventService.save(new FootballEvent(LocalDate.now(), LocalTime.now(), 12.343234, 45.345665,
-                appUserService.findById(1L).get()));
+        footballEventService.save(new FootballEvent(LocalDate.now(), LocalTime.now(), 12.343234, 45.345665, EventLevel.E,
+                3, appUserService.findById(1L).get()));
 
     }
 }

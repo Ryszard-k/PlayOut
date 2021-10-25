@@ -1,6 +1,7 @@
 package com.inz.PlayOut.model.entites;
 
 import com.fasterxml.jackson.annotation.*;
+import com.inz.PlayOut.model.EventLevel;
 import com.inz.PlayOut.model.SportEvent;
 
 import javax.persistence.*;
@@ -29,10 +30,15 @@ public class FootballEvent extends SportEvent implements Serializable {
             cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Comment> comments;
 
-    public FootballEvent(LocalDate date, LocalTime time, double latitude, double longitude, AppUser author) {
-        super(date, time, latitude, longitude);
+    public FootballEvent(LocalDate date, LocalTime time, double latitude, double longitude, EventLevel eventLevel, int vacancies, AppUser author) {
+        super(date, time, latitude, longitude, eventLevel, vacancies);
         this.author = author;
     }
+
+    /*  public FootballEvent(LocalDate date, LocalTime time, double latitude, double longitude, AppUser author) {
+        super(date, time, latitude, longitude);
+        this.author = author;
+    }*/
 
     public FootballEvent() {
     }
