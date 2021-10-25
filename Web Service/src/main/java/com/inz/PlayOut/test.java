@@ -32,7 +32,7 @@ public class test {
         appUserService.save(new AppUser("Piotr", "password", "piotr@gmail.com"));
 
         footballEventService.save(new FootballEvent(LocalDate.now(), LocalTime.now(), 12.343234, 45.345665,
-                appUserService.findById(1L).get()), 1L);
+                appUserService.findById(1L).get()));
 
     }
 }

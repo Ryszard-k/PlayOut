@@ -33,8 +33,9 @@ public record AppUserService(UserRepo userRepo) implements CRUDService<AppUser>{
     @Override
     public Optional<AppUser> delete(Long id) {
         Optional<AppUser> deleted = userRepo.findById(id);
-        userRepo.deleteById(id);
-
-        return deleted;
+        if (deleted.isPresent()){
+            userRepo.deleteById(id);
+            return deleted;
+        } else throw new IllegalArgumentException("Not found User");
     }
 }

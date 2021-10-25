@@ -1,18 +1,16 @@
 package com.inz.PlayOut.model.entites;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.Set;
 
 @Entity
-//@JsonIgnoreProperties({"footballEventsAuthor", "footballEventsParticipants"})
-public class AppUser {
+public class AppUser implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,12 +25,12 @@ public class AppUser {
     @Email
     private String email;
 
-    @OneToMany(mappedBy = "author", fetch = FetchType.EAGER,
+    @OneToMany(mappedBy = "author",
             cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonIgnoreProperties("author")
     private Set<FootballEvent> footballEventsAuthor;
 
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
     @JoinTable(
             name = "Appuser_FootballEvent",
             joinColumns = { @JoinColumn(name = "Appuser_id") },
@@ -100,13 +98,12 @@ public class AppUser {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AppUser)) return false;
-        AppUser appUser = (AppUser) o;
-        return id.equals(appUser.id) && username.equals(appUser.username) && Objects.equals(password, appUser.password) && email.equals(appUser.email) && Objects.equals(footballEventsAuthor, appUser.footballEventsAuthor) && Objects.equals(footballEventsParticipants, appUser.footballEventsParticipants);
+        if (!(o instanceof AppUser appUser)) return false;
+        return id.equals(appUser.id) && username.equals(appUser.username) && Objects.equals(password, appUser.password) && email.equals(appUser.email);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, password, email, footballEventsAuthor, footballEventsParticipants);
+        return Objects.hash(id, username, password, email);
     }
 }
