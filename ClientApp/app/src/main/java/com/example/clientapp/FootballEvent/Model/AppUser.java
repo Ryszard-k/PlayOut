@@ -1,0 +1,77 @@
+package com.example.clientapp.FootballEvent.Model;
+
+import com.google.gson.annotations.SerializedName;
+
+import java.util.Set;
+
+public class AppUser {
+
+    @SerializedName("id")
+    private Long id;
+
+    @SerializedName("username")
+    private String username;
+
+    @SerializedName("password")
+    private String password;
+
+    @SerializedName("email")
+    private String email;
+
+    @SerializedName("footballEventsAuthor")
+    private Set<FootballEvent> footballEventsAuthor;
+
+    @SerializedName("footballEventsParticipants")
+    private Set<FootballEvent> footballEventsParticipants;
+
+    public AppUser() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Set<FootballEvent> getFootballEventsAuthor() {
+        return footballEventsAuthor;
+    }
+
+    public void setFootballEventsAuthor(Set<FootballEvent> footballEventsAuthor) {
+        this.footballEventsAuthor = footballEventsAuthor;
+    }
+
+    public Set<FootballEvent> getFootballEventsParticipants() {
+        return footballEventsParticipants;
+    }
+
+    public void setFootballEventsParticipants(Set<FootballEvent> footballEventsParticipants) {
+        this.footballEventsParticipants = footballEventsParticipants;
+    }
+}

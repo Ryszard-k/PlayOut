@@ -35,11 +35,6 @@ public class FootballEvent extends SportEvent implements Serializable {
         this.author = author;
     }
 
-    /*  public FootballEvent(LocalDate date, LocalTime time, double latitude, double longitude, AppUser author) {
-        super(date, time, latitude, longitude);
-        this.author = author;
-    }*/
-
     public FootballEvent() {
     }
 
@@ -83,4 +78,5 @@ public class FootballEvent extends SportEvent implements Serializable {
     public int hashCode() {
         return Objects.hash(id, author);
     }
+
 }
