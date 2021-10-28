@@ -32,6 +32,18 @@ public record FootballEventService(FootballEventRepo footballEventRepo, AppUserS
         return footballEventRepo.save(object);
     }
 
+    public Optional<FootballEvent> joinToEvent(Long idAppUser, Long idFootballEvent){
+        Optional<FootballEvent> foundEvent = footballEventRepo.findById(idFootballEvent);
+        Optional<AppUser> foundAppUser = appUserService.findById(idAppUser);
+        if (foundEvent.isPresent() && foundAppUser.isPresent()){
+            foundEvent.get().getParticipants().add(foundAppUser.get());
+            foundAppUser.get().getFootballEventsParticipants().add(foundEvent.get());
+            footballEventRepo.save(foundEvent.get());
+            appUserService.save(foundAppUser.get());
+            return foundEvent;
+        } else throw new IllegalArgumentException("Not found event to join");
+    }
+
     @Override
     public Optional<FootballEvent> delete(Long id) {
         Optional<FootballEvent> deleted = footballEventRepo.findById(id);

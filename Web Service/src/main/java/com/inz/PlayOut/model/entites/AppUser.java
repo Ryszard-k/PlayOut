@@ -36,6 +36,7 @@ public class AppUser implements Serializable {
             joinColumns = { @JoinColumn(name = "Appuser_id") },
             inverseJoinColumns = { @JoinColumn(name = "FootballEvent_id") }
     )
+    @JsonIgnoreProperties("participants")
     private Set<FootballEvent> footballEventsParticipants;
 
     public AppUser(String name, String password, String email) {

@@ -61,6 +61,15 @@ public class FootballEventController implements CRUDController<FootballEvent> {
             return new ResponseEntity<>("Empty input data", HttpStatus.NOT_FOUND);
     }
 
+    @PutMapping("/{idAppUser}/{idFootballEvent}")
+    public ResponseEntity<Object> jointToEvent(@PathVariable Long idAppUser, @PathVariable Long idFootballEvent){
+        Optional<FootballEvent> updatedEvent = footballEventService.joinToEvent(idAppUser, idFootballEvent);
+        if (updatedEvent.isPresent()){
+            return new ResponseEntity<>(updatedEvent, HttpStatus.OK);
+        } else
+            return new ResponseEntity<>("Not found event to join", HttpStatus.NOT_FOUND);
+    }
+
     @Override
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> delete(@PathVariable Long id) {

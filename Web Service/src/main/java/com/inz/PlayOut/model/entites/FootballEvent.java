@@ -24,6 +24,7 @@ public class FootballEvent extends SportEvent implements Serializable {
     private AppUser author;
 
     @ManyToMany(mappedBy = "footballEventsParticipants", fetch = FetchType.EAGER)
+    @JsonIgnoreProperties("footballEventsParticipants")
     private Set<AppUser> participants;
 
     @OneToMany(mappedBy = "footballEvent", fetch = FetchType.LAZY,

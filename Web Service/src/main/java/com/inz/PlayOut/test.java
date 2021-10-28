@@ -31,6 +31,7 @@ public class test {
     @EventListener(ApplicationReadyEvent.class)
     public void fillDbWithExampleData(){
         appUserService.save(new AppUser("Piotr", "password", "piotr@gmail.com"));
+        appUserService.save(new AppUser("Kamil", "kamilpassword", "kamil@gmail.com"));
 
         footballEventService.save(new FootballEvent(LocalDate.now(), LocalTime.now(), 12.343234, 45.345665, EventLevel.E,
                 3, appUserService.findById(1L).get()));
