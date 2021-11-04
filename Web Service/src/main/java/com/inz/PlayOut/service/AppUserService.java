@@ -3,13 +3,14 @@ package com.inz.PlayOut.service;
 import com.inz.PlayOut.model.entites.AppUser;
 import com.inz.PlayOut.model.repositories.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public record AppUserService(UserRepo userRepo) implements CRUDService<AppUser>{
+public record AppUserService(UserRepo userRepo, PasswordEncoder passwordEncoder) implements CRUDService<AppUser>{
 
     @Autowired
     public AppUserService {
@@ -27,6 +28,7 @@ public record AppUserService(UserRepo userRepo) implements CRUDService<AppUser>{
 
     @Override
     public AppUser save(AppUser object) {
+        object.setPassword(passwordEncoder.encode(object.getPassword()));
         return userRepo.save(object);
     }
 
