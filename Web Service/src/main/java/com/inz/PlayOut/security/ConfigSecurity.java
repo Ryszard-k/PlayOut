@@ -37,8 +37,8 @@ public class ConfigSecurity extends WebSecurityConfigurerAdapter {
         http.headers().disable();
         http
                 .authorizeRequests()
-                .antMatchers("/footballEvent").hasRole("user")
-                .anyRequest().authenticated().and()
-                .formLogin().defaultSuccessUrl("/appUser");
+                .anyRequest().authenticated()
+                .and()
+                .oauth2Login();
     }
 }
