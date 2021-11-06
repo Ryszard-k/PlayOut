@@ -39,6 +39,7 @@ public class ConfigSecurity extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .anyRequest().authenticated()
                 .and()
-                .oauth2Login();
+                .oauth2Login().and()
+                .formLogin();
     }
 }

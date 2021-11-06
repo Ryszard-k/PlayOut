@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">clientApp</string>
+    <string name="playout">PlayOut</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="loginGoogle">Login with Google account</string>
+    <string name="loginFb">Login with Facebook account</string>
+    <string name="password">Password</string>
+    <string name="username">Username</string>
 </resources>

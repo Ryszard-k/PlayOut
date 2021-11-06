@@ -1,38 +1,27 @@
 package com.example.clientapp;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.Toast;
 
-import com.example.clientapp.FootballEvent.APIClient;
-import com.example.clientapp.FootballEvent.Model.FootballEvent;
-
-import java.util.Collections;
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import com.example.clientapp.Register.LoginActivity;
+import com.example.clientapp.Register.RegisterActivity;
 
 public class MainActivity extends AppCompatActivity {
-
-    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        listView = findViewById(R.id.listViewFootballEvent);
+        findViewById(R.id.RegisterButton).setOnClickListener(v -> startActivity(new Intent(
+                MainActivity.this, RegisterActivity.class)));
 
-        getAllEvent();
+        findViewById(R.id.LoginGoogleButton).setOnClickListener(v -> startActivity(new Intent(
+                MainActivity.this, LoginActivity.class)));
     }
-
+/*
     private void getAllEvent() {
         Call<List<FootballEvent>> call = APIClient.getInstance().getMyApi().getAllEvent();
 
@@ -58,5 +47,5 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("TAG","Response = "+t.toString());
             }
         });
-        }
+        }*/
 }
