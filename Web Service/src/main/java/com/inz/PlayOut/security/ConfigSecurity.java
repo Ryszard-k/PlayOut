@@ -9,12 +9,13 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 public class ConfigSecurity extends WebSecurityConfigurerAdapter {
 
-    private AppUserDetailService appUserDetailService;
+    private final AppUserDetailService appUserDetailService;
 
     @Autowired
     public ConfigSecurity(AppUserDetailService appUserDetailService) {
@@ -34,12 +35,14 @@ public class ConfigSecurity extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
-        http.headers().disable();
+    //    http.headers().disable();
         http
                 .authorizeRequests()
+                .antMatchers("/login").permitAll()
                 .anyRequest().authenticated()
-                .and()
-                .oauth2Login().and()
-                .formLogin();
+                .and().httpBasic();
+            //    .oauth2Login().and()
+              //  .formLogin();
+
     }
 }

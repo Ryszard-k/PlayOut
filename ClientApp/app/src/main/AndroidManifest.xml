@@ -20,6 +20,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Auth.LoginActivity" />
+        <activity android:name=".FootballEvent.DashboardActivity"/>
+        <activity android:name=".Auth.RegisterActivity"/>
     </application>
 
 </manifest>

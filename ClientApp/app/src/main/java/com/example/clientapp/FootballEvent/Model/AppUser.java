@@ -1,5 +1,6 @@
 package com.example.clientapp.FootballEvent.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Set;
@@ -19,9 +20,11 @@ public class AppUser {
     private String email;
 
     @SerializedName("footballEventsAuthor")
+    @JsonIgnoreProperties("author")
     private Set<FootballEvent> footballEventsAuthor;
 
     @SerializedName("footballEventsParticipants")
+    @JsonIgnoreProperties("participants")
     private Set<FootballEvent> footballEventsParticipants;
 
     public AppUser() {

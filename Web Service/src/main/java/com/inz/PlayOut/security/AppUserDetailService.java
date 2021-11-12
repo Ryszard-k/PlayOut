@@ -27,7 +27,8 @@ public class AppUserDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         Optional<AppUser> appUser = userRepo.findByUsername(s);
         if (appUser.isPresent()){
-            return new User(appUser.get().getUsername(), appUser.get().getPassword(), Collections.singleton(new SimpleGrantedAuthority("user")));
+            return new User(appUser.get().getUsername(), appUser.get().getPassword(),
+                    Collections.singleton(new SimpleGrantedAuthority("user")));
         } else throw new UsernameNotFoundException(s);
     }
 }

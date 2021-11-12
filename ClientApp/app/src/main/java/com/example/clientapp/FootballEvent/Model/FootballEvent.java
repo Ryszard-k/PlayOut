@@ -1,5 +1,6 @@
 package com.example.clientapp.FootballEvent.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -39,9 +40,11 @@ public class FootballEvent {
     private Long id;
 
     @SerializedName("author")
+    @JsonIgnoreProperties("footballEventsAuthor")
     private AppUser author;
 
     @SerializedName("participants")
+    @JsonIgnoreProperties("footballEventsParticipants")
     private Set<AppUser> participants;
 
     @SerializedName("comments")

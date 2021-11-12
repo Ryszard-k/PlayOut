@@ -1,9 +1,11 @@
 package com.example.clientapp.FootballEvent;
 
+import com.example.clientapp.FootballEvent.Model.AppUser;
 import com.example.clientapp.FootballEvent.Model.FootballEvent;
 
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;

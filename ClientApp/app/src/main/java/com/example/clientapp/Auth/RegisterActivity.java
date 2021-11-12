@@ -1,4 +1,4 @@
-package com.example.clientapp.Register;
+package com.example.clientapp.Auth;
 
 import android.os.Bundle;
 
