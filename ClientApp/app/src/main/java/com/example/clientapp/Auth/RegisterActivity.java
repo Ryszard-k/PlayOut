@@ -43,14 +43,16 @@ public class RegisterActivity extends AppCompatActivity {
                 call1.enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(Call<String> call1, Response<String> response1) {
-                        Log.d("tag", String.valueOf(response1));
-                        Log.d("tag1", String.valueOf(response1.body()));
                         if (response1.raw().code() == HttpsURLConnection.HTTP_NO_CONTENT) {
 
                             AppUser newAppUser = new AppUser();
                             newAppUser.setUsername(username.getText().toString());
                             newAppUser.setPassword(password.getText().toString());
                             newAppUser.setEmail(email.getText().toString());
+                            Prefs.getInstance(getApplicationContext()).save(
+                            username.getText().toString(), password.getText().toString(), 4L);
+
+
 
                             Call<String> call = APIClient.createService(AuthService.class).register(newAppUser);
                             call.enqueue(new Callback<String>() {
@@ -65,7 +67,10 @@ public class RegisterActivity extends AppCompatActivity {
                                 @Override
                                 public void onFailure(Call<String> call, Throwable t) {
                                     Toast.makeText(RegisterActivity.this, "Registered Successfully", Toast.LENGTH_LONG).show();
+
+
                                     startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+
                                 }
                             });
 
@@ -79,41 +84,9 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<String> call1, Throwable t) {
                         Toast.makeText(RegisterActivity.this, "Failed connection username", Toast.LENGTH_LONG).show();
-                        Log.d("tag3", String.valueOf(t.getMessage()));
-                        Log.d("tag2", String.valueOf(t.getStackTrace()));
                     }
                 });
             }
-/*
-            if (validateUserData() && validateUsernameInDB()){
-                AppUser newAppUser = new AppUser();
-                newAppUser.setUsername(username.getText().toString());
-                newAppUser.setPassword(password.getText().toString());
-                newAppUser.setEmail(email.getText().toString());
-
-                Call<String> call = APIClient.createService(AuthService.class).register(newAppUser);
-                call.enqueue(new Callback<String>() {
-                    @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
-                        if (response.isSuccessful() && response.body().equals("Registered Successfully")){
-                            Toast.makeText(RegisterActivity.this, "Registered Successfully", Toast.LENGTH_LONG).show();
-                            startActivity(new Intent(RegisterActivity.this, MainActivity.class));
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<String> call, Throwable t) {
-                        Toast.makeText(RegisterActivity.this, "Failed connection", Toast.LENGTH_LONG).show();
-                        try {
-                            throw new ConnectException(t.getMessage());
-                        } catch (ConnectException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-
-            }
-*/
         });
     }
 
@@ -147,35 +120,4 @@ public class RegisterActivity extends AppCompatActivity {
 
         return true;
     }
-
-    private boolean validateUsernameInDB(){
-        final String reg_name = username.getText().toString();
-        final boolean[] ok = {false};
-
-            Call<String> call1 = APIClient.createService(AuthService.class).checkAppUser(reg_name);
-        call1.enqueue(new Callback<String>() {
-                @Override
-                public void onResponse(Call<String> call1, Response<String> response1) {
-                    Log.d("tag", String.valueOf(response1));
-                    Log.d("tag1", String.valueOf(response1.body()));
-                    if (response1.raw().code() == HttpsURLConnection.HTTP_NO_CONTENT) {
-                            ok[0] = true;
-                        Toast.makeText(RegisterActivity.this, "git", Toast.LENGTH_LONG).show();
-
-                    } else {
-                        username.setError("This username already exist");
-                        username.requestFocus();
-                    }
-
-                }
-
-                @Override
-                public void onFailure(Call<String> call1, Throwable t) {
-                    Toast.makeText(RegisterActivity.this, "Failed connection", Toast.LENGTH_LONG).show();
-                    Log.d("tag3", String.valueOf(t.getMessage()));
-                    Log.d("tag2", String.valueOf(t.getStackTrace()));
-                }
-            });
-            return ok[0];
-        }
 }

@@ -46,28 +46,6 @@
         android:importantForAutofill="no" />
 
     <Button
-        android:id="@+id/LoginGoogleButton"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="20dp"
-        android:text="@string/loginGoogle"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/LoginFacebookButton"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="20dp"
-        android:text="@string/loginFb"
-        app:layout_constraintBottom_toTopOf="@+id/LoginGoogleButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
         android:id="@+id/RegisterButtonRegister"
         android:layout_width="150dp"
         android:layout_height="50dp"
