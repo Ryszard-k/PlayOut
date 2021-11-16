@@ -1,5 +1,7 @@
 package com.inz.PlayOut.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.inz.PlayOut.model.entites.AppUser;
 import com.inz.PlayOut.service.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,17 +43,29 @@ public class AppUserController implements CRUDController<AppUser>{
             return new ResponseEntity<>(found, HttpStatus.OK);
     }
 
+    @GetMapping(path = "/username/{username}",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<Object> checkUsername(@PathVariable String username){
+        Optional<AppUser> found = appUserService.findByUsername(username);
+        if(found.isPresent()){
+            return new ResponseEntity<>("User exist", HttpStatus.FOUND);
+        } else
+            return new ResponseEntity<>("Username available", HttpStatus.NO_CONTENT);
+    }
+
     @Override
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<Object> add(@RequestBody AppUser object) {
-        if (object == null) {
-            return new ResponseEntity<>("Empty input data", HttpStatus.NOT_FOUND);
-        } else
+        if (object != null) {
             appUserService.save(object);
-        return new ResponseEntity<>(object, HttpStatus.CREATED);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } else
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Override

@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.clientapp.FootballEvent.APIClient;
 import com.example.clientapp.FootballEvent.DashboardActivity;
 import com.example.clientapp.FootballEvent.Model.AppUser;
-import com.example.clientapp.FootballEvent.Model.LoginRequest;
 import com.example.clientapp.R;
 
 import java.util.List;
@@ -32,7 +31,7 @@ public class LoginActivity extends AppCompatActivity {
         etUsername = findViewById(com.example.clientapp.R.id.etUsername);
         etPassword = findViewById(com.example.clientapp.R.id.etPassword);
 
-        findViewById(R.id.LoginButtonLogin).setOnClickListener(v ->
+        findViewById(R.id.RegisterButtonRegister).setOnClickListener(v ->
         {
             if (TextUtils.isEmpty(etUsername.getText().toString()) || TextUtils.isEmpty(etPassword.getText().toString())) {
                 Toast.makeText(LoginActivity.this, "Username / Password Required", Toast.LENGTH_LONG).show();
@@ -43,19 +42,16 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginUser() {
-        LoginRequest loginRequest = new LoginRequest();
-        loginRequest.setUsername(etUsername.getText().toString());
-        loginRequest.setPassword(etPassword.getText().toString());
+        String username = etUsername.getText().toString();
+        String password = etPassword.getText().toString();
 
-        Call<List<AppUser>> call = APIClient.createService(LoginService.class, loginRequest.getUsername(), loginRequest.getPassword()).getAllAppUsers();
+        Call<List<AppUser>> call = APIClient.createService(AuthService.class, username, password).getAllAppUsers();
         call.enqueue(new Callback<List<AppUser>>() {
             @Override
             public void onResponse(Call<List<AppUser>> call, Response<List<AppUser>> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_LONG).show();
-                    List<AppUser> abc = response.body();
                     startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
-                    System.out.println(abc);
                 } else {
                     Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_LONG).show();
                 }
@@ -63,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<AppUser>> call, Throwable t) {
-                Toast.makeText(LoginActivity.this, "Throwable " + t.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this, "Wrong credentials ", Toast.LENGTH_LONG).show();
             }
 
         });

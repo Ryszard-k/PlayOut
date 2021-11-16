@@ -26,6 +26,10 @@ public record AppUserService(UserRepo userRepo, PasswordEncoder passwordEncoder)
         return userRepo.findById(id);
     }
 
+    public Optional<AppUser> findByUsername(String username) {
+        return userRepo.findByUsername(username);
+    }
+
     @Override
     public AppUser save(AppUser object) {
         object.setPassword(passwordEncoder.encode(object.getPassword()));

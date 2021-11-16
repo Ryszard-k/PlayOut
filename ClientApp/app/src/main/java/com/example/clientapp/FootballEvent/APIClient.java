@@ -3,17 +3,20 @@ package com.example.clientapp.FootballEvent;
 import android.text.TextUtils;
 
 import com.example.clientapp.Auth.AuthenticationInterceptor;
-import com.example.clientapp.Auth.LoginService;
 
 import okhttp3.Credentials;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class APIClient {
 
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+    private static HttpLoggingInterceptor logging =
+            new HttpLoggingInterceptor()
+                    .setLevel(HttpLoggingInterceptor.Level.BODY);
 /*
     private static Retrofit getRetrofit() {
         Retrofit retrofit = new Retrofit.Builder()
@@ -27,7 +30,8 @@ public class APIClient {
     private static Retrofit.Builder builder =
             new Retrofit.Builder()
                     .baseUrl(FootballEventAPI.BASE_URL)
-                    .addConverterFactory(JacksonConverterFactory.create());
+                    .addConverterFactory(JacksonConverterFactory.create())
+            .addConverterFactory(ScalarsConverterFactory.create());
 
     private static Retrofit retrofit = builder.build();
 
@@ -53,6 +57,7 @@ public class APIClient {
 
             if (!httpClient.interceptors().contains(interceptor)) {
                 httpClient.addInterceptor(interceptor);
+                httpClient.addInterceptor(logging);
 
                 builder.client(httpClient.build());
                 retrofit = builder.build();
