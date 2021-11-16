@@ -1,7 +1,5 @@
 package com.example.clientapp.FootballEvent;
 
-import static android.os.Build.VERSION_CODES.R;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -11,9 +9,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.clientapp.FootballEvent.Model.AppUser;
 import com.example.clientapp.FootballEvent.Model.FootballEvent;
-import com.example.clientapp.R;
 
 import java.util.Collections;
 import java.util.List;
@@ -22,14 +18,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DashboardActivity extends AppCompatActivity {
+public class DashboardActivity2 extends AppCompatActivity {
 
     private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(com.example.clientapp.R.layout.dashboard_activity);
+        setContentView(com.example.clientapp.R.layout.dashboard_activity2);
 
         listView = findViewById(com.example.clientapp.R.id.listview);
 

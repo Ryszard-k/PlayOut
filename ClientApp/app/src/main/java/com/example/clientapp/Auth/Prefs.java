@@ -8,7 +8,6 @@ public class Prefs {
     public static final String MyPREFERENCES = "MyPrefs" ;
     public static final String Username = "UsernameKey";
     public static final String Password = "PasswordKey";
-    public static final String Id = "IdKey";
 
     private static Prefs instance;
     private SharedPreferences sharedpreferences;
@@ -23,24 +22,11 @@ public class Prefs {
         return instance == null ? new Prefs(context) : instance;
     }
 
-    public void save(String username, String password, Long id){
+    public void save(String username, String password){
 
         editor.putString(Username, username);
         editor.putString(Password, password);
-        editor.putLong(Id, id);
         editor.commit();
 
-    }
-
-    public String getUsername() {
-        return sharedpreferences.getString(Username, "brak username");
-    }
-
-    public static String getPassword() {
-        return Password;
-    }
-
-    public static String getId() {
-        return Id;
     }
 }

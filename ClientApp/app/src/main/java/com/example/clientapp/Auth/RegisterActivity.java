@@ -3,20 +3,15 @@ package com.example.clientapp.Auth;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.clientapp.FootballEvent.APIClient;
-import com.example.clientapp.FootballEvent.DashboardActivity;
 import com.example.clientapp.FootballEvent.Model.AppUser;
 import com.example.clientapp.MainActivity;
 import com.example.clientapp.R;
-
-import java.io.IOException;
-import java.net.ConnectException;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -50,9 +45,7 @@ public class RegisterActivity extends AppCompatActivity {
                             newAppUser.setPassword(password.getText().toString());
                             newAppUser.setEmail(email.getText().toString());
                             Prefs.getInstance(getApplicationContext()).save(
-                            username.getText().toString(), password.getText().toString(), 4L);
-
-
+                            username.getText().toString(), password.getText().toString());
 
                             Call<String> call = APIClient.createService(AuthService.class).register(newAppUser);
                             call.enqueue(new Callback<String>() {
@@ -68,9 +61,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 public void onFailure(Call<String> call, Throwable t) {
                                     Toast.makeText(RegisterActivity.this, "Registered Successfully", Toast.LENGTH_LONG).show();
 
-
                                     startActivity(new Intent(RegisterActivity.this, MainActivity.class));
-
                                 }
                             });
 

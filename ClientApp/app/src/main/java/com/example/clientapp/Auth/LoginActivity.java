@@ -9,7 +9,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.clientapp.FootballEvent.APIClient;
-import com.example.clientapp.FootballEvent.DashboardActivity;
+import com.example.clientapp.FootballEvent.DashboardActivity2;
 import com.example.clientapp.FootballEvent.Model.AppUser;
 import com.example.clientapp.R;
 
@@ -51,7 +51,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<List<AppUser>> call, Response<List<AppUser>> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_LONG).show();
-                    startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
+                    startActivity(new Intent(LoginActivity.this, DashboardActivity2.class));
                 } else {
                     Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_LONG).show();
                 }

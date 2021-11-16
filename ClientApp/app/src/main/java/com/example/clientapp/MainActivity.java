@@ -16,7 +16,7 @@ import com.example.clientapp.Auth.AuthService;
 import com.example.clientapp.Auth.RegisterActivity;
 import com.example.clientapp.Auth.LoginActivity;
 import com.example.clientapp.FootballEvent.APIClient;
-import com.example.clientapp.FootballEvent.DashboardActivity;
+import com.example.clientapp.FootballEvent.DashboardActivity2;
 import com.example.clientapp.FootballEvent.Model.AppUser;
 
 import java.util.List;

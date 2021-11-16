@@ -3,6 +3,7 @@
     package="com.example.clientapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,6 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ClientApp"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".DashboardActivity"
+            android:exported="true"
+            android:label="@string/title_activity_dashboard"
+            android:theme="@style/Theme.ClientApp.NoActionBar" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -21,8 +27,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".Auth.LoginActivity" />
-        <activity android:name=".FootballEvent.DashboardActivity"/>
-        <activity android:name=".Auth.RegisterActivity"/>
+        <activity android:name=".FootballEvent.DashboardActivity2" />
+        <activity android:name=".Auth.RegisterActivity" />
     </application>
 
 </manifest>
