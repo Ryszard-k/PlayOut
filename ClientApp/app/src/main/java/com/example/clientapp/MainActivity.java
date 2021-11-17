@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.clientapp.Auth.AuthService;
@@ -37,8 +38,7 @@ public class MainActivity extends AppCompatActivity {
             if (sharedpreferences.contains(Username) && sharedpreferences.contains(Password)){
                 String username = sharedpreferences.getString(Username, Username);
                 String password = sharedpreferences.getString(Password, Password);
-
-                System.out.println(username);
+                Log.d("mainActivity", sharedpreferences.getString(Username, Username));
 
                 Call<List<AppUser>> call = APIClient.createService(AuthService.class, username, password).getAllAppUsers();
                 call.enqueue(new Callback<List<AppUser>>() {
