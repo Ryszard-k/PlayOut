@@ -22,6 +22,10 @@ public interface FootballEventAPI {
     @Headers("Content-Type: application/json")
     Call<List<FootballEvent>> getAllEvent();
 
+    @GET("/footballEvent/getMyActiveEvent/{username}")
+    @Headers("Content-Type: application/json")
+    Call<List<FootballEvent>> getMyActiveEvent(@Path("username") String username);
+
     @GET("/footballEvent/{id}")
     Call<List<FootballEvent>> getByIdEvent();
 

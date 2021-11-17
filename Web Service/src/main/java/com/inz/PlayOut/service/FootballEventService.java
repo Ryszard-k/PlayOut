@@ -6,8 +6,12 @@ import com.inz.PlayOut.model.repositories.FootballEventRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public record FootballEventService(FootballEventRepo footballEventRepo, AppUserService appUserService)
@@ -25,6 +29,28 @@ public record FootballEventService(FootballEventRepo footballEventRepo, AppUserS
     @Override
     public Optional<FootballEvent> findById(Long id) {
         return footballEventRepo.findById(id);
+    }
+
+    public List<FootballEvent> getMyActiveEvent(String username){
+        Optional<AppUser> appUser = appUserService.findByUsername(username);
+        if (appUser.isPresent()){
+            List<FootballEvent> myActiveEvents = appUser.get().getFootballEventsParticipants().stream()
+                    .filter(k -> k.getDate().isAfter(LocalDate.now()))
+                    .collect(Collectors.toList());
+
+            myActiveEvents.addAll(appUser.get().getFootballEventsParticipants().stream()
+                    .filter(k -> (k.getDate().isEqual(LocalDate.now())) && (k.getTime().isAfter(LocalTime.now().plusSeconds(30))))
+                    .collect(Collectors.toList()));
+
+            myActiveEvents.addAll(appUser.get().getFootballEventsAuthor().stream()
+                    .filter(k -> k.getDate().isAfter(LocalDate.now()))
+                    .collect(Collectors.toList()));
+
+            myActiveEvents.addAll(appUser.get().getFootballEventsAuthor().stream()
+                    .filter(k -> (k.getDate().isEqual(LocalDate.now())) && (k.getTime().isAfter(LocalTime.now().plusSeconds(30))))
+                    .collect(Collectors.toList()));
+            return myActiveEvents;
+        } else return List.of();
     }
 
     @Override

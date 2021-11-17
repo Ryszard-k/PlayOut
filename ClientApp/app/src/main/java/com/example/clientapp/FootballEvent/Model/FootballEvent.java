@@ -40,11 +40,11 @@ public class FootballEvent {
     private Long id;
 
     @SerializedName("author")
-    @JsonIgnoreProperties("footballEventsAuthor")
+ //   @JsonIgnoreProperties("footballEventsAuthor")
     private AppUser author;
 
     @SerializedName("participants")
-    @JsonIgnoreProperties("footballEventsParticipants")
+   // @JsonIgnoreProperties("footballEventsParticipants")
     private Set<AppUser> participants;
 
     @SerializedName("comments")

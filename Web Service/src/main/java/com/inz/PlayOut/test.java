@@ -36,8 +36,11 @@ public class test {
         appUserService.save(new AppUser("Piotr", "piotr123", "piotr@gmail.com"));
         appUserService.save(new AppUser("Kamil", "kamil123", "kamil@gmail.com"));
 
-        footballEventService.save(new FootballEvent(LocalDate.now(), LocalTime.now(), 12.343234, 45.345665, EventLevel.E,
+        footballEventService.save(new FootballEvent(LocalDate.now().plusDays(3), LocalTime.now(), 12.343234, 45.345665, EventLevel.E,
                 3, appUserService.findById(1L).get()));
-
+        footballEventService.save(new FootballEvent(LocalDate.now().minusDays(3), LocalTime.now(), 12.343234, 45.345665, EventLevel.E,
+                3, appUserService.findById(1L).get()));
+        footballEventService.save(new FootballEvent(LocalDate.now(), LocalTime.now().plusMinutes(3), 12.343234, 45.345665, EventLevel.E,
+                3, appUserService.findById(1L).get()));
     }
 }

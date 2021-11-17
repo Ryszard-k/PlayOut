@@ -34,13 +34,13 @@ public class ConfigSecurity extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(appUserDetailService).passwordEncoder(passwordEncoder());
     }
 
-   /* @Override
+    @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
                 .antMatchers("/login")
                 .antMatchers(HttpMethod.POST, "/appUser")
                 .antMatchers(HttpMethod.GET, "/appUser/username/*");
-    }*/
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

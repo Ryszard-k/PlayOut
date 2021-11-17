@@ -8,9 +8,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.example.clientapp.BasketballEventActivity;
-import com.example.clientapp.FootballEventActivity;
-import com.example.clientapp.JoggingEventActivity;
+import com.example.clientapp.Search;
+import com.example.clientapp.MyEvents;
+import com.example.clientapp.History;
 import com.example.clientapp.R;
 
 /**
@@ -33,13 +33,13 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         switch (position){
             case 0:
-                return new FootballEventActivity();
+                return new MyEvents();
 
             case 1:
-                return new BasketballEventActivity();
+                return new Search();
 
             case 2:
-                return new JoggingEventActivity();
+                return new History();
 
             default:
                 return PlaceholderFragment.newInstance(position + 1);

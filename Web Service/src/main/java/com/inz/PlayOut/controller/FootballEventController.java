@@ -46,6 +46,18 @@ public class FootballEventController implements CRUDController<FootballEvent> {
             return new ResponseEntity<>(found, HttpStatus.OK);
     }
 
+    @GetMapping(path = "/getMyActiveEvent/{username}",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<Object> getMyActiveEvent(@PathVariable String username){
+        List<FootballEvent> list = footballEventService.getMyActiveEvent(username);
+        if (list.isEmpty()){
+            return new ResponseEntity<>(List.of(), HttpStatus.NOT_FOUND);
+        } else
+            return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
     @Override
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,

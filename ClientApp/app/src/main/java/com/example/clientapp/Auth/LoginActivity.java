@@ -50,6 +50,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<AppUser>> call, Response<List<AppUser>> response) {
                 if (response.isSuccessful()) {
+                    Prefs.getInstance(getApplicationContext()).save(username, password);
                     Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_LONG).show();
                     startActivity(new Intent(LoginActivity.this, DashboardActivity2.class));
                 } else {

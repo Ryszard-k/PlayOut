@@ -38,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
                 String username = sharedpreferences.getString(Username, Username);
                 String password = sharedpreferences.getString(Password, Password);
 
+                System.out.println(username);
+
                 Call<List<AppUser>> call = APIClient.createService(AuthService.class, username, password).getAllAppUsers();
                 call.enqueue(new Callback<List<AppUser>>() {
                     @Override
