@@ -27,7 +27,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".Auth.LoginActivity" />
-        <activity android:name=".FootballEvent.DashboardActivity2" />
         <activity android:name=".Auth.RegisterActivity" />
     </application>
 

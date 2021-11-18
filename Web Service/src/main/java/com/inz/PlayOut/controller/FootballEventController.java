@@ -15,22 +15,18 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/footballEvent")
-public class FootballEventController implements CRUDController<FootballEvent> {
-
-    private final FootballEventService footballEventService;
-    private final AppUserService appUserService;
+public record FootballEventController(FootballEventService footballEventService,
+                                      AppUserService appUserService) implements CRUDController<FootballEvent> {
 
     @Autowired
-    public FootballEventController(FootballEventService footballEventService, AppUserService appUserService) {
-        this.footballEventService = footballEventService;
-        this.appUserService = appUserService;
+    public FootballEventController {
     }
 
     @Override
     @GetMapping()
     public ResponseEntity<Object> findAll() {
         List<FootballEvent> found = footballEventService.findAll();
-        if (found.isEmpty()){
+        if (found.isEmpty()) {
             return new ResponseEntity<>("Repository is empty!", HttpStatus.NOT_FOUND);
         } else
             return new ResponseEntity<>(found, HttpStatus.OK);
@@ -40,20 +36,32 @@ public class FootballEventController implements CRUDController<FootballEvent> {
     @GetMapping("/{id}")
     public ResponseEntity<Object> getById(@PathVariable Long id) {
         Optional<FootballEvent> found = footballEventService.findById(id);
-        if(found.isEmpty()){
+        if (found.isEmpty()) {
             return new ResponseEntity<>("Bad id", HttpStatus.NOT_FOUND);
         } else
             return new ResponseEntity<>(found, HttpStatus.OK);
     }
 
-    @GetMapping(path = "/getMyActiveEvent/{username}",
+    @GetMapping(path = "/activeEvent/{username}",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<Object> getMyActiveEvent(@PathVariable String username){
+    public ResponseEntity<Object> getMyActiveEvent(@PathVariable String username) {
         List<FootballEvent> list = footballEventService.getMyActiveEvent(username);
-        if (list.isEmpty()){
-            return new ResponseEntity<>(List.of(), HttpStatus.NOT_FOUND);
+        if (list.isEmpty()) {
+            return new ResponseEntity<>(List.of(), HttpStatus.NO_CONTENT);
+        } else
+            return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/historyEvent/{username}",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<Object> getMyHistoryEvent(@PathVariable String username) {
+        List<FootballEvent> list = footballEventService.getMyHistoryEvent(username);
+        if (list.isEmpty()) {
+            return new ResponseEntity<>(List.of(), HttpStatus.NO_CONTENT);
         } else
             return new ResponseEntity<>(list, HttpStatus.OK);
     }
@@ -74,9 +82,9 @@ public class FootballEventController implements CRUDController<FootballEvent> {
     }
 
     @PutMapping("/{idAppUser}/{idFootballEvent}")
-    public ResponseEntity<Object> jointToEvent(@PathVariable Long idAppUser, @PathVariable Long idFootballEvent){
+    public ResponseEntity<Object> jointToEvent(@PathVariable Long idAppUser, @PathVariable Long idFootballEvent) {
         Optional<FootballEvent> updatedEvent = footballEventService.joinToEvent(idAppUser, idFootballEvent);
-        if (updatedEvent.isPresent()){
+        if (updatedEvent.isPresent()) {
             return new ResponseEntity<>(updatedEvent, HttpStatus.OK);
         } else
             return new ResponseEntity<>("Not found event to join", HttpStatus.NOT_FOUND);
@@ -88,7 +96,7 @@ public class FootballEventController implements CRUDController<FootballEvent> {
         Optional<FootballEvent> found = footballEventService.findById(id);
         if (found.isPresent()) {
             footballEventService.delete(id);
-            return new ResponseEntity<>(found,HttpStatus.OK);
+            return new ResponseEntity<>(found, HttpStatus.OK);
         } else
             return new ResponseEntity<>("Not found object to delete!", HttpStatus.NOT_FOUND);
     }

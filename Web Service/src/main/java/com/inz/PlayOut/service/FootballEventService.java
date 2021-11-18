@@ -53,6 +53,28 @@ public record FootballEventService(FootballEventRepo footballEventRepo, AppUserS
         } else return List.of();
     }
 
+    public List<FootballEvent> getMyHistoryEvent(String username){
+        Optional<AppUser> appUser = appUserService.findByUsername(username);
+        if (appUser.isPresent()){
+            List<FootballEvent> myActiveEvents = appUser.get().getFootballEventsParticipants().stream()
+                    .filter(k -> k.getDate().isBefore(LocalDate.now()))
+                    .collect(Collectors.toList());
+
+            myActiveEvents.addAll(appUser.get().getFootballEventsParticipants().stream()
+                    .filter(k -> (k.getDate().isEqual(LocalDate.now())) && (k.getTime().isBefore(LocalTime.now().plusSeconds(30))))
+                    .collect(Collectors.toList()));
+
+            myActiveEvents.addAll(appUser.get().getFootballEventsAuthor().stream()
+                    .filter(k -> k.getDate().isBefore(LocalDate.now()))
+                    .collect(Collectors.toList()));
+
+            myActiveEvents.addAll(appUser.get().getFootballEventsAuthor().stream()
+                    .filter(k -> (k.getDate().isEqual(LocalDate.now())) && (k.getTime().isBefore(LocalTime.now().plusSeconds(30))))
+                    .collect(Collectors.toList()));
+            return myActiveEvents;
+        } else return List.of();
+    }
+
     @Override
     public FootballEvent save(FootballEvent object) {
         return footballEventRepo.save(object);
