@@ -27,13 +27,14 @@ public class SportEvent {
     private int vacancies;
     private String note;
 
-    public SportEvent(LocalDate date, LocalTime time, double latitude, double longitude, EventLevel eventLevel, int vacancies) {
+    public SportEvent(LocalDate date, LocalTime time, double latitude, double longitude, EventLevel eventLevel, int vacancies, String note) {
         this.date = date;
         this.time = time;
         this.latitude = latitude;
         this.longitude = longitude;
         this.eventLevel = eventLevel;
         this.vacancies = vacancies;
+        this.note = note;
     }
 
     public SportEvent() {

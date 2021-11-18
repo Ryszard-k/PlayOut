@@ -31,8 +31,8 @@ public class FootballEvent extends SportEvent implements Serializable {
             cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Comment> comments;
 
-    public FootballEvent(LocalDate date, LocalTime time, double latitude, double longitude, EventLevel eventLevel, int vacancies, AppUser author) {
-        super(date, time, latitude, longitude, eventLevel, vacancies);
+    public FootballEvent(LocalDate date, LocalTime time, double latitude, double longitude, EventLevel eventLevel, int vacancies, String note, AppUser author) {
+        super(date, time, latitude, longitude, eventLevel, vacancies, note);
         this.author = author;
     }
 
