@@ -4,14 +4,25 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.clientapp.FootballEvent.APIClient;
 import com.example.clientapp.FootballEvent.ActiveFootballEvents;
+import com.example.clientapp.FootballEvent.FootballEventAPI;
+import com.example.clientapp.FootballEvent.Model.FootballEvent;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -71,7 +82,24 @@ public class MyEvents extends Fragment {
 
         rvME = view.findViewById(R.id.RVFootballEvent);
         rvME.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        rvME.setAdapter(new ActiveFootballEvents());
+        rvME.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.VERTICAL));
+
+        Call<List<FootballEvent>> call = APIClient.createService(FootballEventAPI.class)
+                .getMyActiveEvent("Piotr");   //sharedpreferences.getString(Username, Username));
+
+        call.enqueue(new Callback<List<FootballEvent>>() {
+            @Override
+            public void onResponse(Call<List<FootballEvent>> call, Response<List<FootballEvent>> response) {
+                List<FootballEvent> list = response.body();
+                rvME.setAdapter(new ActiveFootballEvents(list));
+                Log.d("ActiveFootballEvents", "Registered Successfully");
+            }
+
+            @Override
+            public void onFailure(Call<List<FootballEvent>> call, Throwable t) {
+                Log.d("tag1", t.getMessage());
+            }
+        });
 
         return view;
     }

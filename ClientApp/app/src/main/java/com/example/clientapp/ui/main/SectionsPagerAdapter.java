@@ -8,10 +8,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.example.clientapp.Search;
 import com.example.clientapp.MyEvents;
 import com.example.clientapp.History;
 import com.example.clientapp.R;
+import com.example.clientapp.Search;
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to

@@ -1,17 +1,33 @@
 package com.example.clientapp;
 
+import static com.example.clientapp.Auth.Prefs.MyPREFERENCES;
+
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.clientapp.FootballEvent.APIClient;
 import com.example.clientapp.FootballEvent.ActiveFootballEvents;
+import com.example.clientapp.FootballEvent.FootballEventAPI;
 import com.example.clientapp.FootballEvent.HistoryFootballEvents;
+import com.example.clientapp.FootballEvent.Model.FootballEvent;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -67,10 +83,29 @@ public class History extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_history, container, false);
-
         recyclerView = view.findViewById(R.id.recyclerViewHistory);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        recyclerView.setAdapter(new HistoryFootballEvents());
+        recyclerView.setHasFixedSize(true);
+        recyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.VERTICAL));
+
+        SharedPreferences sharedpreferences = container.getContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+
+        Call<List<FootballEvent>> call = APIClient.createService(FootballEventAPI.class).getMyHistoryEvent("Piotr");
+        //sharedpreferences.getString(Username, Username));
+        call.enqueue(new Callback<List<FootballEvent>>() {
+            @Override
+            public void onResponse(Call<List<FootballEvent>> call, Response<List<FootballEvent>> response) {
+                List<FootballEvent> list = response.body();
+                recyclerView.setAdapter(new HistoryFootballEvents(list));
+                Log.d("HistoryFootballEvents", "Registered Successfully");
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(Call<List<FootballEvent>> call, Throwable t) {
+                Log.d("HistoryFootballEventsFailure", t.getMessage());
+            }
+        });
 
         return view;
     }
