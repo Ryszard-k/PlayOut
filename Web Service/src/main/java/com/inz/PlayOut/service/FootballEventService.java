@@ -31,6 +31,19 @@ public record FootballEventService(FootballEventRepo footballEventRepo, AppUserS
         return footballEventRepo.findById(id);
     }
 
+    public List<FootballEvent> findAllActiveEvent(){
+        List<FootballEvent> allEvents = footballEventRepo.findAll();
+        List<FootballEvent> list = allEvents.stream()
+                .filter(k -> k.getDate().isAfter(LocalDate.now()))
+                .collect(Collectors.toList());
+
+        list.addAll(allEvents.stream()
+                .filter(k -> (k.getDate().isEqual(LocalDate.now())) && (k.getTime().isAfter(LocalTime.now().plusSeconds(30))))
+                .collect(Collectors.toList()));
+
+        return list;
+    }
+
     public List<FootballEvent> getMyActiveEvent(String username){
         Optional<AppUser> appUser = appUserService.findByUsername(username);
         if (appUser.isPresent()){
