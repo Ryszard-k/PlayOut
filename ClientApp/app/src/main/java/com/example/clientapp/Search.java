@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import androidx.appcompat.widget.SearchView;
 
 import com.example.clientapp.FootballEvent.APIClient;
 import com.example.clientapp.FootballEvent.FootballEventAPI;
@@ -35,9 +36,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Search extends Fragment {
+public class Search extends Fragment implements GoogleMap.OnMapLongClickListener {
 
     List<String> filterResultList = new ArrayList<>();
+    private SearchView searchView;
+    private GoogleMap map;
 
     @Nullable
     @Override
@@ -52,8 +55,9 @@ public class Search extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Button filterButton = view.findViewById(R.id.filterButton);
-
         Button searchButton = view.findViewById(R.id.searchLocationButton);
+        searchView = view.findViewById(R.id.idSearchView);
+
         searchButton.setOnClickListener(v -> {
             Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
             List<Address> addresses = null;
@@ -108,9 +112,36 @@ public class Search extends Fragment {
 
 
         });
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                String location = searchView.getQuery().toString();
+                List<Address> addressList = null;
+
+                Geocoder geocoder = new Geocoder(getContext());
+                try {
+                    addressList = geocoder.getFromLocationName(location, 1);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Address address = addressList.get(0);
+                LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
     }
 
     private final OnMapReadyCallback callbackWithFilters = googleMap -> {
+        map = googleMap;
+        googleMap.setOnMapLongClickListener(this);
         Call<List<FootballEvent>> call = APIClient.createService(FootballEventAPI.class).findAllActiveEvent();
         call.enqueue(new Callback<List<FootballEvent>>() {
             @Override
@@ -145,4 +176,13 @@ public class Search extends Fragment {
             }
         });
     };
+
+    @Override
+    public void onMapLongClick(@NonNull LatLng latLng) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setCancelable(false);
+        builder.setTitle("Create event");
+
+
+    }
 }

@@ -39,6 +39,9 @@ public class FootballEvent {
     @SerializedName("id")
     private Long id;
 
+    @SerializedName("location")
+    private String location;
+
     @SerializedName("author")
     private AppUser author;
 
@@ -137,5 +140,13 @@ public class FootballEvent {
 
     public void setComments(Set<Comment> comments) {
         this.comments = comments;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }
