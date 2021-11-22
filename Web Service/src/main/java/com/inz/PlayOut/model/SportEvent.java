@@ -26,8 +26,9 @@ public class SportEvent {
 
     private int vacancies;
     private String note;
+    private String location;
 
-    public SportEvent(LocalDate date, LocalTime time, double latitude, double longitude, EventLevel eventLevel, int vacancies, String note) {
+    public SportEvent(LocalDate date, LocalTime time, double latitude, double longitude, EventLevel eventLevel, int vacancies, String note, String location) {
         this.date = date;
         this.time = time;
         this.latitude = latitude;
@@ -35,6 +36,7 @@ public class SportEvent {
         this.eventLevel = eventLevel;
         this.vacancies = vacancies;
         this.note = note;
+        this.location = location;
     }
 
     public SportEvent() {
@@ -94,5 +96,13 @@ public class SportEvent {
 
     public void setVacancies(int vacancies) {
         this.vacancies = vacancies;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }

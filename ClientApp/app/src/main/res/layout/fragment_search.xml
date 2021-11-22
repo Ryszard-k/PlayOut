@@ -5,4 +5,33 @@
     android:name="com.google.android.gms.maps.SupportMapFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Search" />
+    tools:context=".Search" >
+
+    <Button
+        android:id="@+id/filterButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|top"
+        android:text="@string/filter"
+        android:padding="10dp"
+        android:layout_marginTop="20dp"
+        android:paddingRight="10dp"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:alpha="0.7" />
+
+    <Button
+        android:id="@+id/searchLocationButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|top"
+        android:text="@string/search"
+        android:padding="10dp"
+        android:layout_marginTop="80dp"
+        android:paddingRight="10dp"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:alpha="0.7" />
+
+
+</fragment>
