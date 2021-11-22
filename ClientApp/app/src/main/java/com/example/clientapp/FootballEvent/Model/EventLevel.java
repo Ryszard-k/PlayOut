@@ -1,5 +1,6 @@
 package com.example.clientapp.FootballEvent.Model;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 public enum EventLevel {
@@ -27,5 +28,16 @@ public enum EventLevel {
         map.put(A, A.description);
 
         return map;
+    }
+
+    public static String[] enumToStringArray(){
+        String[] lvl = {EventLevel.A.name() + " " + EventLevel.A.description,
+                EventLevel.B.name() + " " + EventLevel.B.description,
+                EventLevel.C.name() + " " + EventLevel.C.description,
+                EventLevel.D.name() + " " + EventLevel.D.description,
+                EventLevel.E.name() + " " + EventLevel.E.description,
+                EventLevel.F.name() + " " + EventLevel.F.description};
+
+        return lvl;
     }
 }

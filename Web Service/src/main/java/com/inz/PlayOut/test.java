@@ -40,7 +40,9 @@ public class test {
                 3, "Piłeczka raz" ,appUserService.findById(1L).get()));
         footballEventService.save(new FootballEvent(LocalDate.now().minusDays(3), LocalTime.now(), 12.343234, 45.345665, EventLevel.E,
                 3, "Piłeczka dwa", appUserService.findById(1L).get()));
-        footballEventService.save(new FootballEvent(LocalDate.now(), LocalTime.now().plusMinutes(3), 12.343234, 45.345665, EventLevel.E,
+        footballEventService.save(new FootballEvent(LocalDate.now(), LocalTime.now().plusMinutes(3), 10.343234, 35.345665, EventLevel.E,
                 3, "Piłeczka trzy", appUserService.findById(1L).get()));
+        footballEventService.save(new FootballEvent(LocalDate.now().plusDays(3), LocalTime.now().plusMinutes(3), 11.343234, 12.76, EventLevel.A,
+                3, "Piłeczka cztery", appUserService.findById(2L).get()));
     }
 }
