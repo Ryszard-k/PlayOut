@@ -1,7 +1,9 @@
 package com.example.clientapp.FootballEvent.Model;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 public enum EventLevel {
 
@@ -31,13 +33,24 @@ public enum EventLevel {
     }
 
     public static String[] enumToStringArray(){
-        String[] lvl = {EventLevel.A.name() + " " + EventLevel.A.description,
-                EventLevel.B.name() + " " + EventLevel.B.description,
-                EventLevel.C.name() + " " + EventLevel.C.description,
-                EventLevel.D.name() + " " + EventLevel.D.description,
-                EventLevel.E.name() + " " + EventLevel.E.description,
-                EventLevel.F.name() + " " + EventLevel.F.description};
 
-        return lvl;
+        return new String[]{A.name() + " - " + A.description,
+                B.name() + " - " + B.description,
+                C.name() + " - " + C.description,
+                D.name() + " - " + D.description,
+                E.name() + " - " + E.description,
+                F.name() + " - " + F.description};
+    }
+
+    public static List<EventLevel> returnListOfEnums(){
+        List<EventLevel>  eventLevelList = new ArrayList<>();
+        eventLevelList.add(A);
+        eventLevelList.add(B);
+        eventLevelList.add(C);
+        eventLevelList.add(D);
+        eventLevelList.add(E);
+        eventLevelList.add(F);
+
+        return eventLevelList;
     }
 }

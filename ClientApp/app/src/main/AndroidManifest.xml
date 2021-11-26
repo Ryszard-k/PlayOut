@@ -51,6 +51,7 @@
         </activity>
         <activity android:name=".Auth.LoginActivity" />
         <activity android:name=".Auth.RegisterActivity" />
+        <activity android:name=".AddFootballEventActivity" />
     </application>
 
 </manifest>

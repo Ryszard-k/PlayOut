@@ -18,4 +18,9 @@
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="search">Search</string>
+    <string name="create_new_event">Create new event</string>
+    <string name="_22_11_46">22:11:46</string>
+    <string name="_2021_11_25">2021-11-25</string>
+    <string name="vacancies">vacancies</string>
+    <string name="note">note</string>
 </resources>
