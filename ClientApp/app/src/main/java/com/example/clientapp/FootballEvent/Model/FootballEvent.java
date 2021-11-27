@@ -1,10 +1,11 @@
 package com.example.clientapp.FootballEvent.Model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import com.google.gson.annotations.SerializedName;
 
 import java.time.LocalDate;
@@ -15,10 +16,12 @@ public class FootballEvent {
 
     @SerializedName("date")
     @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate date;
 
     @SerializedName("time")
     @JsonDeserialize(using = LocalTimeDeserializer.class)
+    @JsonSerialize(using = LocalTimeSerializer.class)
     private LocalTime time;
 
     @SerializedName("latitude")
@@ -53,6 +56,7 @@ public class FootballEvent {
 
     public FootballEvent() {
     }
+
 
     public Long getId() {
         return id;

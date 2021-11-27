@@ -17,15 +17,6 @@ public class APIClient {
     private static HttpLoggingInterceptor logging =
             new HttpLoggingInterceptor()
                     .setLevel(HttpLoggingInterceptor.Level.BODY);
-/*
-    private static Retrofit getRetrofit() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(FootballEventAPI.BASE_URL)
-                .addConverterFactory(JacksonConverterFactory.create())
-                .build();
-
-        return retrofit;
-    }*/
 
     private static Retrofit.Builder builder =
             new Retrofit.Builder()

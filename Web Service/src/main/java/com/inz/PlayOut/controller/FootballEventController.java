@@ -84,13 +84,13 @@ public record FootballEventController(FootballEventService footballEventService,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<Object> add(@RequestBody FootballEvent object) {
-        Optional<AppUser> found = appUserService.findById(object.getAuthor().getId());
+        Optional<AppUser> found = appUserService.findByUsername(object.getAuthor().getUsername());
         if (found.isPresent()) {
             object.setAuthor(found.get());
             footballEventService.save(object);
-            return new ResponseEntity<>(object, HttpStatus.CREATED);
+            return new ResponseEntity<>(HttpStatus.CREATED);
         } else
-            return new ResponseEntity<>("Empty input data", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping("/{idAppUser}/{idFootballEvent}")

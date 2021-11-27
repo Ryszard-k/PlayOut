@@ -1,7 +1,14 @@
 package com.example.clientapp;
 
+import static com.example.clientapp.Auth.Prefs.MyPREFERENCES;
+import static com.example.clientapp.Auth.Prefs.Username;
+
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -11,9 +18,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.clientapp.FootballEvent.APIClient;
+import com.example.clientapp.FootballEvent.FootballEventAPI;
+import com.example.clientapp.FootballEvent.Model.AppUser;
 import com.example.clientapp.FootballEvent.Model.EventLevel;
 import com.example.clientapp.FootballEvent.Model.FootballEvent;
 
@@ -22,6 +33,10 @@ import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AddFootballEventActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
@@ -41,6 +56,7 @@ public class AddFootballEventActivity extends AppCompatActivity implements Adapt
         setContentView(R.layout.add_football_event_layout);
         Bundle extras = getIntent().getExtras();
         String locationName = Geocoder.nameFromLatLon(getApplicationContext(), extras.getDouble("latitude"), extras.getDouble("longitude"));
+        SharedPreferences sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 
         Spinner spinnerLvl = findViewById(R.id.spinnerLvl);
         spinnerLvl.setOnItemSelectedListener(this);
@@ -58,6 +74,8 @@ public class AddFootballEventActivity extends AppCompatActivity implements Adapt
 
         findViewById(R.id.buttonOk).setOnClickListener(v -> {
             if (validateUserData()){
+                AppUser appUser = new AppUser();
+                appUser.setUsername(sharedpreferences.getString(Username, Username));
 
                 newFootballEvent.setDate(LocalDate.parse(date.getText().toString()));
                 newFootballEvent.setTime(LocalTime.parse(time.getText().toString()));
@@ -66,9 +84,32 @@ public class AddFootballEventActivity extends AppCompatActivity implements Adapt
                 newFootballEvent.setLatitude(extras.getDouble("latitude"));
                 newFootballEvent.setLongitude(extras.getDouble("longitude"));
                 newFootballEvent.setLocation(locationName);
+                newFootballEvent.setAuthor(appUser);
 
+                Call<Void> call = APIClient.createService(FootballEventAPI.class).addEvent(newFootballEvent);
+                call.enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if (response.isSuccessful()) {
+                            Toast.makeText(AddFootballEventActivity.this, "Created event", Toast.LENGTH_LONG).show();
+
+                            stopService(new Intent(AddFootballEventActivity.this, DashboardActivity.class));
+                            startActivity(new Intent(AddFootballEventActivity.this, DashboardActivity.class));
+                            finish();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        Toast.makeText(AddFootballEventActivity.this, "nie poszui", Toast.LENGTH_LONG).show();
+                        Log.d("dodajemyFE", t.getMessage());
+                        Log.d("dodajemyFE2", Log.getStackTraceString(t));
+                    }
+            });
             }
         });
+
+        findViewById(R.id.buttonCancel).setOnClickListener(v -> finish());
 
         date.setOnClickListener(v -> {
             final Calendar cldr = Calendar.getInstance();
