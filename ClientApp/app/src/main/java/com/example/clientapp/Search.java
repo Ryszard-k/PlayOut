@@ -41,7 +41,8 @@ import retrofit2.Response;
 
 public class Search extends Fragment implements GoogleMap.OnMapLongClickListener {
 
-    List<String> filterResultList = new ArrayList<>();
+    List<String> filterLevelResultList = new ArrayList<>();
+    List<String> filterEventResultList = new ArrayList<>();
     private SearchView searchView;
     private GoogleMap map;
 
@@ -90,16 +91,28 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
             boolean[] checkedItems = new boolean[lvlList.length];
             List<String> selectedItems = Arrays.asList(lvlList);
 
-            builder.setMultiChoiceItems(lvlList, checkedItems, (dialog, which, isChecked) -> {
-                checkedItems[which] = isChecked;
-                // String currentItem = selectedItems.get(which);
+            String[] eventList = {"Football", "Basketball", "Volleyball"};
+            boolean[] checkedEventItems = new boolean[eventList.length];
+            List<String> selectedEventItems = Arrays.asList(eventList);
+
+            builder.setMultiChoiceItems(eventList, checkedEventItems, (dialog, which, isChecked) ->{
+                checkedEventItems[which] = isChecked;
             });
 
+            builder.setMultiChoiceItems(lvlList, checkedItems, (dialog, which, isChecked) -> checkedItems[which] = isChecked);
+
             builder.setPositiveButton(R.string.ok, (dialog, id) -> {
-                filterResultList = new ArrayList<>();
+                filterLevelResultList = new ArrayList<>();
                 for (int i = 0; i < checkedItems.length; i++) {
                     if (checkedItems[i]) {
-                        filterResultList.add(selectedItems.get(i).substring(0, 1));
+                        filterLevelResultList.add(selectedItems.get(i).substring(0, 1));
+                    }
+                }
+
+                filterEventResultList = new ArrayList<>();
+                for (int i = 0; i < checkedEventItems.length; i++) {
+                    if (checkedEventItems[i]) {
+                        filterEventResultList.add(selectedEventItems.get(i).substring(0, 1));
                     }
                 }
 
@@ -154,9 +167,9 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
                     List<FootballEvent> responseList = response.body();
                     googleMap.clear();
 
-                    if (!filterResultList.isEmpty()) {
+                    if (!filterLevelResultList.isEmpty()) {
                         for (FootballEvent f : responseList) {
-                            if (filterResultList.contains(f.getEventLevel().name()))
+                            if (filterLevelResultList.contains(f.getEventLevel().name()))
                                 googleMap.addMarker(new MarkerOptions()
                                         .position(new LatLng(f.getLatitude(), f.getLongitude()))
                                         .title(f.getNote()));
@@ -183,7 +196,7 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
 
     @Override
     public void onMapLongClick(@NonNull LatLng latLng) {
-        String[] lvlList = {"Football", "Basketball", "Jogging"};
+        String[] lvlList = {"Football", "Basketball", "Volleyball"};
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Create event");
 

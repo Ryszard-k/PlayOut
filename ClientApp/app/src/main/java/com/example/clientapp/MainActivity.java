@@ -21,6 +21,8 @@ import com.example.clientapp.FootballEvent.Model.AppUser;
 
 import java.util.List;
 
+import javax.net.ssl.HttpsURLConnection;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -39,11 +41,11 @@ public class MainActivity extends AppCompatActivity {
                 String password = sharedpreferences.getString(Password, Password);
                 Log.d("mainActivity", sharedpreferences.getString(Username, Username));
 
-                Call<List<AppUser>> call = APIClient.createService(AuthService.class, username, password).getAllAppUsers();
-                call.enqueue(new Callback<List<AppUser>>() {
+                Call<String> call = APIClient.createService(AuthService.class, username, password).checkAppUser(username);
+                call.enqueue(new Callback<String>() {
                     @Override
-                    public void onResponse(Call<List<AppUser>> call, Response<List<AppUser>> response) {
-                        if (response.isSuccessful()) {
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        if (response.raw().code() == HttpsURLConnection.HTTP_MOVED_TEMP) {
                             Toast.makeText(MainActivity.this, "Login Successful", Toast.LENGTH_LONG).show();
                             startActivity(new Intent(MainActivity.this, DashboardActivity.class));
                         } else {
@@ -52,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<List<AppUser>> call, Throwable t) {
+                    public void onFailure(Call<String> call, Throwable t) {
                         Toast.makeText(MainActivity.this, "Wrong credentials ", Toast.LENGTH_LONG).show();
                     }
 
