@@ -20,6 +20,7 @@ import androidx.appcompat.widget.SearchView;
 
 import com.example.clientapp.FootballEvent.APIClient;
 import com.example.clientapp.FootballEvent.FootballEventAPI;
+import com.example.clientapp.FootballEvent.GoogleMapInfoWindowAdapter;
 import com.example.clientapp.FootballEvent.Model.EventLevel;
 import com.example.clientapp.FootballEvent.Model.FootballEvent;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -63,6 +64,8 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
         searchView = view.findViewById(R.id.idSearchView);
 
         searchButton.setOnClickListener(v -> {
+
+            /*
             Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
             List<Address> addresses = null;
             try {
@@ -73,7 +76,7 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
                 System.out.println(addresses.get(0).getFeatureName());
             } catch (IOException e) {
                 e.printStackTrace();
-            }
+            }*/
         });
 
         SupportMapFragment mapFragment =
@@ -159,20 +162,24 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
         map = googleMap;
         googleMap.getUiSettings().setZoomControlsEnabled(true);
         googleMap.setOnMapLongClickListener(this);
-        Call<List<FootballEvent>> call = APIClient.createService(FootballEventAPI.class).findAllActiveEvent();
-        call.enqueue(new Callback<List<FootballEvent>>() {
+
+        Call<EventsWrapper> call = APIClient.createService(EventAPI.class).findAllActiveEvent();
+        call.enqueue(new Callback<EventsWrapper>() {
             @Override
-            public void onResponse(Call<List<FootballEvent>> call, Response<List<FootballEvent>> response) {
+            public void onResponse(Call<EventsWrapper> call, Response<EventsWrapper> response) {
                 if (response.isSuccessful()) {
-                    List<FootballEvent> responseList = response.body();
+                    List<FootballEvent> responseList = response.body().getEventsWrapperWithFootball();
                     googleMap.clear();
 
                     if (!filterLevelResultList.isEmpty()) {
                         for (FootballEvent f : responseList) {
                             if (filterLevelResultList.contains(f.getEventLevel().name()))
+                                googleMap.setInfoWindowAdapter(new GoogleMapInfoWindowAdapter(getContext(), f.getDate(),
+                                        f.getTime(), f.getLocation(), f.getEventLevel(), f.getVacancies(), f.getNote()));
+
                                 googleMap.addMarker(new MarkerOptions()
-                                        .position(new LatLng(f.getLatitude(), f.getLongitude()))
-                                        .title(f.getNote()));
+                                        .position(new LatLng(f.getLatitude(), f.getLongitude())))
+                                        .showInfoWindow();
                         }
                         int listSize = responseList.size() - 1;
                         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(responseList.get(listSize).getLatitude(),
@@ -188,7 +195,7 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
             }
 
             @Override
-            public void onFailure(Call<List<FootballEvent>> call, Throwable t) {
+            public void onFailure(Call<EventsWrapper> call, Throwable t) {
                 Log.d("googleMap", t.getMessage());
             }
         });

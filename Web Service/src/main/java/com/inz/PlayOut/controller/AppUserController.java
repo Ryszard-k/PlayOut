@@ -1,7 +1,5 @@
 package com.inz.PlayOut.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.inz.PlayOut.model.entites.AppUser;
 import com.inz.PlayOut.service.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;

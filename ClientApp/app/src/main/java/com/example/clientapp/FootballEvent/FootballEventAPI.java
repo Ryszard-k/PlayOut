@@ -16,10 +16,6 @@ public interface FootballEventAPI {
 
     String BASE_URL = "http://10.0.2.2:8080";
 
-    @GET("/footballEvent/activeEvent/all")
-    @Headers("Content-Type: application/json")
-    Call<List<FootballEvent>> findAllActiveEvent();
-
     @GET("/footballEvent/activeEvent/{username}")
     @Headers("Content-Type: application/json")
     Call<List<FootballEvent>> getMyActiveEvent(@Path("username") String username);
@@ -34,4 +30,5 @@ public interface FootballEventAPI {
 
     @DELETE("/footballEvent/{id}")
     Call<Void> deleteEvent(@Path("id") Long id);
+
 }
