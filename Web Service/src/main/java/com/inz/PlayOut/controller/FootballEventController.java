@@ -42,42 +42,6 @@ public record FootballEventController(FootballEventService footballEventService,
             return new ResponseEntity<>(found, HttpStatus.OK);
     }
 
-    @GetMapping(path = "/activeEvent/all",
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    public ResponseEntity<Object> getAllActiveEvent() {
-        List<FootballEvent> list = footballEventService.findAllActiveEvent();
-        if (list.isEmpty()) {
-            return new ResponseEntity<>(List.of(), HttpStatus.NO_CONTENT);
-        } else
-            return new ResponseEntity<>(list, HttpStatus.OK);
-    }
-
-    @GetMapping(path = "/activeEvent/{username}",
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    public ResponseEntity<Object> getMyActiveEvent(@PathVariable String username) {
-        List<FootballEvent> list = footballEventService.getMyActiveEvent(username);
-        if (list.isEmpty()) {
-            return new ResponseEntity<>(List.of(), HttpStatus.NO_CONTENT);
-        } else
-            return new ResponseEntity<>(list, HttpStatus.OK);
-    }
-
-    @GetMapping(path = "/historyEvent/{username}",
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    public ResponseEntity<Object> getMyHistoryEvent(@PathVariable String username) {
-        List<FootballEvent> list = footballEventService.getMyHistoryEvent(username);
-        if (list.isEmpty()) {
-            return new ResponseEntity<>(List.of(), HttpStatus.NO_CONTENT);
-        } else
-            return new ResponseEntity<>(list, HttpStatus.OK);
-    }
-
     @Override
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,

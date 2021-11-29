@@ -90,19 +90,19 @@ public class History extends Fragment {
 
         SharedPreferences sharedpreferences = container.getContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 
-        Call<List<FootballEvent>> call = APIClient.createService(FootballEventAPI.class).getMyHistoryEvent("Piotr");
+        Call<EventsWrapper> call = APIClient.createService(EventAPI.class).getMyHistoryEvent("Piotr");
         //sharedpreferences.getString(Username, Username));
-        call.enqueue(new Callback<List<FootballEvent>>() {
+        call.enqueue(new Callback<EventsWrapper>() {
             @Override
-            public void onResponse(Call<List<FootballEvent>> call, Response<List<FootballEvent>> response) {
-                List<FootballEvent> list = response.body();
+            public void onResponse(Call<EventsWrapper> call, Response<EventsWrapper> response) {
+                List<FootballEvent> list = response.body().getEventsWrapperWithFootball();
                 recyclerView.setAdapter(new HistoryFootballEvents(list));
                 Log.d("HistoryFootballEvents", "Registered Successfully");
             }
 
             @SuppressLint("LongLogTag")
             @Override
-            public void onFailure(Call<List<FootballEvent>> call, Throwable t) {
+            public void onFailure(Call<EventsWrapper> call, Throwable t) {
                 Log.d("HistoryFootballEventsFailure", t.getMessage());
             }
         });

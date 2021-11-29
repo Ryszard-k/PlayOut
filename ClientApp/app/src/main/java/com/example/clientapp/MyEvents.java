@@ -84,19 +84,19 @@ public class MyEvents extends Fragment {
         rvME.setLayoutManager(new LinearLayoutManager(view.getContext()));
         rvME.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.VERTICAL));
 
-        Call<List<FootballEvent>> call = APIClient.createService(FootballEventAPI.class)
+        Call<EventsWrapper> call = APIClient.createService(EventAPI.class)
                 .getMyActiveEvent("Piotr");   //sharedpreferences.getString(Username, Username));
 
-        call.enqueue(new Callback<List<FootballEvent>>() {
+        call.enqueue(new Callback<EventsWrapper>() {
             @Override
-            public void onResponse(Call<List<FootballEvent>> call, Response<List<FootballEvent>> response) {
-                List<FootballEvent> list = response.body();
+            public void onResponse(Call<EventsWrapper> call, Response<EventsWrapper> response) {
+                List<FootballEvent> list = response.body().getEventsWrapperWithFootball();
                 rvME.setAdapter(new ActiveFootballEvents(list));
                 Log.d("ActiveFootballEvents", "Registered Successfully");
             }
 
             @Override
-            public void onFailure(Call<List<FootballEvent>> call, Throwable t) {
+            public void onFailure(Call<EventsWrapper> call, Throwable t) {
                 Log.d("tag1", t.getMessage());
             }
         });
