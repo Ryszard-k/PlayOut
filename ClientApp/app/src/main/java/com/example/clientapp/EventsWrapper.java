@@ -6,6 +6,7 @@ import com.example.clientapp.Volleyball.Volleyball;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -30,7 +31,9 @@ public class EventsWrapper {
     }
 
     public List<FootballEvent> getEventsWrapperWithFootball(){
-       return (List<FootballEvent>) map.get("Football");
+        if (map.get("Football") != null) {
+            return (List<FootballEvent>) map.get("Football");
+        } else return Collections.emptyList();
     }
 
     public List<Basketball> getEventsWrapperWithBasketball(){

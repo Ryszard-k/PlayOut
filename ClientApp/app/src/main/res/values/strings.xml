@@ -24,4 +24,8 @@
     <string name="vacancies">vacancies</string>
     <string name="note">note</string>
     <string name="join">Join</string>
+    <string name="Events">Events</string>
+    <string name="Levels">Levels</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

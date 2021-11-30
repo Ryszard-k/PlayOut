@@ -71,6 +71,9 @@ public record AllEventsController(FootballEventService footballEventService) {
         List<FootballEvent> list = footballEventService.getMyHistoryEvent(username);
         eventWrapper.setEventsWrapperWithFootball(list);
 
+        // TODO: find all active events from basketball and set to wrapper
+        // TODO: find all active events from volleyball and set to wrapper
+
         if (eventWrapper.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else

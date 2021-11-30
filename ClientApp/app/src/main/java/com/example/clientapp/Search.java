@@ -1,11 +1,15 @@
 package com.example.clientapp;
 
+import static com.example.clientapp.Auth.Prefs.MyPREFERENCES;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -18,16 +22,19 @@ import android.widget.Toast;
 
 import androidx.appcompat.widget.SearchView;
 
+import com.example.clientapp.Basketball.Basketball;
 import com.example.clientapp.FootballEvent.APIClient;
 import com.example.clientapp.FootballEvent.FootballEventAPI;
 import com.example.clientapp.FootballEvent.GoogleMapInfoWindowAdapter;
 import com.example.clientapp.FootballEvent.Model.EventLevel;
 import com.example.clientapp.FootballEvent.Model.FootballEvent;
+import com.example.clientapp.Volleyball.Volleyball;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
@@ -35,12 +42,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.HTTP;
 
-public class Search extends Fragment implements GoogleMap.OnMapLongClickListener {
+public class Search extends Fragment implements GoogleMap.OnMapLongClickListener, GoogleMap.OnInfoWindowClickListener {
 
     List<String> filterLevelResultList = new ArrayList<>();
     List<String> filterEventResultList = new ArrayList<>();
@@ -59,25 +70,11 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Button filterButton = view.findViewById(R.id.filterButton);
-        Button searchButton = view.findViewById(R.id.searchLocationButton);
+        Button filterLevelButton = view.findViewById(R.id.filterLevelButton);
+        Button filterEventButton = view.findViewById(R.id.filterEventButton);
         searchView = view.findViewById(R.id.idSearchView);
 
-        searchButton.setOnClickListener(v -> {
-
-            /*
-            Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
-            List<Address> addresses = null;
-            try {
-                List<Address> abc = geocoder.getFromLocationName("Rondo mogilskie", 1);
-                System.out.println(abc.get(0).getLatitude());
-                System.out.println(abc.get(0).getLongitude());
-                addresses = geocoder.getFromLocation(50.06109, 19.91220, 1);
-                System.out.println(addresses.get(0).getFeatureName());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }*/
-        });
+        SharedPreferences sharedpreferences = view.getContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
@@ -85,14 +82,10 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
             mapFragment.getMapAsync(callbackWithFilters);
         }
 
-        filterButton.setOnClickListener(v -> {
+        filterEventButton.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setCancelable(false);
-            builder.setTitle("Filter");
-
-            String[] lvlList = EventLevel.enumToStringArray();
-            boolean[] checkedItems = new boolean[lvlList.length];
-            List<String> selectedItems = Arrays.asList(lvlList);
+            builder.setTitle("Event filter");
 
             String[] eventList = {"Football", "Basketball", "Volleyball"};
             boolean[] checkedEventItems = new boolean[eventList.length];
@@ -102,16 +95,7 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
                 checkedEventItems[which] = isChecked;
             });
 
-            builder.setMultiChoiceItems(lvlList, checkedItems, (dialog, which, isChecked) -> checkedItems[which] = isChecked);
-
             builder.setPositiveButton(R.string.ok, (dialog, id) -> {
-                filterLevelResultList = new ArrayList<>();
-                for (int i = 0; i < checkedItems.length; i++) {
-                    if (checkedItems[i]) {
-                        filterLevelResultList.add(selectedItems.get(i).substring(0, 1));
-                    }
-                }
-
                 filterEventResultList = new ArrayList<>();
                 for (int i = 0; i < checkedEventItems.length; i++) {
                     if (checkedEventItems[i]) {
@@ -128,8 +112,36 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
 
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
+        });
 
+        filterLevelButton.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setCancelable(false);
+            builder.setTitle("Level filter");
 
+            String[] lvlList = EventLevel.enumToStringArray();
+            boolean[] checkedItems = new boolean[lvlList.length];
+            List<String> selectedItems = Arrays.asList(lvlList);
+
+            builder.setMultiChoiceItems(lvlList, checkedItems, (dialog, which, isChecked) -> checkedItems[which] = isChecked);
+
+            builder.setPositiveButton(R.string.ok, (dialog, id) -> {
+                filterLevelResultList = new ArrayList<>();
+                for (int i = 0; i < checkedItems.length; i++) {
+                    if (checkedItems[i]) {
+                        filterLevelResultList.add(selectedItems.get(i).substring(0, 1));
+                    }
+                }
+
+                mapFragment.getMapAsync(callbackWithFilters);
+            });
+
+            builder.setNegativeButton(R.string.cancel, (dialog, id) -> {
+                dialog.cancel();
+            });
+
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
         });
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -162,33 +174,53 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
         map = googleMap;
         googleMap.getUiSettings().setZoomControlsEnabled(true);
         googleMap.setOnMapLongClickListener(this);
+        googleMap.setOnInfoWindowClickListener(this);
 
         Call<EventsWrapper> call = APIClient.createService(EventAPI.class).findAllActiveEvent();
         call.enqueue(new Callback<EventsWrapper>() {
             @Override
             public void onResponse(Call<EventsWrapper> call, Response<EventsWrapper> response) {
                 if (response.isSuccessful()) {
-                    List<FootballEvent> responseList = response.body().getEventsWrapperWithFootball();
+                    List<FootballEvent> responseListFootball = response.body().getEventsWrapperWithFootball();
+                    List<Basketball> responseListBasketball = response.body().getEventsWrapperWithBasketball();
+                    List<Volleyball> responseListVolleyball = response.body().getEventsWrapperWithVolleyball();
+
                     googleMap.clear();
+/*
+                    if (!filterEventResultList.isEmpty() && !filterLevelResultList.isEmpty()){
+                        for ()
+                    } else if (filterEventResultList.isEmpty() && !filterLevelResultList.isEmpty()){
+
+                    } else if (!filterEventResultList.isEmpty() && filterLevelResultList.isEmpty()){
+
+                    } else {
+
+                    }*/
 
                     if (!filterLevelResultList.isEmpty()) {
-                        for (FootballEvent f : responseList) {
+                        for (FootballEvent f : responseListFootball) {
                             if (filterLevelResultList.contains(f.getEventLevel().name()))
-                                googleMap.setInfoWindowAdapter(new GoogleMapInfoWindowAdapter(getContext(), f.getDate(),
-                                        f.getTime(), f.getLocation(), f.getEventLevel(), f.getVacancies(), f.getNote()));
+                                googleMap.setInfoWindowAdapter(new GoogleMapInfoWindowAdapter(getContext()));
 
                                 googleMap.addMarker(new MarkerOptions()
-                                        .position(new LatLng(f.getLatitude(), f.getLongitude())))
-                                        .showInfoWindow();
+                                        .position(new LatLng(f.getLatitude(), f.getLongitude())));
                         }
-                        int listSize = responseList.size() - 1;
-                        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(responseList.get(listSize).getLatitude(),
-                                responseList.get(listSize).getLongitude()), 1));
+                        int listSize = responseListFootball.size() - 1;
+                        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(responseListFootball.get(listSize).getLatitude(),
+                                responseListFootball.get(listSize).getLongitude()), 1));
                     } else {
-                        for (FootballEvent f : responseList){
+                        for (FootballEvent f : responseListFootball){
+                            String snippet = "Date: " + f.getDate() + "\n" +
+                                    "Time: " + f.getTime() + "\n" +
+                                    "Address: " + f.getLocation() + "\n" +
+                                    "Level: " + f.getEventLevel() + "\n" +
+                                    "Vacancies: " + f.getVacancies() + "\n" +
+                                    "Note: " + f.getNote() + "\n";
+                            googleMap.setInfoWindowAdapter(new GoogleMapInfoWindowAdapter(getContext()));
                             googleMap.addMarker(new MarkerOptions()
                                     .position(new LatLng(f.getLatitude(), f.getLongitude()))
-                                    .title(f.getNote()));
+                                    .title("Football Event " +f.getId())
+                            .snippet(snippet));
                         }
                     }
                 }
@@ -230,4 +262,50 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
     }
 
 
+    @Override
+    public void onInfoWindowClick(@NonNull Marker marker) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Are you sure you want to join the event?");
+        String markerTitle = marker.getTitle();
+        String a = Objects.requireNonNull(markerTitle).substring(0, markerTitle.indexOf(" "));
+        Long eventId = Long.valueOf(markerTitle.substring(markerTitle.lastIndexOf(" ", 15) + 1));
+
+        builder.setPositiveButton(R.string.yes, (dialog, which) -> {
+            switch (a){
+                case "Football":
+                    Call<Void> call = APIClient.createService(FootballEventAPI.class).joinToEvent(eventId, "Piotr"); //sharedpreferences.getString(Username, Username)
+                    call.enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            if (response.isSuccessful()){
+                                Toast.makeText(getContext(), "Joined to event", Toast.LENGTH_LONG).show();
+                            } else if (response.raw().code() == HttpsURLConnection.HTTP_CONFLICT){
+                                Toast.makeText(getContext(), "You are already attending the event", Toast.LENGTH_LONG).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+                            Log.d("joinFootball", Log.getStackTraceString(t));
+                        }
+                    });
+                    break;
+
+                case "Basketball":
+
+                    break;
+
+                case "Volleyball":
+
+                    break;
+                default: break;
+            }
+            dialog.dismiss();
+        });
+
+        builder.setNegativeButton(R.string.no, (dialog, id) -> dialog.cancel());
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
 }

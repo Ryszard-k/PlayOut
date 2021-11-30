@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.clientapp.Basketball.Basketball;
 import com.example.clientapp.FootballEvent.APIClient;
 import com.example.clientapp.FootballEvent.ActiveFootballEvents;
 import com.example.clientapp.FootballEvent.FootballEventAPI;
@@ -91,6 +92,7 @@ public class MyEvents extends Fragment {
             @Override
             public void onResponse(Call<EventsWrapper> call, Response<EventsWrapper> response) {
                 List<FootballEvent> list = response.body().getEventsWrapperWithFootball();
+                List<Basketball> basketballs = response.body().getEventsWrapperWithBasketball();
                 rvME.setAdapter(new ActiveFootballEvents(list));
                 Log.d("ActiveFootballEvents", "Registered Successfully");
             }

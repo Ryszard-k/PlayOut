@@ -20,11 +20,11 @@
         app:queryHint="Search Here" />
 
     <Button
-        android:id="@+id/filterButton"
+        android:id="@+id/filterLevelButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right|top"
-        android:text="@string/filter"
+        android:text="@string/Levels"
         android:padding="10dp"
         android:layout_marginTop="70dp"
         android:paddingRight="10dp"
@@ -33,11 +33,11 @@
         android:alpha="0.7" />
 
     <Button
-        android:id="@+id/searchLocationButton"
+        android:id="@+id/filterEventButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right|top"
-        android:text="@string/search"
+        android:text="@string/Events"
         android:padding="10dp"
         android:layout_marginTop="130dp"
         android:paddingRight="10dp"

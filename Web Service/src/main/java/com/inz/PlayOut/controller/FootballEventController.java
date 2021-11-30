@@ -57,13 +57,13 @@ public record FootballEventController(FootballEventService footballEventService,
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @PutMapping("/{idAppUser}/{idFootballEvent}")
-    public ResponseEntity<Object> jointToEvent(@PathVariable Long idAppUser, @PathVariable Long idFootballEvent) {
-        Optional<FootballEvent> updatedEvent = footballEventService.joinToEvent(idAppUser, idFootballEvent);
-        if (updatedEvent.isPresent()) {
-            return new ResponseEntity<>(updatedEvent, HttpStatus.OK);
+    @PutMapping("/join/{eventId}/{username}")
+    public ResponseEntity<Object> jointToEvent(@PathVariable String username, @PathVariable Long eventId) {
+        boolean updatedEvent = footballEventService.joinToEvent(username, eventId);
+        if (updatedEvent) {
+            return new ResponseEntity<>(HttpStatus.OK);
         } else
-            return new ResponseEntity<>("Not found event to join", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
     }
 
     @Override

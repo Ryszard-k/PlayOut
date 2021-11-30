@@ -7,6 +7,7 @@ import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface FootballEventAPI {
@@ -16,6 +17,9 @@ public interface FootballEventAPI {
     @POST("/footballEvent")
     @Headers("Content-Type: application/json")
     Call<Void> addEvent(@Body FootballEvent footballEvent);
+
+    @PUT("/footballEvent/join/{eventId}/{username}")
+    Call<Void> joinToEvent(@Path("eventId") Long eventId, @Path("username") String username);
 
     @DELETE("/footballEvent/{id}")
     Call<Void> deleteEvent(@Path("id") Long id);
