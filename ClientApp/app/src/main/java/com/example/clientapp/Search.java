@@ -86,6 +86,7 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setCancelable(false);
             builder.setTitle("Event filter");
+            filterEventResultList = new ArrayList<>();
 
             String[] eventList = {"Football", "Basketball", "Volleyball"};
             boolean[] checkedEventItems = new boolean[eventList.length];
@@ -96,10 +97,9 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
             });
 
             builder.setPositiveButton(R.string.ok, (dialog, id) -> {
-                filterEventResultList = new ArrayList<>();
                 for (int i = 0; i < checkedEventItems.length; i++) {
                     if (checkedEventItems[i]) {
-                        filterEventResultList.add(selectedEventItems.get(i).substring(0, 1));
+                        filterEventResultList.add(selectedEventItems.get(i));
                     }
                 }
 
@@ -118,6 +118,7 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setCancelable(false);
             builder.setTitle("Level filter");
+            filterLevelResultList = new ArrayList<>();
 
             String[] lvlList = EventLevel.enumToStringArray();
             boolean[] checkedItems = new boolean[lvlList.length];
@@ -126,7 +127,6 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
             builder.setMultiChoiceItems(lvlList, checkedItems, (dialog, which, isChecked) -> checkedItems[which] = isChecked);
 
             builder.setPositiveButton(R.string.ok, (dialog, id) -> {
-                filterLevelResultList = new ArrayList<>();
                 for (int i = 0; i < checkedItems.length; i++) {
                     if (checkedItems[i]) {
                         filterLevelResultList.add(selectedItems.get(i).substring(0, 1));
@@ -186,6 +186,63 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
                     List<Volleyball> responseListVolleyball = response.body().getEventsWrapperWithVolleyball();
 
                     googleMap.clear();
+                    if (filterEventResultList.isEmpty() && filterLevelResultList.isEmpty()) {
+                        for (FootballEvent f : responseListFootball) {
+                            markersSetUp(f, googleMap);
+                            //TODO: basketball and volleyball list without filters
+                        }
+                    } else if (!filterEventResultList.isEmpty() && filterLevelResultList.isEmpty()){
+                        for (String e : filterEventResultList) {
+                            switch (e) {
+                                case "Football":
+                                        for (FootballEvent f : responseListFootball) {
+                                            markersSetUp(f, googleMap);
+                                    }
+                                    break;
+
+                                case "Basketball":
+                                    //TODO: basketball markers with filters
+                                    break;
+
+                                case "Volleyball":
+                                    //TODO: volleyball markers with filters
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    } else if (filterEventResultList.isEmpty() && !filterLevelResultList.isEmpty()) {
+                        for (FootballEvent f : responseListFootball) {
+                            if (filterLevelResultList.contains(f.getEventLevel().name())){
+                                markersSetUp(f, googleMap);
+                            }
+                        }
+
+                        // TODO: basketball and volleyball
+                    } else if (!filterEventResultList.isEmpty() && !filterLevelResultList.isEmpty()) {
+                        for (String e : filterEventResultList) {
+                            switch (e) {
+                                case "Football":
+                                    for (FootballEvent f : responseListFootball) {
+                                        if (filterLevelResultList.contains(f.getEventLevel().name())){
+                                            markersSetUp(f, googleMap);
+                                        }
+                                    }
+                                    break;
+
+                                case "Basketball":
+                                    //TODO: basketball markers with filters
+                                    break;
+
+                                case "Volleyball":
+                                    //TODO: volleyball markers with filters
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    }
+
 /*
                     if (!filterEventResultList.isEmpty() && !filterLevelResultList.isEmpty()){
                         for ()
@@ -196,7 +253,7 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
                     } else {
 
                     }*/
-
+/*
                     if (!filterLevelResultList.isEmpty()) {
                         for (FootballEvent f : responseListFootball) {
                             if (filterLevelResultList.contains(f.getEventLevel().name()))
@@ -222,7 +279,7 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
                                     .title("Football Event " +f.getId())
                             .snippet(snippet));
                         }
-                    }
+                    }*/
                 }
             }
 
@@ -279,6 +336,8 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
                         public void onResponse(Call<Void> call, Response<Void> response) {
                             if (response.isSuccessful()){
                                 Toast.makeText(getContext(), "Joined to event", Toast.LENGTH_LONG).show();
+                                getActivity().finish();
+                                startActivity(new Intent(getActivity(), DashboardActivity.class));
                             } else if (response.raw().code() == HttpsURLConnection.HTTP_CONFLICT){
                                 Toast.makeText(getContext(), "You are already attending the event", Toast.LENGTH_LONG).show();
                             }
@@ -307,5 +366,19 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
 
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    private void markersSetUp(FootballEvent f, GoogleMap map) {
+        String snippet = "Date: " + f.getDate() + "\n" +
+                "Time: " + f.getTime() + "\n" +
+                "Address: " + f.getLocation() + "\n" +
+                "Level: " + f.getEventLevel() + "\n" +
+                "Vacancies: " + f.getVacancies() + "\n" +
+                "Note: " + f.getNote() + "\n";
+        map.setInfoWindowAdapter(new GoogleMapInfoWindowAdapter(getContext()));
+        map.addMarker(new MarkerOptions()
+                .position(new LatLng(f.getLatitude(), f.getLongitude()))
+                .title("Football Event " + f.getId())
+                .snippet(snippet));
     }
 }

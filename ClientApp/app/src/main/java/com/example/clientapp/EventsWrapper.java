@@ -37,11 +37,15 @@ public class EventsWrapper {
     }
 
     public List<Basketball> getEventsWrapperWithBasketball(){
-        return (List<Basketball>) map.get("Basketball");
+        if (map.get("Basketball") != null) {
+            return (List<Basketball>) map.get("Basketball");
+        } else return Collections.emptyList();
     }
 
-    public List<Volleyball> getEventsWrapperWithVolleyball(){
-        return (List<Volleyball>) map.get("Volleyball");
+    public List<Volleyball> getEventsWrapperWithVolleyball() {
+        if (map.get("Volleyball") != null) {
+            return (List<Volleyball>) map.get("Volleyball");
+        } else return Collections.emptyList();
     }
 
 }
