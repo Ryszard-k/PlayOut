@@ -1,7 +1,9 @@
 package com.inz.PlayOut.controller;
 
 import com.inz.PlayOut.EventWrapper;
+import com.inz.PlayOut.model.entites.BasketballEvent;
 import com.inz.PlayOut.model.entites.FootballEvent;
+import com.inz.PlayOut.service.BasketballEventService;
 import com.inz.PlayOut.service.FootballEventService;
 import com.sun.xml.bind.v2.TODO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/events")
-public record AllEventsController(FootballEventService footballEventService) {
+public record AllEventsController(FootballEventService footballEventService, BasketballEventService basketballEventService) {
 
     @Autowired
     public AllEventsController {
@@ -33,7 +35,9 @@ public record AllEventsController(FootballEventService footballEventService) {
         List<FootballEvent> footballEvents = footballEventService.findAllActiveEvent();
         eventWrapper.setEventsWrapperWithFootball(footballEvents);
 
-        // TODO: find all active events from basketball and set to wrapper
+        List<BasketballEvent> basketballEvents = basketballEventService.findAllActiveEvent();
+        eventWrapper.setEventsWrapperWithBasketball(basketballEvents);
+
         // TODO: find all active events from volleyball and set to wrapper
 
         if (eventWrapper.isEmpty()){
@@ -52,7 +56,9 @@ public record AllEventsController(FootballEventService footballEventService) {
         List<FootballEvent> list = footballEventService.getMyActiveEvent(username);
         eventWrapper.setEventsWrapperWithFootball(list);
 
-        // TODO: find all active events from basketball and set to wrapper
+        List<BasketballEvent> basketballEvents = basketballEventService.getMyActiveEvent(username);
+        eventWrapper.setEventsWrapperWithBasketball(basketballEvents);
+
         // TODO: find all active events from volleyball and set to wrapper
 
         if (eventWrapper.isEmpty()) {
@@ -71,7 +77,9 @@ public record AllEventsController(FootballEventService footballEventService) {
         List<FootballEvent> list = footballEventService.getMyHistoryEvent(username);
         eventWrapper.setEventsWrapperWithFootball(list);
 
-        // TODO: find all active events from basketball and set to wrapper
+        List<BasketballEvent> basketballEvents = basketballEventService.getMyHistoryEvent(username);
+        eventWrapper.setEventsWrapperWithBasketball(basketballEvents);
+
         // TODO: find all active events from volleyball and set to wrapper
 
         if (eventWrapper.isEmpty()) {

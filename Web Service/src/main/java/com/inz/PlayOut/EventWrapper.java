@@ -1,7 +1,7 @@
 package com.inz.PlayOut;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.inz.PlayOut.model.entites.Basketball;
+import com.inz.PlayOut.model.entites.BasketballEvent;
 import com.inz.PlayOut.model.entites.FootballEvent;
 import com.inz.PlayOut.model.entites.Volleyball;
 
@@ -17,7 +17,7 @@ public class EventWrapper {
         return map;
     }
 
-    public HashMap<String, List<?>> setEventsWrapperWithBasketball(List<Basketball> objects){
+    public HashMap<String, List<?>> setEventsWrapperWithBasketball(List<BasketballEvent> objects){
         map.put("Basketball", objects);
         return map;
     }
@@ -31,8 +31,8 @@ public class EventWrapper {
         return (List<FootballEvent>) map.get("Football");
     }
 
-    public List<Basketball> getEventsWrapperWithBasketball(){
-        return (List<Basketball>) map.get("Basketball");
+    public List<BasketballEvent> getEventsWrapperWithBasketball(){
+        return (List<BasketballEvent>) map.get("Basketball");
     }
 
     public List<Volleyball> getEventsWrapperWithVolleyball(){
