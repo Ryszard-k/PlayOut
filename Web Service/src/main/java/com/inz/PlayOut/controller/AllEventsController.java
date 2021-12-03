@@ -3,9 +3,10 @@ package com.inz.PlayOut.controller;
 import com.inz.PlayOut.EventWrapper;
 import com.inz.PlayOut.model.entites.BasketballEvent;
 import com.inz.PlayOut.model.entites.FootballEvent;
+import com.inz.PlayOut.model.entites.VolleyballEvent;
 import com.inz.PlayOut.service.BasketballEventService;
 import com.inz.PlayOut.service.FootballEventService;
-import com.sun.xml.bind.v2.TODO;
+import com.inz.PlayOut.service.VolleyballEventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,7 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/events")
-public record AllEventsController(FootballEventService footballEventService, BasketballEventService basketballEventService) {
+public record AllEventsController(FootballEventService footballEventService, BasketballEventService basketballEventService, VolleyballEventService volleyballEventService) {
 
     @Autowired
     public AllEventsController {
@@ -38,7 +39,8 @@ public record AllEventsController(FootballEventService footballEventService, Bas
         List<BasketballEvent> basketballEvents = basketballEventService.findAllActiveEvent();
         eventWrapper.setEventsWrapperWithBasketball(basketballEvents);
 
-        // TODO: find all active events from volleyball and set to wrapper
+        List<VolleyballEvent> volleyballEvents = volleyballEventService.findAllActiveEvent();
+        eventWrapper.setEventsWrapperWithVolleyball(volleyballEvents);
 
         if (eventWrapper.isEmpty()){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -59,7 +61,8 @@ public record AllEventsController(FootballEventService footballEventService, Bas
         List<BasketballEvent> basketballEvents = basketballEventService.getMyActiveEvent(username);
         eventWrapper.setEventsWrapperWithBasketball(basketballEvents);
 
-        // TODO: find all active events from volleyball and set to wrapper
+        List<VolleyballEvent> volleyballEvents = volleyballEventService.findAllActiveEvent();
+        eventWrapper.setEventsWrapperWithVolleyball(volleyballEvents);
 
         if (eventWrapper.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -80,7 +83,8 @@ public record AllEventsController(FootballEventService footballEventService, Bas
         List<BasketballEvent> basketballEvents = basketballEventService.getMyHistoryEvent(username);
         eventWrapper.setEventsWrapperWithBasketball(basketballEvents);
 
-        // TODO: find all active events from volleyball and set to wrapper
+        List<VolleyballEvent> volleyballEvents = volleyballEventService.findAllActiveEvent();
+        eventWrapper.setEventsWrapperWithVolleyball(volleyballEvents);
 
         if (eventWrapper.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

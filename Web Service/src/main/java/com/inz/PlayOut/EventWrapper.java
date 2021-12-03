@@ -3,7 +3,7 @@ package com.inz.PlayOut;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.inz.PlayOut.model.entites.BasketballEvent;
 import com.inz.PlayOut.model.entites.FootballEvent;
-import com.inz.PlayOut.model.entites.Volleyball;
+import com.inz.PlayOut.model.entites.VolleyballEvent;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,7 +22,7 @@ public class EventWrapper {
         return map;
     }
 
-    public HashMap<String, List<?>> setEventsWrapperWithVolleyball(List<Volleyball> objects){
+    public HashMap<String, List<?>> setEventsWrapperWithVolleyball(List<VolleyballEvent> objects){
         map.put("Volleyball", objects);
         return map;
     }
@@ -35,8 +35,8 @@ public class EventWrapper {
         return (List<BasketballEvent>) map.get("Basketball");
     }
 
-    public List<Volleyball> getEventsWrapperWithVolleyball(){
-        return (List<Volleyball>) map.get("Volleyball");
+    public List<VolleyballEvent> getEventsWrapperWithVolleyball(){
+        return (List<VolleyballEvent>) map.get("Volleyball");
     }
 
     @JsonIgnore

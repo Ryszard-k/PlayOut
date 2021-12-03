@@ -4,10 +4,8 @@ import com.inz.PlayOut.model.EventLevel;
 import com.inz.PlayOut.model.entites.AppUser;
 import com.inz.PlayOut.model.entites.BasketballEvent;
 import com.inz.PlayOut.model.entites.FootballEvent;
-import com.inz.PlayOut.service.AppUserService;
-import com.inz.PlayOut.service.BasketballEventService;
-import com.inz.PlayOut.service.CommentService;
-import com.inz.PlayOut.service.FootballEventService;
+import com.inz.PlayOut.model.entites.VolleyballEvent;
+import com.inz.PlayOut.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
@@ -25,14 +23,16 @@ public class test {
     private final CommentService commentService;
     private final PasswordEncoder passwordEncoder;
     private final BasketballEventService basketballEventService;
+    private final VolleyballEventService volleyballEventService;
 
     @Autowired
-    public test(FootballEventService footballEventService, AppUserService appUserService, CommentService commentService, PasswordEncoder passwordEncoder, BasketballEventService basketballEventService) {
+    public test(FootballEventService footballEventService, AppUserService appUserService, CommentService commentService, PasswordEncoder passwordEncoder, BasketballEventService basketballEventService, VolleyballEventService volleyballEventService) {
         this.footballEventService = footballEventService;
         this.appUserService = appUserService;
         this.commentService = commentService;
         this.passwordEncoder = passwordEncoder;
         this.basketballEventService = basketballEventService;
+        this.volleyballEventService = volleyballEventService;
     }
 
     @EventListener(ApplicationReadyEvent.class)
@@ -57,5 +57,14 @@ public class test {
                 3, "kosz trzy", "Mogilska 3" ,appUserService.findById(1L).get()));
         basketballEventService.save(new BasketballEvent(LocalDate.now().plusDays(3), LocalTime.now().plusMinutes(3), 2.343234, 5.345665, EventLevel.C,
                 3, "kosz cztery", "Mogilska 4" ,appUserService.findById(2L).get()));
+
+        volleyballEventService.save(new VolleyballEvent(LocalDate.now().plusDays(3), LocalTime.now(), 8.343234, 5.345665, EventLevel.C,
+                3, "siata raz", "Jana 1" ,appUserService.findById(1L).get()));
+        volleyballEventService.save(new VolleyballEvent(LocalDate.now().minusDays(3), LocalTime.now(), 8.343234, 5.345665, EventLevel.C,
+                3, "siata dwa", "Jana 2" ,appUserService.findById(1L).get()));
+        volleyballEventService.save(new VolleyballEvent(LocalDate.now(), LocalTime.now().plusMinutes(3), 8.343234, 5.345665, EventLevel.C,
+                3, "siata trzy", "Jana 3" ,appUserService.findById(1L).get()));
+        volleyballEventService.save(new VolleyballEvent(LocalDate.now().plusDays(3), LocalTime.now().plusMinutes(3), 8.343234, 5.345665, EventLevel.C,
+                3, "siata cztery", "Jana 4" ,appUserService.findById(2L).get()));
     }
 }

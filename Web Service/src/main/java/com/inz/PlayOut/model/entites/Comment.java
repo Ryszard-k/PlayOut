@@ -23,6 +23,10 @@ public class Comment {
     @JoinColumn(name = "BasketballEvent", nullable = false)
     private BasketballEvent basketballEvent;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "VolleyballEvent", nullable = false)
+    private VolleyballEvent volleyballEvent;
+
     public Comment(String text) {
         this.text = text;
     }

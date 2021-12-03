@@ -58,6 +58,20 @@ public class AppUser implements Serializable, UserDetails {
     @JsonIgnoreProperties("participants")
     private Set<BasketballEvent> basketballEventsParticipants;
 
+    @OneToMany(mappedBy = "authorVolleyball",
+            cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("authorVolleyball")
+    private Set<VolleyballEvent> volleyballEventsAuthor;
+
+    @ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "Appuser_VolleyballEvent",
+            joinColumns = { @JoinColumn(name = "Appuser_id") },
+            inverseJoinColumns = { @JoinColumn(name = "VolleyballEvent_id") }
+    )
+    @JsonIgnoreProperties("participants")
+    private Set<VolleyballEvent> volleyballEventsParticipants;
+
     public AppUser(String name, String password, String email) {
         this.username = name;
         this.password = password;
@@ -159,6 +173,22 @@ public class AppUser implements Serializable, UserDetails {
 
     public void setBasketballEventsParticipants(Set<BasketballEvent> basketballEventsParticipants) {
         this.basketballEventsParticipants = basketballEventsParticipants;
+    }
+
+    public Set<VolleyballEvent> getVolleyballEventsAuthor() {
+        return volleyballEventsAuthor;
+    }
+
+    public void setVolleyballEventsAuthor(Set<VolleyballEvent> volleyballEventsAuthor) {
+        this.volleyballEventsAuthor = volleyballEventsAuthor;
+    }
+
+    public Set<VolleyballEvent> getVolleyballEventsParticipants() {
+        return volleyballEventsParticipants;
+    }
+
+    public void setVolleyballEventsParticipants(Set<VolleyballEvent> volleyballEventsParticipants) {
+        this.volleyballEventsParticipants = volleyballEventsParticipants;
     }
 
     @Override

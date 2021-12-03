@@ -1,8 +1,8 @@
 package com.inz.PlayOut.service;
 
 import com.inz.PlayOut.model.entites.AppUser;
-import com.inz.PlayOut.model.entites.BasketballEvent;
-import com.inz.PlayOut.model.repositories.BasketballEventRepo;
+import com.inz.PlayOut.model.entites.VolleyballEvent;
+import com.inz.PlayOut.model.repositories.VolleyballEventRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,25 +13,26 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public record BasketballEventService(BasketballEventRepo basketballEventRepo, AppUserService appUserService) implements CRUDService<BasketballEvent>{
+public record VolleyballEventService(VolleyballEventRepo volleyballEventRepo,
+                                     AppUserService appUserService) implements CRUDService<VolleyballEvent> {
 
     @Autowired
-    public BasketballEventService {
+    public VolleyballEventService {
     }
 
     @Override
-    public List<BasketballEvent> findAll() {
-        return basketballEventRepo.findAll();
+    public List<VolleyballEvent> findAll() {
+        return volleyballEventRepo.findAll();
     }
 
     @Override
-    public Optional<BasketballEvent> findById(Long id) {
-        return basketballEventRepo.findById(id);
+    public Optional<VolleyballEvent> findById(Long id) {
+        return volleyballEventRepo.findById(id);
     }
 
-    public List<BasketballEvent> findAllActiveEvent(){
-        List<BasketballEvent> allEvents = basketballEventRepo.findAll();
-        List<BasketballEvent> list = allEvents.stream()
+    public List<VolleyballEvent> findAllActiveEvent(){
+        List<VolleyballEvent> allEvents = volleyballEventRepo.findAll();
+        List<VolleyballEvent> list = allEvents.stream()
                 .filter(k -> k.getDate().isAfter(LocalDate.now()))
                 .collect(Collectors.toList());
 
@@ -42,44 +43,44 @@ public record BasketballEventService(BasketballEventRepo basketballEventRepo, Ap
         return list;
     }
 
-    public List<BasketballEvent> getMyActiveEvent(String username){
+    public List<VolleyballEvent> getMyActiveEvent(String username){
         Optional<AppUser> appUser = appUserService.findByUsername(username);
         if (appUser.isPresent()){
-            List<BasketballEvent> myActiveEvents = appUser.get().getBasketballEventsParticipants().stream()
+            List<VolleyballEvent> myActiveEvents = appUser.get().getVolleyballEventsParticipants().stream()
                     .filter(k -> k.getDate().isAfter(LocalDate.now()))
                     .collect(Collectors.toList());
 
-            myActiveEvents.addAll(appUser.get().getBasketballEventsParticipants().stream()
+            myActiveEvents.addAll(appUser.get().getVolleyballEventsParticipants().stream()
                     .filter(k -> (k.getDate().isEqual(LocalDate.now())) && (k.getTime().isAfter(LocalTime.now().plusSeconds(30))))
                     .collect(Collectors.toList()));
 
-            myActiveEvents.addAll(appUser.get().getBasketballEventsAuthor().stream()
+            myActiveEvents.addAll(appUser.get().getVolleyballEventsAuthor().stream()
                     .filter(k -> k.getDate().isAfter(LocalDate.now()))
                     .collect(Collectors.toList()));
 
-            myActiveEvents.addAll(appUser.get().getBasketballEventsAuthor().stream()
+            myActiveEvents.addAll(appUser.get().getVolleyballEventsAuthor().stream()
                     .filter(k -> (k.getDate().isEqual(LocalDate.now())) && (k.getTime().isAfter(LocalTime.now().plusSeconds(30))))
                     .collect(Collectors.toList()));
             return myActiveEvents;
         } else return List.of();
     }
 
-    public List<BasketballEvent> getMyHistoryEvent(String username){
+    public List<VolleyballEvent> getMyHistoryEvent(String username){
         Optional<AppUser> appUser = appUserService.findByUsername(username);
         if (appUser.isPresent()){
-            List<BasketballEvent> myActiveEvents = appUser.get().getBasketballEventsParticipants().stream()
+            List<VolleyballEvent> myActiveEvents = appUser.get().getVolleyballEventsParticipants().stream()
                     .filter(k -> k.getDate().isBefore(LocalDate.now()))
                     .collect(Collectors.toList());
 
-            myActiveEvents.addAll(appUser.get().getBasketballEventsParticipants().stream()
+            myActiveEvents.addAll(appUser.get().getVolleyballEventsParticipants().stream()
                     .filter(k -> (k.getDate().isEqual(LocalDate.now())) && (k.getTime().isBefore(LocalTime.now().plusSeconds(30))))
                     .collect(Collectors.toList()));
 
-            myActiveEvents.addAll(appUser.get().getBasketballEventsAuthor().stream()
+            myActiveEvents.addAll(appUser.get().getVolleyballEventsAuthor().stream()
                     .filter(k -> k.getDate().isBefore(LocalDate.now()))
                     .collect(Collectors.toList()));
 
-            myActiveEvents.addAll(appUser.get().getBasketballEventsAuthor().stream()
+            myActiveEvents.addAll(appUser.get().getVolleyballEventsAuthor().stream()
                     .filter(k -> (k.getDate().isEqual(LocalDate.now())) && (k.getTime().isBefore(LocalTime.now().plusSeconds(30))))
                     .collect(Collectors.toList()));
             return myActiveEvents;
@@ -87,23 +88,23 @@ public record BasketballEventService(BasketballEventRepo basketballEventRepo, Ap
     }
 
     @Override
-    public BasketballEvent save(BasketballEvent object) {
-        return basketballEventRepo.save(object);
+    public VolleyballEvent save(VolleyballEvent object) {
+        return volleyballEventRepo.save(object);
     }
 
     public boolean joinToEvent(String username, Long idBasketball){
-        Optional<BasketballEvent> foundEvent = basketballEventRepo.findById(idBasketball);
+        Optional<VolleyballEvent> foundEvent = volleyballEventRepo.findById(idBasketball);
         Optional<AppUser> foundAppUser = appUserService.findByUsername(username);
         if (foundEvent.isPresent() && foundAppUser.isPresent()){
-            if (foundEvent.get().getAuthorBasketball().equals(foundAppUser.get()) || foundEvent.get().getParticipantsBasketball().contains(foundAppUser.get()) ||
+            if (foundEvent.get().getAuthorVolleyball().equals(foundAppUser.get()) || foundEvent.get().getParticipantsVolleyball().contains(foundAppUser.get()) ||
                     foundEvent.get().getVacancies() < 1)
             {
                 return false;
             } else {
-                foundEvent.get().getParticipantsBasketball().add(foundAppUser.get());
+                foundEvent.get().getParticipantsVolleyball().add(foundAppUser.get());
                 foundEvent.get().setVacancies(foundEvent.get().getVacancies() - 1);
-                foundAppUser.get().getBasketballEventsParticipants().add(foundEvent.get());
-                basketballEventRepo.save(foundEvent.get());
+                foundAppUser.get().getVolleyballEventsParticipants().add(foundEvent.get());
+                volleyballEventRepo.save(foundEvent.get());
                 appUserService.save(foundAppUser.get());
                 return true;
             }
@@ -111,10 +112,10 @@ public record BasketballEventService(BasketballEventRepo basketballEventRepo, Ap
     }
 
     @Override
-    public Optional<BasketballEvent> delete(Long id) {
-        Optional<BasketballEvent> deleted = basketballEventRepo.findById(id);
+    public Optional<VolleyballEvent> delete(Long id) {
+        Optional<VolleyballEvent> deleted = volleyballEventRepo.findById(id);
         if (deleted.isPresent()){
-            basketballEventRepo.deleteById(id);
+            volleyballEventRepo.deleteById(id);
             return deleted;
         } else throw new IllegalArgumentException("Not found event");
     }
