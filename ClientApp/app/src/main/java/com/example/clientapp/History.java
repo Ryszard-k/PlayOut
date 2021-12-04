@@ -17,11 +17,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.clientapp.Basketball.Basketball;
 import com.example.clientapp.FootballEvent.APIClient;
-import com.example.clientapp.FootballEvent.ActiveFootballEvents;
-import com.example.clientapp.FootballEvent.FootballEventAPI;
-import com.example.clientapp.FootballEvent.HistoryFootballEvents;
+import com.example.clientapp.FootballEvent.ActiveEvents;
+import com.example.clientapp.FootballEvent.HistoryEvents;
 import com.example.clientapp.FootballEvent.Model.FootballEvent;
+import com.example.clientapp.Volleyball.Volleyball;
 
 import java.util.List;
 
@@ -95,8 +96,12 @@ public class History extends Fragment {
         call.enqueue(new Callback<EventsWrapper>() {
             @Override
             public void onResponse(Call<EventsWrapper> call, Response<EventsWrapper> response) {
-                List<FootballEvent> list = response.body().getEventsWrapperWithFootball();
-                recyclerView.setAdapter(new HistoryFootballEvents(list));
+                List<FootballEvent> footballs = response.body().getEventsWrapperWithFootball();
+                List<Basketball> basketballs = response.body().getEventsWrapperWithBasketball();
+                List<Volleyball> volleyballs = response.body().getEventsWrapperWithVolleyball();
+
+                recyclerView.setAdapter(new ActiveEvents(footballs, basketballs, volleyballs));
+
                 Log.d("HistoryFootballEvents", "Registered Successfully");
             }
 

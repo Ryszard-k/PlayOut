@@ -8,13 +8,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class RecyclerViewMyEventsHolder extends RecyclerView.ViewHolder {
 
-    private TextView tvMEHLocation;
-    private TextView iconTextView;
-    private TextView dateTextView;
-    private TextView timeTextView;
-    private TextView lvlTextView;
-    private TextView noteTextView;
-    private TextView vacanciesTextView;
+    private final TextView tvMEHLocation;
+    private final TextView iconTextView;
+    private final TextView dateTextView;
+    private final TextView timeTextView;
+    private final TextView lvlTextView;
+    private final TextView noteTextView;
+    private final TextView vacanciesTextView;
 
     public RecyclerViewMyEventsHolder(@NonNull View itemView) {
         super(itemView);

@@ -1,6 +1,5 @@
 package com.example.clientapp;
 
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -15,8 +14,7 @@ import android.view.ViewGroup;
 
 import com.example.clientapp.Basketball.Basketball;
 import com.example.clientapp.FootballEvent.APIClient;
-import com.example.clientapp.FootballEvent.ActiveFootballEvents;
-import com.example.clientapp.FootballEvent.FootballEventAPI;
+import com.example.clientapp.FootballEvent.ActiveEvents;
 import com.example.clientapp.FootballEvent.Model.FootballEvent;
 import com.example.clientapp.Volleyball.Volleyball;
 
@@ -95,7 +93,7 @@ public class MyEvents extends Fragment {
                 List<FootballEvent> footballs = response.body().getEventsWrapperWithFootball();
                 List<Basketball> basketballs = response.body().getEventsWrapperWithBasketball();
                 List<Volleyball> volleyballs = response.body().getEventsWrapperWithVolleyball();
-                rvME.setAdapter(new ActiveFootballEvents(footballs, basketballs, volleyballs));
+                rvME.setAdapter(new ActiveEvents(footballs, basketballs, volleyballs));
                 Log.d("ActiveFootballEvents", "Registered Successfully");
             }
 
