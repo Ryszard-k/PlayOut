@@ -11,6 +11,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Objects;
 import java.util.Set;
 
 public class FootballEvent {
@@ -47,7 +48,7 @@ public class FootballEvent {
     private String location;
 
     @SerializedName("author")
-    @JsonIgnoreProperties("footballEventsParticipants")
+    @JsonIgnoreProperties({"footballEventsParticipants", "basketballEventsParticipants", "volleyballEventsParticipants"})
     private AppUser author;
 
     @SerializedName("participants")
@@ -59,7 +60,6 @@ public class FootballEvent {
 
     public FootballEvent() {
     }
-
 
     public Long getId() {
         return id;
@@ -155,5 +155,18 @@ public class FootballEvent {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof FootballEvent)) return false;
+        FootballEvent that = (FootballEvent) o;
+        return id.equals(that.id) && Objects.equals(author, that.author);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, author);
     }
 }

@@ -18,6 +18,7 @@ import com.example.clientapp.FootballEvent.APIClient;
 import com.example.clientapp.FootballEvent.ActiveFootballEvents;
 import com.example.clientapp.FootballEvent.FootballEventAPI;
 import com.example.clientapp.FootballEvent.Model.FootballEvent;
+import com.example.clientapp.Volleyball.Volleyball;
 
 import java.util.List;
 
@@ -91,9 +92,10 @@ public class MyEvents extends Fragment {
         call.enqueue(new Callback<EventsWrapper>() {
             @Override
             public void onResponse(Call<EventsWrapper> call, Response<EventsWrapper> response) {
-                List<FootballEvent> list = response.body().getEventsWrapperWithFootball();
+                List<FootballEvent> footballs = response.body().getEventsWrapperWithFootball();
                 List<Basketball> basketballs = response.body().getEventsWrapperWithBasketball();
-                rvME.setAdapter(new ActiveFootballEvents(list));
+                List<Volleyball> volleyballs = response.body().getEventsWrapperWithVolleyball();
+                rvME.setAdapter(new ActiveFootballEvents(footballs, basketballs, volleyballs));
                 Log.d("ActiveFootballEvents", "Registered Successfully");
             }
 

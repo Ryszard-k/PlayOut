@@ -1,5 +1,7 @@
 package com.example.clientapp.FootballEvent.Model;
 
+import com.example.clientapp.Basketball.Basketball;
+import com.example.clientapp.Volleyball.Volleyball;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.gson.annotations.SerializedName;
 
@@ -26,6 +28,22 @@ public class AppUser {
     @SerializedName("footballEventsParticipants")
     @JsonIgnoreProperties("participants")
     private Set<FootballEvent> footballEventsParticipants;
+
+    @SerializedName("basketballEventsAuthor")
+    @JsonIgnoreProperties("authorBasketball")
+    private Set<Basketball> basketballEventsAuthor;
+
+    @SerializedName("basketballEventsParticipants")
+    @JsonIgnoreProperties("participantsBasketball")
+    private Set<Basketball> basketballEventsParticipants;
+
+    @SerializedName("volleyballEventsAuthor")
+    @JsonIgnoreProperties("authorVolleyball")
+    private Set<Volleyball> volleyballEventsAuthor;
+
+    @SerializedName("volleyballEventsParticipants")
+    @JsonIgnoreProperties("participantsVolleyball")
+    private Set<Volleyball> volleyballEventsParticipants;
 
     public AppUser() {
     }
@@ -76,5 +94,37 @@ public class AppUser {
 
     public void setFootballEventsParticipants(Set<FootballEvent> footballEventsParticipants) {
         this.footballEventsParticipants = footballEventsParticipants;
+    }
+
+    public Set<Basketball> getBasketballEventsAuthor() {
+        return basketballEventsAuthor;
+    }
+
+    public void setBasketballEventsAuthor(Set<Basketball> basketballEventsAuthor) {
+        this.basketballEventsAuthor = basketballEventsAuthor;
+    }
+
+    public Set<Basketball> getBasketballEventsParticipants() {
+        return basketballEventsParticipants;
+    }
+
+    public void setBasketballEventsParticipants(Set<Basketball> basketballEventsParticipants) {
+        this.basketballEventsParticipants = basketballEventsParticipants;
+    }
+
+    public Set<Volleyball> getVolleyballEventsAuthor() {
+        return volleyballEventsAuthor;
+    }
+
+    public void setVolleyballEventsAuthor(Set<Volleyball> volleyballEventsAuthor) {
+        this.volleyballEventsAuthor = volleyballEventsAuthor;
+    }
+
+    public Set<Volleyball> getVolleyballEventsParticipants() {
+        return volleyballEventsParticipants;
+    }
+
+    public void setVolleyballEventsParticipants(Set<Volleyball> volleyballEventsParticipants) {
+        this.volleyballEventsParticipants = volleyballEventsParticipants;
     }
 }

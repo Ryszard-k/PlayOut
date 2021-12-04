@@ -36,7 +36,7 @@ public class HistoryFootballEvents extends RecyclerView.Adapter<RecyclerViewMyEv
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewMyEventsHolder holder, @SuppressLint("RecyclerView") int position) {
-        holder.getTextView().setText(list.get(position).getNote());
+        holder.getNoteTextView().setText(list.get(position).getNote());
     }
 
     @Override

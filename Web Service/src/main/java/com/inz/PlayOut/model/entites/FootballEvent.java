@@ -20,11 +20,11 @@ public class FootballEvent extends SportEvent implements Serializable {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "User_id", nullable = false)
-    @JsonIgnoreProperties("footballEventsAuthor")
+    @JsonIgnoreProperties({"footballEventsAuthor", "basketballEventsAuthor", "volleyballEventsAuthor"})
     private AppUser author;
 
     @ManyToMany(mappedBy = "footballEventsParticipants", fetch = FetchType.EAGER)
-    @JsonIgnoreProperties("footballEventsParticipants")
+    @JsonIgnoreProperties({"footballEventsParticipants", "basketballEventsParticipants", "volleyballEventsParticipants"})
     private Set<AppUser> participants;
 
     @OneToMany(mappedBy = "footballEvent", fetch = FetchType.LAZY,
