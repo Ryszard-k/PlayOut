@@ -3,7 +3,6 @@ package com.example.clientapp;
 import static com.example.clientapp.Auth.Prefs.MyPREFERENCES;
 import static com.example.clientapp.Auth.Prefs.Username;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -38,7 +37,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AddFootballEventActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+public class AddBasketballEvent extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
     private final String[] lvlList = EventLevel.enumToStringArray();
     private final FootballEvent newFootballEvent = new FootballEvent();
@@ -91,17 +90,17 @@ public class AddFootballEventActivity extends AppCompatActivity implements Adapt
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {
                         if (response.isSuccessful()) {
-                            Toast.makeText(AddFootballEventActivity.this, "Created event", Toast.LENGTH_LONG).show();
+                            Toast.makeText(AddBasketballEvent.this, "Created event", Toast.LENGTH_LONG).show();
 
-                            stopService(new Intent(AddFootballEventActivity.this, DashboardActivity.class));
-                            startActivity(new Intent(AddFootballEventActivity.this, DashboardActivity.class));
+                            stopService(new Intent(AddBasketballEvent.this, DashboardActivity.class));
+                            startActivity(new Intent(AddBasketballEvent.this, DashboardActivity.class));
                             finish();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<Void> call, Throwable t) {
-                        Toast.makeText(AddFootballEventActivity.this, "nie poszui", Toast.LENGTH_LONG).show();
+                        Toast.makeText(AddBasketballEvent.this, "nie poszui", Toast.LENGTH_LONG).show();
                         Log.d("dodajemyFE", t.getMessage());
                         Log.d("dodajemyFE2", Log.getStackTraceString(t));
                     }
@@ -116,7 +115,7 @@ public class AddFootballEventActivity extends AppCompatActivity implements Adapt
             int day = cldr.get(Calendar.DAY_OF_MONTH);
             int month = cldr.get(Calendar.MONTH);
             int year = cldr.get(Calendar.YEAR);
-            picker = new DatePickerDialog(AddFootballEventActivity.this,
+            picker = new DatePickerDialog(AddBasketballEvent.this,
                     (view, year1, monthOfYear, dayOfMonth) -> date.setText(LocalDate.of(year1, monthOfYear + 1, dayOfMonth)
                             .toString()), year, month, day);
             picker.show();
@@ -126,7 +125,7 @@ public class AddFootballEventActivity extends AppCompatActivity implements Adapt
             final Calendar cldr = Calendar.getInstance();
             int hour = cldr.get(Calendar.HOUR);
             int minutes = cldr.get(Calendar.MINUTE);
-            timePicker = new TimePickerDialog(AddFootballEventActivity.this, (view, hourOfDay, minute) ->
+            timePicker = new TimePickerDialog(AddBasketballEvent.this, (view, hourOfDay, minute) ->
                 time.setText(LocalTime.of(hourOfDay, minute, 0).toString()), hour, minutes, true);
             timePicker.show();
         });
