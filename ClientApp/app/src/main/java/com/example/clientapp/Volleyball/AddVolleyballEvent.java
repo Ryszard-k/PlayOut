@@ -1,4 +1,4 @@
-package com.example.clientapp.Basketball;
+package com.example.clientapp.Volleyball;
 
 import static com.example.clientapp.Auth.Prefs.MyPREFERENCES;
 import static com.example.clientapp.Auth.Prefs.Username;
@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.clientapp.Basketball.BasketballAPI;
 import com.example.clientapp.DashboardActivity;
 import com.example.clientapp.FootballEvent.APIClient;
 import com.example.clientapp.FootballEvent.Model.AppUser;
@@ -38,10 +39,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AddBasketballEvent extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+public class AddVolleyballEvent extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private final String[] lvlList = EventLevel.enumToStringArray();
-    private final Basketball newBasketballEvent = new Basketball();
+    private final Volleyball newVolleyballEvent = new Volleyball();
     private final List<String> selectedItems = Arrays.asList(lvlList);
     private EditText date;
     private EditText time;
@@ -77,31 +78,31 @@ public class AddBasketballEvent extends AppCompatActivity implements AdapterView
                 AppUser appUser = new AppUser();
                 appUser.setUsername(sharedpreferences.getString(Username, Username));
 
-                newBasketballEvent.setDate(LocalDate.parse(date.getText().toString()));
-                newBasketballEvent.setTime(LocalTime.parse(time.getText().toString()));
-                newBasketballEvent.setVacancies(Integer.parseInt(vacancies.getText().toString()));
-                newBasketballEvent.setNote(note.getText().toString());
-                newBasketballEvent.setLatitude(extras.getDouble("latitude"));
-                newBasketballEvent.setLongitude(extras.getDouble("longitude"));
-                newBasketballEvent.setLocation(locationName);
-                newBasketballEvent.setAuthorBasketball(appUser);
+                newVolleyballEvent.setDate(LocalDate.parse(date.getText().toString()));
+                newVolleyballEvent.setTime(LocalTime.parse(time.getText().toString()));
+                newVolleyballEvent.setVacancies(Integer.parseInt(vacancies.getText().toString()));
+                newVolleyballEvent.setNote(note.getText().toString());
+                newVolleyballEvent.setLatitude(extras.getDouble("latitude"));
+                newVolleyballEvent.setLongitude(extras.getDouble("longitude"));
+                newVolleyballEvent.setLocation(locationName);
+                newVolleyballEvent.setAuthorVolleyball(appUser);
 
-                Call<Void> call = APIClient.createService(BasketballAPI.class).addEvent(newBasketballEvent);
+                Call<Void> call = APIClient.createService(VolleyballAPI.class).addEvent(newVolleyballEvent);
                 call.enqueue(new Callback<Void>() {
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {
                         if (response.isSuccessful()) {
-                            Toast.makeText(AddBasketballEvent.this, "Created event", Toast.LENGTH_LONG).show();
+                            Toast.makeText(AddVolleyballEvent.this, "Created event", Toast.LENGTH_LONG).show();
 
-                            stopService(new Intent(AddBasketballEvent.this, DashboardActivity.class));
-                            startActivity(new Intent(AddBasketballEvent.this, DashboardActivity.class));
+                            stopService(new Intent(AddVolleyballEvent.this, DashboardActivity.class));
+                            startActivity(new Intent(AddVolleyballEvent.this, DashboardActivity.class));
                             finish();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<Void> call, Throwable t) {
-                        Toast.makeText(AddBasketballEvent.this, "nie poszui", Toast.LENGTH_LONG).show();
+                        Toast.makeText(AddVolleyballEvent.this, "nie poszui", Toast.LENGTH_LONG).show();
                         Log.d("dodajemyFE", t.getMessage());
                         Log.d("dodajemyFE2", Log.getStackTraceString(t));
                     }
@@ -116,7 +117,7 @@ public class AddBasketballEvent extends AppCompatActivity implements AdapterView
             int day = cldr.get(Calendar.DAY_OF_MONTH);
             int month = cldr.get(Calendar.MONTH);
             int year = cldr.get(Calendar.YEAR);
-            picker = new DatePickerDialog(AddBasketballEvent.this,
+            picker = new DatePickerDialog(AddVolleyballEvent.this,
                     (view, year1, monthOfYear, dayOfMonth) -> date.setText(LocalDate.of(year1, monthOfYear + 1, dayOfMonth)
                             .toString()), year, month, day);
             picker.show();
@@ -126,7 +127,7 @@ public class AddBasketballEvent extends AppCompatActivity implements AdapterView
             final Calendar cldr = Calendar.getInstance();
             int hour = cldr.get(Calendar.HOUR);
             int minutes = cldr.get(Calendar.MINUTE);
-            timePicker = new TimePickerDialog(AddBasketballEvent.this, (view, hourOfDay, minute) ->
+            timePicker = new TimePickerDialog(AddVolleyballEvent.this, (view, hourOfDay, minute) ->
                     time.setText(LocalTime.of(hourOfDay, minute, 0).toString()), hour, minutes, true);
             timePicker.show();
         });
@@ -138,16 +139,16 @@ public class AddBasketballEvent extends AppCompatActivity implements AdapterView
         List<EventLevel> eventLevelList = EventLevel.returnListOfEnums();
         for (EventLevel e : eventLevelList){
             if (e.name().equals(selectedItems.get(position).substring(0, 1))) {
-                newBasketballEvent.setEventLevel(e);
+                newVolleyballEvent.setEventLevel(e);
                 break;
             }
         }
-        Log.d("addedEventLevel", newBasketballEvent.getEventLevel().name());
+        Log.d("addedEventLevel", newVolleyballEvent.getEventLevel().name());
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-        newBasketballEvent.setEventLevel(EventLevel.A);
+        newVolleyballEvent.setEventLevel(EventLevel.A);
     }
 
     private boolean validateUserData() {

@@ -53,6 +53,7 @@
         <activity android:name=".Auth.RegisterActivity" />
         <activity android:name=".Basketball.AddBasketballEvent" />
         <activity android:name=".AddBasketballEvent"/>
+        <activity android:name=".Volleyball.AddVolleyballEvent"/>
 
     </application>
 

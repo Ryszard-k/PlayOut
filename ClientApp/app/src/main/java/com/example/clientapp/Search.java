@@ -292,7 +292,8 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
                             .putExtra("latitude", latLng.latitude).putExtra("longitude", latLng.longitude));
                     break;
                 case 2:
-
+                    startActivity(new Intent(getContext(), com.example.clientapp.Volleyball.AddVolleyballEvent.class)
+                            .putExtra("latitude", latLng.latitude).putExtra("longitude", latLng.longitude));
                     break;
                 default:
                     Toast.makeText(getContext(), "Please choose type of event", Toast.LENGTH_LONG).show();
