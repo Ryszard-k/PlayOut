@@ -2,16 +2,21 @@ package com.example.clientapp;
 
 import static com.example.clientapp.Auth.Prefs.MyPREFERENCES;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,6 +38,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -49,7 +56,6 @@ import javax.net.ssl.HttpsURLConnection;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.http.HTTP;
 
 public class Search extends Fragment implements GoogleMap.OnMapLongClickListener, GoogleMap.OnInfoWindowClickListener {
 
@@ -148,16 +154,7 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
             @Override
             public boolean onQueryTextSubmit(String query) {
                 String location = searchView.getQuery().toString();
-                List<Address> addressList = null;
-
-                Geocoder geocoder = new Geocoder(getContext());
-                try {
-                    addressList = geocoder.getFromLocationName(location, 1);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                Address address = addressList.get(0);
-                LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+                LatLng latLng = com.example.clientapp.Geocoder.latLngFromName(getContext(), location);
 
                 map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
                 return false;
@@ -181,6 +178,7 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
             @Override
             public void onResponse(Call<EventsWrapper> call, Response<EventsWrapper> response) {
                 if (response.isSuccessful()) {
+                    assert response.body() != null;
                     List<FootballEvent> responseListFootball = response.body().getEventsWrapperWithFootball();
                     List<Basketball> responseListBasketball = response.body().getEventsWrapperWithBasketball();
                     List<Volleyball> responseListVolleyball = response.body().getEventsWrapperWithVolleyball();
@@ -188,24 +186,35 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
                     googleMap.clear();
                     if (filterEventResultList.isEmpty() && filterLevelResultList.isEmpty()) {
                         for (FootballEvent f : responseListFootball) {
-                            markersSetUp(f, googleMap);
-                            //TODO: basketball and volleyball list without filters
+                            markersSetUpFootball(f, googleMap);
+                        }
+
+                        for (Basketball b : responseListBasketball){
+                            markersSetUpBasketball(b, googleMap);
+                        }
+
+                        for (Volleyball v : responseListVolleyball){
+                            markersSetUpVolleyball(v, googleMap);
                         }
                     } else if (!filterEventResultList.isEmpty() && filterLevelResultList.isEmpty()){
                         for (String e : filterEventResultList) {
                             switch (e) {
                                 case "Football":
                                         for (FootballEvent f : responseListFootball) {
-                                            markersSetUp(f, googleMap);
+                                            markersSetUpFootball(f, googleMap);
                                     }
                                     break;
 
                                 case "Basketball":
-                                    //TODO: basketball markers with filters
+                                    for (Basketball b : responseListBasketball){
+                                        markersSetUpBasketball(b, googleMap);
+                                    }
                                     break;
 
                                 case "Volleyball":
-                                    //TODO: volleyball markers with filters
+                                    for (Volleyball v : responseListVolleyball){
+                                        markersSetUpVolleyball(v, googleMap);
+                                    }
                                     break;
                                 default:
                                     break;
@@ -214,28 +223,47 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
                     } else if (filterEventResultList.isEmpty() && !filterLevelResultList.isEmpty()) {
                         for (FootballEvent f : responseListFootball) {
                             if (filterLevelResultList.contains(f.getEventLevel().name())){
-                                markersSetUp(f, googleMap);
+                                markersSetUpFootball(f, googleMap);
                             }
                         }
 
-                        // TODO: basketball and volleyball
+                        for (Basketball b : responseListBasketball){
+                            if (filterLevelResultList.contains(b.getEventLevel().name())) {
+                                markersSetUpBasketball(b, googleMap);
+                            }
+                        }
+
+                        for (Volleyball v : responseListVolleyball){
+                            if (filterLevelResultList.contains(v.getEventLevel().name())) {
+                                markersSetUpVolleyball(v, googleMap);
+                            }
+                        }
+
                     } else if (!filterEventResultList.isEmpty() && !filterLevelResultList.isEmpty()) {
                         for (String e : filterEventResultList) {
                             switch (e) {
                                 case "Football":
                                     for (FootballEvent f : responseListFootball) {
                                         if (filterLevelResultList.contains(f.getEventLevel().name())){
-                                            markersSetUp(f, googleMap);
+                                            markersSetUpFootball(f, googleMap);
                                         }
                                     }
                                     break;
 
                                 case "Basketball":
-                                    //TODO: basketball markers with filters
+                                    for (Basketball b : responseListBasketball){
+                                        if (filterLevelResultList.contains(b.getEventLevel().name())) {
+                                            markersSetUpBasketball(b, googleMap);
+                                        }
+                                    }
                                     break;
 
                                 case "Volleyball":
-                                    //TODO: volleyball markers with filters
+                                    for (Volleyball v : responseListVolleyball){
+                                        if (filterLevelResultList.contains(v.getEventLevel().name())) {
+                                            markersSetUpVolleyball(v, googleMap);
+                                        }
+                                    }
                                     break;
                                 default:
                                     break;
@@ -243,43 +271,10 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
                         }
                     }
 
-/*
-                    if (!filterEventResultList.isEmpty() && !filterLevelResultList.isEmpty()){
-                        for ()
-                    } else if (filterEventResultList.isEmpty() && !filterLevelResultList.isEmpty()){
+               /*     Locale defaultLocale = Resources.getSystem().getConfiguration().getLocales().get(0);
+                    LatLng latLng = Geocoder.latLngFromName(getContext(), defaultLocale.getDisplayName());
+                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));*/
 
-                    } else if (!filterEventResultList.isEmpty() && filterLevelResultList.isEmpty()){
-
-                    } else {
-
-                    }*/
-/*
-                    if (!filterLevelResultList.isEmpty()) {
-                        for (FootballEvent f : responseListFootball) {
-                            if (filterLevelResultList.contains(f.getEventLevel().name()))
-                                googleMap.setInfoWindowAdapter(new GoogleMapInfoWindowAdapter(getContext()));
-
-                                googleMap.addMarker(new MarkerOptions()
-                                        .position(new LatLng(f.getLatitude(), f.getLongitude())));
-                        }
-                        int listSize = responseListFootball.size() - 1;
-                        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(responseListFootball.get(listSize).getLatitude(),
-                                responseListFootball.get(listSize).getLongitude()), 1));
-                    } else {
-                        for (FootballEvent f : responseListFootball){
-                            String snippet = "Date: " + f.getDate() + "\n" +
-                                    "Time: " + f.getTime() + "\n" +
-                                    "Address: " + f.getLocation() + "\n" +
-                                    "Level: " + f.getEventLevel() + "\n" +
-                                    "Vacancies: " + f.getVacancies() + "\n" +
-                                    "Note: " + f.getNote() + "\n";
-                            googleMap.setInfoWindowAdapter(new GoogleMapInfoWindowAdapter(getContext()));
-                            googleMap.addMarker(new MarkerOptions()
-                                    .position(new LatLng(f.getLatitude(), f.getLongitude()))
-                                    .title("Football Event " +f.getId())
-                            .snippet(snippet));
-                        }
-                    }*/
                 }
             }
 
@@ -336,8 +331,10 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
                         public void onResponse(Call<Void> call, Response<Void> response) {
                             if (response.isSuccessful()){
                                 Toast.makeText(getContext(), "Joined to event", Toast.LENGTH_LONG).show();
-                                getActivity().finish();
-                                startActivity(new Intent(getActivity(), DashboardActivity.class));
+
+                            //    getActivity().getSupportFragmentManager().popBackStack();
+                          //      startActivity(new Intent(getActivity(), DashboardActivity.class));
+
                             } else if (response.raw().code() == HttpsURLConnection.HTTP_CONFLICT){
                                 Toast.makeText(getContext(), "You are already attending the event", Toast.LENGTH_LONG).show();
                             }
@@ -359,6 +356,7 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
                     break;
                 default: break;
             }
+
             dialog.dismiss();
         });
 
@@ -368,7 +366,7 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
         alertDialog.show();
     }
 
-    private void markersSetUp(FootballEvent f, GoogleMap map) {
+    private void markersSetUpFootball(FootballEvent f, GoogleMap map) {
         String snippet = "Date: " + f.getDate() + "\n" +
                 "Time: " + f.getTime() + "\n" +
                 "Address: " + f.getLocation() + "\n" +
@@ -379,6 +377,38 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
         map.addMarker(new MarkerOptions()
                 .position(new LatLng(f.getLatitude(), f.getLongitude()))
                 .title("Football Event " + f.getId())
-                .snippet(snippet));
+                .snippet(snippet))
+                .setIcon(BitmapDescriptorFactory.defaultMarker(359f));
+    }
+
+    private void markersSetUpBasketball(Basketball f, GoogleMap map) {
+        String snippet = "Date: " + f.getDate() + "\n" +
+                "Time: " + f.getTime() + "\n" +
+                "Address: " + f.getLocation() + "\n" +
+                "Level: " + f.getEventLevel() + "\n" +
+                "Vacancies: " + f.getVacancies() + "\n" +
+                "Note: " + f.getNote() + "\n";
+        map.setInfoWindowAdapter(new GoogleMapInfoWindowAdapter(getContext()));
+        map.addMarker(new MarkerOptions()
+                .position(new LatLng(f.getLatitude(), f.getLongitude()))
+                .title("Football Event " + f.getId())
+                .snippet(snippet))
+        .setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+
+    }
+
+    private void markersSetUpVolleyball(Volleyball f, GoogleMap map) {
+        String snippet = "Date: " + f.getDate() + "\n" +
+                "Time: " + f.getTime() + "\n" +
+                "Address: " + f.getLocation() + "\n" +
+                "Level: " + f.getEventLevel() + "\n" +
+                "Vacancies: " + f.getVacancies() + "\n" +
+                "Note: " + f.getNote() + "\n";
+        map.setInfoWindowAdapter(new GoogleMapInfoWindowAdapter(getContext()));
+        map.addMarker(new MarkerOptions()
+                .position(new LatLng(f.getLatitude(), f.getLongitude()))
+                .title("Football Event " + f.getId())
+                .snippet(snippet))
+                .setIcon(BitmapDescriptorFactory.defaultMarker(250f));
     }
 }

@@ -19,6 +19,7 @@ public interface FootballEventAPI {
     Call<Void> addEvent(@Body FootballEvent footballEvent);
 
     @PUT("/footballEvent/join/{eventId}/{username}")
+    @Headers("Content-Type: application/json")
     Call<Void> joinToEvent(@Path("eventId") Long eventId, @Path("username") String username);
 
     @DELETE("/footballEvent/{id}")

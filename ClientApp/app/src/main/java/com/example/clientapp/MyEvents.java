@@ -1,5 +1,11 @@
 package com.example.clientapp;
 
+import static com.example.clientapp.Auth.Prefs.MyPREFERENCES;
+import static com.example.clientapp.Auth.Prefs.Password;
+import static com.example.clientapp.Auth.Prefs.Username;
+
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,14 +17,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.clientapp.Basketball.Basketball;
 import com.example.clientapp.FootballEvent.APIClient;
 import com.example.clientapp.FootballEvent.ActiveEvents;
+import com.example.clientapp.FootballEvent.FootballEventAPI;
 import com.example.clientapp.FootballEvent.Model.FootballEvent;
 import com.example.clientapp.Volleyball.Volleyball;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -84,22 +95,27 @@ public class MyEvents extends Fragment {
         rvME.setLayoutManager(new LinearLayoutManager(view.getContext()));
         rvME.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.VERTICAL));
 
+        SharedPreferences sharedpreferences = container.getContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+
         Call<EventsWrapper> call = APIClient.createService(EventAPI.class)
                 .getMyActiveEvent("Piotr");   //sharedpreferences.getString(Username, Username));
 
         call.enqueue(new Callback<EventsWrapper>() {
             @Override
             public void onResponse(Call<EventsWrapper> call, Response<EventsWrapper> response) {
-                List<FootballEvent> footballs = response.body().getEventsWrapperWithFootball();
-                List<Basketball> basketballs = response.body().getEventsWrapperWithBasketball();
-                List<Volleyball> volleyballs = response.body().getEventsWrapperWithVolleyball();
-                rvME.setAdapter(new ActiveEvents(footballs, basketballs, volleyballs));
-                Log.d("ActiveFootballEvents", "Registered Successfully");
+                if (response.isSuccessful()) {
+                    assert response.body() != null;
+                    List<FootballEvent> footballs = response.body().getEventsWrapperWithFootball();
+                    List<Basketball> basketballs = response.body().getEventsWrapperWithBasketball();
+                    List<Volleyball> volleyballs = response.body().getEventsWrapperWithVolleyball();
+                    rvME.setAdapter(new ActiveEvents(footballs, basketballs, volleyballs));
+                    Log.d("ActiveFootballEvents", "Registered Successfully");
+                }
             }
 
             @Override
             public void onFailure(Call<EventsWrapper> call, Throwable t) {
-                Log.d("tag1", t.getMessage());
+                Log.d("myEvents", Log.getStackTraceString(t));
             }
         });
 

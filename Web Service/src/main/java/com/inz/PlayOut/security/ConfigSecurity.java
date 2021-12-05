@@ -11,7 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 @Configuration
 @EnableWebSecurity(debug = true)
@@ -42,6 +42,11 @@ public class ConfigSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/appUser/username/*");
     }
 
+ /*   @Bean
+    public HttpSessionEventPublisher httpSessionEventPublisher() {
+        return new HttpSessionEventPublisher();
+    }*/
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
@@ -53,8 +58,7 @@ public class ConfigSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/appUser/username/*").permitAll()
                 .anyRequest().authenticated()
                 .and().httpBasic();
-            //    .oauth2Login().and()
-              //  .formLogin();
 
+     //   http.sessionManagement().maximumSessions(2);
     }
 }
