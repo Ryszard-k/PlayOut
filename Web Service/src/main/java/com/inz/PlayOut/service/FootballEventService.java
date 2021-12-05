@@ -105,7 +105,6 @@ public record FootballEventService(FootballEventRepo footballEventRepo, AppUserS
                 foundEvent.get().setVacancies(foundEvent.get().getVacancies() - 1);
                 foundAppUser.get().getFootballEventsParticipants().add(foundEvent.get());
                 footballEventRepo.save(foundEvent.get());
-                appUserService.save(foundAppUser.get());
                 return true;
             }
         } else throw new IllegalArgumentException("Not found event to join");

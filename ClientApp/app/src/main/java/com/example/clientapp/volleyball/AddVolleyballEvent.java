@@ -1,7 +1,7 @@
-package com.example.clientapp.Volleyball;
+package com.example.clientapp.volleyball;
 
-import static com.example.clientapp.Auth.Prefs.MyPREFERENCES;
-import static com.example.clientapp.Auth.Prefs.Username;
+import static com.example.clientapp.auth.Prefs.MyPREFERENCES;
+import static com.example.clientapp.auth.Prefs.Username;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -21,11 +21,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.clientapp.Basketball.BasketballAPI;
 import com.example.clientapp.DashboardActivity;
-import com.example.clientapp.FootballEvent.APIClient;
-import com.example.clientapp.FootballEvent.Model.AppUser;
-import com.example.clientapp.FootballEvent.Model.EventLevel;
+import com.example.clientapp.footballEvent.APIClient;
+import com.example.clientapp.footballEvent.model.AppUser;
+import com.example.clientapp.footballEvent.model.EventLevel;
 import com.example.clientapp.Geocoder;
 import com.example.clientapp.R;
 

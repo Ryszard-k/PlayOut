@@ -6,7 +6,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class RecyclerViewMyEventsHolder extends RecyclerView.ViewHolder {
+public class RecyclerViewMyEventsHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     private final TextView tvMEHLocation;
     private final TextView iconTextView;
@@ -15,8 +15,9 @@ public class RecyclerViewMyEventsHolder extends RecyclerView.ViewHolder {
     private final TextView lvlTextView;
     private final TextView noteTextView;
     private final TextView vacanciesTextView;
+    private final EventClickListener eventClickListener;
 
-    public RecyclerViewMyEventsHolder(@NonNull View itemView) {
+    public RecyclerViewMyEventsHolder(@NonNull View itemView, EventClickListener eventClickListener) {
         super(itemView);
         tvMEHLocation = itemView.findViewById(R.id.tvMEHLocation);
         iconTextView = itemView.findViewById(R.id.iconTextView);
@@ -25,6 +26,10 @@ public class RecyclerViewMyEventsHolder extends RecyclerView.ViewHolder {
         lvlTextView = itemView.findViewById(R.id.lvlTextView);
         noteTextView = itemView.findViewById(R.id.noteTextView);
         vacanciesTextView = itemView.findViewById(R.id.vacanciesTextView);
+
+        this.eventClickListener = eventClickListener;
+        itemView.setOnClickListener(this);
+
     }
 
     public TextView getTvMEHLocation() {
@@ -53,5 +58,10 @@ public class RecyclerViewMyEventsHolder extends RecyclerView.ViewHolder {
 
     public TextView getVacanciesTextView() {
         return vacanciesTextView;
+    }
+
+    @Override
+    public void onClick(View v) {
+        eventClickListener.onItemClick(getLayoutPosition(), v);
     }
 }

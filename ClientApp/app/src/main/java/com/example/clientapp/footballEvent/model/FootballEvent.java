@@ -1,8 +1,5 @@
-package com.example.clientapp.Basketball;
+package com.example.clientapp.footballEvent.model;
 
-import com.example.clientapp.FootballEvent.Model.AppUser;
-import com.example.clientapp.FootballEvent.Model.Comment;
-import com.example.clientapp.FootballEvent.Model.EventLevel;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -17,7 +14,7 @@ import java.time.LocalTime;
 import java.util.Objects;
 import java.util.Set;
 
-public class Basketball {
+public class FootballEvent {
 
     @SerializedName("date")
     @JsonDeserialize(using = LocalDateDeserializer.class)
@@ -50,18 +47,26 @@ public class Basketball {
     @SerializedName("location")
     private String location;
 
-    @SerializedName("authorBasketball")
+    @SerializedName("author")
     @JsonIgnoreProperties({"footballEventsParticipants", "basketballEventsParticipants", "volleyballEventsParticipants"})
-    private AppUser authorBasketball;
+    private AppUser author;
 
-    @SerializedName("participantsBasketball")
+    @SerializedName("participants")
     @JsonIgnoreProperties({"footballEventsAuthor", "basketballEventsAuthor", "volleyballEventsAuthor"})
-    private Set<AppUser> participantsBasketball;
+    private Set<AppUser> participants;
 
     @SerializedName("comments")
     private Set<Comment> comments;
 
-    public Basketball() {
+    public FootballEvent() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public LocalDate getDate() {
@@ -120,36 +125,20 @@ public class Basketball {
         this.note = note;
     }
 
-    public Long getId() {
-        return id;
+    public AppUser getAuthor() {
+        return author;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setAuthor(AppUser author) {
+        this.author = author;
     }
 
-    public String getLocation() {
-        return location;
+    public Set<AppUser> getParticipants() {
+        return participants;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public AppUser getAuthorBasketball() {
-        return authorBasketball;
-    }
-
-    public void setAuthorBasketball(AppUser authorBasketball) {
-        this.authorBasketball = authorBasketball;
-    }
-
-    public Set<AppUser> getParticipantsBasketball() {
-        return participantsBasketball;
-    }
-
-    public void setParticipantsBasketball(Set<AppUser> participantsBasketball) {
-        this.participantsBasketball = participantsBasketball;
+    public void setParticipants(Set<AppUser> participants) {
+        this.participants = participants;
     }
 
     public Set<Comment> getComments() {
@@ -160,16 +149,24 @@ public class Basketball {
         this.comments = comments;
     }
 
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Basketball)) return false;
-        Basketball that = (Basketball) o;
-        return id.equals(that.id) && authorBasketball.equals(that.authorBasketball);
+        if (!(o instanceof FootballEvent)) return false;
+        FootballEvent that = (FootballEvent) o;
+        return id.equals(that.id) && Objects.equals(author, that.author);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, authorBasketball);
+        return Objects.hash(id, author);
     }
 }

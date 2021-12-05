@@ -42,7 +42,7 @@ public class test {
 
         footballEventService.save(new FootballEvent(LocalDate.now().plusDays(3), LocalTime.now(), 12.343234, 45.345665, EventLevel.E,
                 3, "Piłeczka raz", "Cystersów 1" ,appUserService.findById(1L).get()));
-        footballEventService.save(new FootballEvent(LocalDate.now().minusDays(3), LocalTime.now(), 12.343234, 45.345665, EventLevel.E,
+        footballEventService.save(new FootballEvent(LocalDate.now().minusDays(3), LocalTime.now(), 11.343234, 45.345665, EventLevel.E,
                 3, "Piłeczka dwa", "Cystersów 2", appUserService.findById(1L).get()));
         footballEventService.save(new FootballEvent(LocalDate.now(), LocalTime.now().plusMinutes(3), 10.343234, 35.345665, EventLevel.E,
                 3, "Piłeczka trzy", "Cystersów 3", appUserService.findById(1L).get()));
@@ -51,20 +51,20 @@ public class test {
 
         basketballEventService.save(new BasketballEvent(LocalDate.now().plusDays(3), LocalTime.now(), 2.343234, 5.345665, EventLevel.C,
                 3, "kosz raz", "Mogilska 1" ,appUserService.findById(1L).get()));
-        basketballEventService.save(new BasketballEvent(LocalDate.now().minusDays(3), LocalTime.now(), 2.343234, 5.345665, EventLevel.C,
+        basketballEventService.save(new BasketballEvent(LocalDate.now().minusDays(3), LocalTime.now(), 3.343234, 5.345665, EventLevel.C,
                 3, "kosz dwa", "Mogilska 2" ,appUserService.findById(1L).get()));
-        basketballEventService.save(new BasketballEvent(LocalDate.now(), LocalTime.now().plusMinutes(3), 2.343234, 5.345665, EventLevel.C,
+        basketballEventService.save(new BasketballEvent(LocalDate.now(), LocalTime.now().plusMinutes(3), 4.343234, 5.345665, EventLevel.C,
                 3, "kosz trzy", "Mogilska 3" ,appUserService.findById(1L).get()));
-        basketballEventService.save(new BasketballEvent(LocalDate.now().plusDays(3), LocalTime.now().plusMinutes(3), 2.343234, 5.345665, EventLevel.C,
+        basketballEventService.save(new BasketballEvent(LocalDate.now().plusDays(3), LocalTime.now().plusMinutes(3), 5.343234, 5.345665, EventLevel.C,
                 3, "kosz cztery", "Mogilska 4" ,appUserService.findById(2L).get()));
 
         volleyballEventService.save(new VolleyballEvent(LocalDate.now().plusDays(3), LocalTime.now(), 8.343234, 5.345665, EventLevel.C,
                 3, "siata raz", "Jana 1" ,appUserService.findById(1L).get()));
-        volleyballEventService.save(new VolleyballEvent(LocalDate.now().minusDays(3), LocalTime.now(), 8.343234, 5.345665, EventLevel.C,
+        volleyballEventService.save(new VolleyballEvent(LocalDate.now().minusDays(3), LocalTime.now(), 9.343234, 5.345665, EventLevel.C,
                 3, "siata dwa", "Jana 2" ,appUserService.findById(1L).get()));
-        volleyballEventService.save(new VolleyballEvent(LocalDate.now(), LocalTime.now().plusMinutes(3), 8.343234, 5.345665, EventLevel.C,
+        volleyballEventService.save(new VolleyballEvent(LocalDate.now(), LocalTime.now().plusMinutes(3), 10.343234, 5.345665, EventLevel.C,
                 3, "siata trzy", "Jana 3" ,appUserService.findById(1L).get()));
-        volleyballEventService.save(new VolleyballEvent(LocalDate.now().plusDays(3), LocalTime.now().plusMinutes(3), 8.343234, 5.345665, EventLevel.C,
+        volleyballEventService.save(new VolleyballEvent(LocalDate.now().plusDays(3), LocalTime.now().plusMinutes(3), 11.343234, 5.345665, EventLevel.C,
                 3, "siata cztery", "Jana 4" ,appUserService.findById(2L).get()));
     }
 }

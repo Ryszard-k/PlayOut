@@ -1,4 +1,4 @@
-package com.example.clientapp.Auth;
+package com.example.clientapp.auth;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,8 +9,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.clientapp.DashboardActivity;
-import com.example.clientapp.FootballEvent.APIClient;
-import com.example.clientapp.FootballEvent.Model.AppUser;
+import com.example.clientapp.footballEvent.APIClient;
+import com.example.clientapp.footballEvent.model.AppUser;
 import com.example.clientapp.R;
 
 import java.util.List;

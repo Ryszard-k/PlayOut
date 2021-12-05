@@ -1,10 +1,9 @@
 package com.example.clientapp;
 
-import com.example.clientapp.Basketball.Basketball;
-import com.example.clientapp.FootballEvent.Model.FootballEvent;
-import com.example.clientapp.Volleyball.Volleyball;
+import com.example.clientapp.basketball.Basketball;
+import com.example.clientapp.footballEvent.model.FootballEvent;
+import com.example.clientapp.volleyball.Volleyball;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.google.gson.annotations.SerializedName;
 
 import java.util.Collections;
 import java.util.HashMap;

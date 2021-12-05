@@ -1,7 +1,6 @@
-package com.example.clientapp.FootballEvent.Model;
+package com.example.clientapp.footballEvent.model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 

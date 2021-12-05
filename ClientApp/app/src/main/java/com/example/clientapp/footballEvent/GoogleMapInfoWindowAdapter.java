@@ -1,23 +1,16 @@
-package com.example.clientapp.FootballEvent;
+package com.example.clientapp.footballEvent;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.clientapp.FootballEvent.Model.EventLevel;
-import com.example.clientapp.FootballEvent.Model.FootballEvent;
 import com.example.clientapp.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
 
 public class GoogleMapInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 

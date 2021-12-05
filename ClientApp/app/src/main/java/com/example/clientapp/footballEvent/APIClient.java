@@ -1,8 +1,8 @@
-package com.example.clientapp.FootballEvent;
+package com.example.clientapp.footballEvent;
 
 import android.text.TextUtils;
 
-import com.example.clientapp.Auth.AuthenticationInterceptor;
+import com.example.clientapp.auth.AuthenticationInterceptor;
 
 import okhttp3.Credentials;
 import okhttp3.OkHttpClient;

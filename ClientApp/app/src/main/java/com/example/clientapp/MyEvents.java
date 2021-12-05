@@ -1,10 +1,9 @@
 package com.example.clientapp;
 
-import static com.example.clientapp.Auth.Prefs.MyPREFERENCES;
-import static com.example.clientapp.Auth.Prefs.Password;
-import static com.example.clientapp.Auth.Prefs.Username;
+import static com.example.clientapp.auth.Prefs.MyPREFERENCES;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -17,19 +16,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.example.clientapp.Basketball.Basketball;
-import com.example.clientapp.FootballEvent.APIClient;
-import com.example.clientapp.FootballEvent.ActiveEvents;
-import com.example.clientapp.FootballEvent.FootballEventAPI;
-import com.example.clientapp.FootballEvent.Model.FootballEvent;
-import com.example.clientapp.Volleyball.Volleyball;
+import com.example.clientapp.basketball.Basketball;
+import com.example.clientapp.footballEvent.APIClient;
+import com.example.clientapp.footballEvent.ActiveEvents;
+import com.example.clientapp.footballEvent.model.FootballEvent;
+import com.example.clientapp.volleyball.Volleyball;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import javax.net.ssl.HttpsURLConnection;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,7 +34,7 @@ import retrofit2.Response;
  * Use the {@link MyEvents#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MyEvents extends Fragment {
+public class MyEvents extends Fragment implements EventClickListener{
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -94,6 +88,7 @@ public class MyEvents extends Fragment {
         rvME = view.findViewById(R.id.RVFootballEvent);
         rvME.setLayoutManager(new LinearLayoutManager(view.getContext()));
         rvME.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.VERTICAL));
+        EventClickListener eventClickListener = this;
 
         SharedPreferences sharedpreferences = container.getContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 
@@ -105,10 +100,12 @@ public class MyEvents extends Fragment {
             public void onResponse(Call<EventsWrapper> call, Response<EventsWrapper> response) {
                 if (response.isSuccessful()) {
                     assert response.body() != null;
+
                     List<FootballEvent> footballs = response.body().getEventsWrapperWithFootball();
                     List<Basketball> basketballs = response.body().getEventsWrapperWithBasketball();
                     List<Volleyball> volleyballs = response.body().getEventsWrapperWithVolleyball();
-                    rvME.setAdapter(new ActiveEvents(footballs, basketballs, volleyballs));
+
+                    rvME.setAdapter(new ActiveEvents(footballs, basketballs, volleyballs, eventClickListener));
                     Log.d("ActiveFootballEvents", "Registered Successfully");
                 }
             }
@@ -120,5 +117,15 @@ public class MyEvents extends Fragment {
         });
 
         return view;
+    }
+
+
+
+    @Override
+    public void onItemClick(int position, View view) {
+        ActiveEvents activeEvents = (ActiveEvents) rvME.getAdapter();
+        Object o = activeEvents.getItemByPosition(position);
+        System.out.println(o);
+     //   startActivity(new Intent(getContext(), MyEventDetails.class).putExtra());
     }
 }

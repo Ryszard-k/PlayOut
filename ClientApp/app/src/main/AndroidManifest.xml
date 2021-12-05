@@ -49,11 +49,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Auth.LoginActivity" />
-        <activity android:name=".Auth.RegisterActivity" />
-        <activity android:name=".Basketball.AddBasketballEvent" />
+        <activity android:name=".auth.LoginActivity" />
+        <activity android:name=".auth.RegisterActivity" />
+        <activity android:name=".basketball.AddBasketballEvent" />
         <activity android:name=".AddBasketballEvent"/>
-        <activity android:name=".Volleyball.AddVolleyballEvent"/>
+        <activity android:name=".volleyball.AddVolleyballEvent"/>
 
     </application>
 

@@ -1,4 +1,4 @@
-package com.example.clientapp.FootballEvent;
+package com.example.clientapp.footballEvent;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
@@ -8,11 +8,12 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.clientapp.Basketball.Basketball;
-import com.example.clientapp.FootballEvent.Model.FootballEvent;
+import com.example.clientapp.basketball.Basketball;
+import com.example.clientapp.EventClickListener;
+import com.example.clientapp.footballEvent.model.FootballEvent;
 import com.example.clientapp.R;
 import com.example.clientapp.RecyclerViewMyEventsHolder;
-import com.example.clientapp.Volleyball.Volleyball;
+import com.example.clientapp.volleyball.Volleyball;
 
 import java.util.List;
 
@@ -21,11 +22,13 @@ public class HistoryEvents extends RecyclerView.Adapter<RecyclerViewMyEventsHold
     private final List<FootballEvent> footballs;
     private final List<Basketball> basketballs;
     private final List<Volleyball> volleyballs;
+    private EventClickListener mEventClickListener;
 
-    public HistoryEvents(List<FootballEvent> footballs, List<Basketball> basketballs, List<Volleyball> volleyballs) {
+    public HistoryEvents(List<FootballEvent> footballs, List<Basketball> basketballs, List<Volleyball> volleyballs, EventClickListener mEventClickListener) {
         this.footballs = footballs;
         this.basketballs = basketballs;
         this.volleyballs = volleyballs;
+        this.mEventClickListener = mEventClickListener;
     }
 
     @Override
@@ -37,9 +40,10 @@ public class HistoryEvents extends RecyclerView.Adapter<RecyclerViewMyEventsHold
     @Override
     public RecyclerViewMyEventsHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(viewType, parent, false);
-        return new RecyclerViewMyEventsHolder(view);
+        return new RecyclerViewMyEventsHolder(view, mEventClickListener);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewMyEventsHolder holder, @SuppressLint("RecyclerView") int position) {
         if ((!footballs.isEmpty()) && (position < footballs.size())) {

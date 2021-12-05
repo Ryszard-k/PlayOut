@@ -1,7 +1,7 @@
-package com.example.clientapp.FootballEvent.Model;
+package com.example.clientapp.footballEvent.model;
 
-import com.example.clientapp.Basketball.Basketball;
-import com.example.clientapp.Volleyball.Volleyball;
+import com.example.clientapp.basketball.Basketball;
+import com.example.clientapp.volleyball.Volleyball;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.gson.annotations.SerializedName;
 

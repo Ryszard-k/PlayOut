@@ -1,6 +1,6 @@
 package com.example.clientapp;
 
-import static com.example.clientapp.Auth.Prefs.MyPREFERENCES;
+import static com.example.clientapp.auth.Prefs.MyPREFERENCES;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -17,12 +17,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.clientapp.Basketball.Basketball;
-import com.example.clientapp.FootballEvent.APIClient;
-import com.example.clientapp.FootballEvent.ActiveEvents;
-import com.example.clientapp.FootballEvent.HistoryEvents;
-import com.example.clientapp.FootballEvent.Model.FootballEvent;
-import com.example.clientapp.Volleyball.Volleyball;
+import com.example.clientapp.basketball.Basketball;
+import com.example.clientapp.footballEvent.APIClient;
+import com.example.clientapp.footballEvent.ActiveEvents;
+import com.example.clientapp.footballEvent.model.FootballEvent;
+import com.example.clientapp.volleyball.Volleyball;
 
 import java.util.List;
 
@@ -47,6 +46,8 @@ public class History extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private EventClickListener eventClickListener;
 
     public History() {
         // Required empty public constructor
@@ -101,7 +102,7 @@ public class History extends Fragment {
                     List<Basketball> basketballs = response.body().getEventsWrapperWithBasketball();
                     List<Volleyball> volleyballs = response.body().getEventsWrapperWithVolleyball();
 
-                    recyclerView.setAdapter(new ActiveEvents(footballs, basketballs, volleyballs));
+                    recyclerView.setAdapter(new ActiveEvents(footballs, basketballs, volleyballs, eventClickListener));
 
                     Log.d("HistoryFootballEvents", "Registered Successfully");
                 }

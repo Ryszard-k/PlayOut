@@ -1,6 +1,6 @@
 package com.example.clientapp;
 
-import static com.example.clientapp.Auth.Prefs.MyPREFERENCES;
+import static com.example.clientapp.auth.Prefs.MyPREFERENCES;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,13 +20,15 @@ import android.widget.Toast;
 
 import androidx.appcompat.widget.SearchView;
 
-import com.example.clientapp.Basketball.Basketball;
-import com.example.clientapp.FootballEvent.APIClient;
-import com.example.clientapp.FootballEvent.FootballEventAPI;
-import com.example.clientapp.FootballEvent.GoogleMapInfoWindowAdapter;
-import com.example.clientapp.FootballEvent.Model.EventLevel;
-import com.example.clientapp.FootballEvent.Model.FootballEvent;
-import com.example.clientapp.Volleyball.Volleyball;
+import com.example.clientapp.basketball.Basketball;
+import com.example.clientapp.basketball.BasketballAPI;
+import com.example.clientapp.footballEvent.APIClient;
+import com.example.clientapp.footballEvent.FootballEventAPI;
+import com.example.clientapp.footballEvent.GoogleMapInfoWindowAdapter;
+import com.example.clientapp.footballEvent.model.EventLevel;
+import com.example.clientapp.footballEvent.model.FootballEvent;
+import com.example.clientapp.volleyball.Volleyball;
+import com.example.clientapp.volleyball.VolleyballAPI;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -288,11 +290,11 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
                             .putExtra("latitude", latLng.latitude).putExtra("longitude", latLng.longitude));
                     break;
                 case 1:
-                    startActivity(new Intent(getContext(), com.example.clientapp.Basketball.AddBasketballEvent.class)
+                    startActivity(new Intent(getContext(), com.example.clientapp.basketball.AddBasketballEvent.class)
                             .putExtra("latitude", latLng.latitude).putExtra("longitude", latLng.longitude));
                     break;
                 case 2:
-                    startActivity(new Intent(getContext(), com.example.clientapp.Volleyball.AddVolleyballEvent.class)
+                    startActivity(new Intent(getContext(), com.example.clientapp.volleyball.AddVolleyballEvent.class)
                             .putExtra("latitude", latLng.latitude).putExtra("longitude", latLng.longitude));
                     break;
                 default:
@@ -324,8 +326,8 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
                             if (response.isSuccessful()){
                                 Toast.makeText(getContext(), "Joined to event", Toast.LENGTH_LONG).show();
 
-                            //    getActivity().getSupportFragmentManager().popBackStack();
-                          //      startActivity(new Intent(getActivity(), DashboardActivity.class));
+                                getActivity().getApplicationContext().stopService(new Intent(getActivity(), DashboardActivity.class));
+                                startActivity(new Intent(getActivity(), DashboardActivity.class));
 
                                 getActivity().getApplicationContext().stopService(new Intent(getActivity(), DashboardActivity.class));
                                 startActivity(new Intent(getActivity(), DashboardActivity.class));
@@ -343,11 +345,49 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
                     break;
 
                 case "Basketball":
+                    Call<Void> call1 = APIClient.createService(BasketballAPI.class).joinToEvent(eventId, "Piotr"); //sharedpreferences.getString(Username, Username)
+                    call1.enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            if (response.isSuccessful()){
+                                Toast.makeText(getContext(), "Joined to event", Toast.LENGTH_LONG).show();
 
+                                getActivity().getApplicationContext().stopService(new Intent(getActivity(), DashboardActivity.class));
+                                startActivity(new Intent(getActivity(), DashboardActivity.class));
+
+                            } else if (response.raw().code() == HttpsURLConnection.HTTP_CONFLICT){
+                                Toast.makeText(getContext(), "You are already attending the event", Toast.LENGTH_LONG).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+                            Log.d("joinBasketball", Log.getStackTraceString(t));
+                        }
+                    });
                     break;
 
                 case "Volleyball":
+                    Call<Void> call2 = APIClient.createService(VolleyballAPI.class).joinToEvent(eventId, "Piotr"); //sharedpreferences.getString(Username, Username)
+                    call2.enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            if (response.isSuccessful()){
+                                Toast.makeText(getContext(), "Joined to event", Toast.LENGTH_LONG).show();
 
+                                getActivity().getApplicationContext().stopService(new Intent(getActivity(), DashboardActivity.class));
+                                startActivity(new Intent(getActivity(), DashboardActivity.class));
+
+                            } else if (response.raw().code() == HttpsURLConnection.HTTP_CONFLICT){
+                                Toast.makeText(getContext(), "You are already attending the event", Toast.LENGTH_LONG).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+                            Log.d("joinBasketball", Log.getStackTraceString(t));
+                        }
+                    });
                     break;
                 default: break;
             }
@@ -367,6 +407,7 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
                 "Address: " + f.getLocation() + "\n" +
                 "Level: " + f.getEventLevel() + "\n" +
                 "Vacancies: " + f.getVacancies() + "\n" +
+                "Author: " + f.getAuthor().getUsername() + "\n" +
                 "Note: " + f.getNote() + "\n";
         map.setInfoWindowAdapter(new GoogleMapInfoWindowAdapter(getContext()));
         map.addMarker(new MarkerOptions()
@@ -382,6 +423,7 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
                 "Address: " + f.getLocation() + "\n" +
                 "Level: " + f.getEventLevel() + "\n" +
                 "Vacancies: " + f.getVacancies() + "\n" +
+                "Author: " + f.getAuthorBasketball().getUsername() + "\n" +
                 "Note: " + f.getNote() + "\n";
         map.setInfoWindowAdapter(new GoogleMapInfoWindowAdapter(getContext()));
         map.addMarker(new MarkerOptions()
@@ -398,6 +440,7 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
                 "Address: " + f.getLocation() + "\n" +
                 "Level: " + f.getEventLevel() + "\n" +
                 "Vacancies: " + f.getVacancies() + "\n" +
+                "Author: " + f.getAuthorVolleyball().getUsername() + "\n" +
                 "Note: " + f.getNote() + "\n";
         map.setInfoWindowAdapter(new GoogleMapInfoWindowAdapter(getContext()));
         map.addMarker(new MarkerOptions()

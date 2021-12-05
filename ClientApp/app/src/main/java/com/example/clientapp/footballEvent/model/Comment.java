@@ -1,4 +1,4 @@
-package com.example.clientapp.FootballEvent.Model;
+package com.example.clientapp.footballEvent.model;
 
 public class Comment {
 
