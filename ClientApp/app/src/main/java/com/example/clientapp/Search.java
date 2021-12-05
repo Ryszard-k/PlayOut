@@ -163,7 +163,7 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
         googleMap.setOnMapLongClickListener(this);
         googleMap.setOnInfoWindowClickListener(this);
 
-        Call<EventsWrapper> call = APIClient.createService(EventAPI.class).findAllActiveEvent();
+        Call<EventsWrapper> call = APIClient.createService(EventAPI.class, "Piotr", "piotr123").findAllActiveEvent();
         call.enqueue(new Callback<EventsWrapper>() {
             @Override
             public void onResponse(Call<EventsWrapper> call, Response<EventsWrapper> response) {
@@ -270,7 +270,7 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
 
             @Override
             public void onFailure(Call<EventsWrapper> call, Throwable t) {
-                Log.d("googleMap", t.getMessage());
+                Log.d("googleMap", Log.getStackTraceString(t));
             }
         });
     };
@@ -326,6 +326,9 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
 
                             //    getActivity().getSupportFragmentManager().popBackStack();
                           //      startActivity(new Intent(getActivity(), DashboardActivity.class));
+
+                                getActivity().getApplicationContext().stopService(new Intent(getActivity(), DashboardActivity.class));
+                                startActivity(new Intent(getActivity(), DashboardActivity.class));
 
                             } else if (response.raw().code() == HttpsURLConnection.HTTP_CONFLICT){
                                 Toast.makeText(getContext(), "You are already attending the event", Toast.LENGTH_LONG).show();

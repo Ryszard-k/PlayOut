@@ -96,14 +96,15 @@ public class History extends Fragment {
         call.enqueue(new Callback<EventsWrapper>() {
             @Override
             public void onResponse(Call<EventsWrapper> call, Response<EventsWrapper> response) {
-                assert response.body() != null;
-                List<FootballEvent> footballs = response.body().getEventsWrapperWithFootball();
-                List<Basketball> basketballs = response.body().getEventsWrapperWithBasketball();
-                List<Volleyball> volleyballs = response.body().getEventsWrapperWithVolleyball();
+                if(response.body() != null) {
+                    List<FootballEvent> footballs = response.body().getEventsWrapperWithFootball();
+                    List<Basketball> basketballs = response.body().getEventsWrapperWithBasketball();
+                    List<Volleyball> volleyballs = response.body().getEventsWrapperWithVolleyball();
 
-                recyclerView.setAdapter(new ActiveEvents(footballs, basketballs, volleyballs));
+                    recyclerView.setAdapter(new ActiveEvents(footballs, basketballs, volleyballs));
 
-                Log.d("HistoryFootballEvents", "Registered Successfully");
+                    Log.d("HistoryFootballEvents", "Registered Successfully");
+                }
             }
 
             @SuppressLint("LongLogTag")
