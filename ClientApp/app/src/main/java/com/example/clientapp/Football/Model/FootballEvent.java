@@ -1,4 +1,4 @@
-package com.example.clientapp.footballEvent.model;
+package com.example.clientapp.Football.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;

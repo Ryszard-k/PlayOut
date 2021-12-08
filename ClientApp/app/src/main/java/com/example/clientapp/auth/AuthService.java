@@ -1,6 +1,6 @@
 package com.example.clientapp.auth;
 
-import com.example.clientapp.footballEvent.model.AppUser;
+import com.example.clientapp.Football.Model.AppUser;
 
 import java.util.List;
 

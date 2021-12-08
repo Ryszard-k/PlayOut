@@ -1,4 +1,4 @@
-package com.example.clientapp.footballEvent;
+package com.example.clientapp.Football;
 
 import android.content.Context;
 import android.view.LayoutInflater;

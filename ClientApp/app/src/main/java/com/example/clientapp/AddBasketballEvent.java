@@ -21,11 +21,11 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.clientapp.footballEvent.APIClient;
-import com.example.clientapp.footballEvent.FootballEventAPI;
-import com.example.clientapp.footballEvent.model.AppUser;
-import com.example.clientapp.footballEvent.model.EventLevel;
-import com.example.clientapp.footballEvent.model.FootballEvent;
+import com.example.clientapp.Football.APIClient;
+import com.example.clientapp.Football.FootballEventAPI;
+import com.example.clientapp.Football.Model.AppUser;
+import com.example.clientapp.Football.Model.EventLevel;
+import com.example.clientapp.Football.Model.FootballEvent;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

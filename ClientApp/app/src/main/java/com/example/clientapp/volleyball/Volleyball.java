@@ -1,8 +1,8 @@
 package com.example.clientapp.volleyball;
 
-import com.example.clientapp.footballEvent.model.AppUser;
-import com.example.clientapp.footballEvent.model.Comment;
-import com.example.clientapp.footballEvent.model.EventLevel;
+import com.example.clientapp.Football.Model.AppUser;
+import com.example.clientapp.Football.Model.Comment;
+import com.example.clientapp.Football.Model.EventLevel;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;

@@ -1,4 +1,4 @@
-package com.example.clientapp.footballEvent.model;
+package com.example.clientapp.Football.Model;
 
 import com.example.clientapp.basketball.Basketball;
 import com.example.clientapp.volleyball.Volleyball;

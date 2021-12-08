@@ -8,8 +8,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.clientapp.footballEvent.APIClient;
-import com.example.clientapp.footballEvent.model.AppUser;
+import com.example.clientapp.Football.APIClient;
+import com.example.clientapp.Football.Model.AppUser;
 import com.example.clientapp.MainActivity;
 import com.example.clientapp.R;
 

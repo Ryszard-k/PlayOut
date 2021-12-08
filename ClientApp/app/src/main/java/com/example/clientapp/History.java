@@ -18,9 +18,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.clientapp.basketball.Basketball;
-import com.example.clientapp.footballEvent.APIClient;
-import com.example.clientapp.footballEvent.ActiveEvents;
-import com.example.clientapp.footballEvent.model.FootballEvent;
+import com.example.clientapp.Football.APIClient;
+import com.example.clientapp.Football.ActiveEvents;
+import com.example.clientapp.Football.Model.FootballEvent;
 import com.example.clientapp.volleyball.Volleyball;
 
 import java.util.List;

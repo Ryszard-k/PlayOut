@@ -1,6 +1,6 @@
-package com.example.clientapp.footballEvent;
+package com.example.clientapp.Football;
 
-import com.example.clientapp.footballEvent.model.FootballEvent;
+import com.example.clientapp.Football.Model.FootballEvent;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

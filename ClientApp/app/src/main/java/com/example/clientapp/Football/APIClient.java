@@ -1,4 +1,4 @@
-package com.example.clientapp.footballEvent;
+package com.example.clientapp.Football;
 
 import android.text.TextUtils;
 

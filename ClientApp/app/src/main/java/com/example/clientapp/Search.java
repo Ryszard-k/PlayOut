@@ -22,11 +22,11 @@ import androidx.appcompat.widget.SearchView;
 
 import com.example.clientapp.basketball.Basketball;
 import com.example.clientapp.basketball.BasketballAPI;
-import com.example.clientapp.footballEvent.APIClient;
-import com.example.clientapp.footballEvent.FootballEventAPI;
-import com.example.clientapp.footballEvent.GoogleMapInfoWindowAdapter;
-import com.example.clientapp.footballEvent.model.EventLevel;
-import com.example.clientapp.footballEvent.model.FootballEvent;
+import com.example.clientapp.Football.APIClient;
+import com.example.clientapp.Football.FootballEventAPI;
+import com.example.clientapp.Football.GoogleMapInfoWindowAdapter;
+import com.example.clientapp.Football.Model.EventLevel;
+import com.example.clientapp.Football.Model.FootballEvent;
 import com.example.clientapp.volleyball.Volleyball;
 import com.example.clientapp.volleyball.VolleyballAPI;
 import com.google.android.gms.maps.CameraUpdateFactory;

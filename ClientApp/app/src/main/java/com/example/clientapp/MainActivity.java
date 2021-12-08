@@ -16,7 +16,7 @@ import android.widget.Toast;
 import com.example.clientapp.auth.AuthService;
 import com.example.clientapp.auth.RegisterActivity;
 import com.example.clientapp.auth.LoginActivity;
-import com.example.clientapp.footballEvent.APIClient;
+import com.example.clientapp.Football.APIClient;
 
 import javax.net.ssl.HttpsURLConnection;
 
