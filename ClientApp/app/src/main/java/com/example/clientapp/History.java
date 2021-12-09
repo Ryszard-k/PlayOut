@@ -1,6 +1,6 @@
 package com.example.clientapp;
 
-import static com.example.clientapp.auth.Prefs.MyPREFERENCES;
+import static com.example.clientapp.Authentication.Prefs.MyPREFERENCES;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -17,11 +17,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.clientapp.basketball.Basketball;
+import com.example.clientapp.BasketballEvent.Basketball;
 import com.example.clientapp.Football.APIClient;
 import com.example.clientapp.Football.ActiveEvents;
 import com.example.clientapp.Football.Model.FootballEvent;
-import com.example.clientapp.volleyball.Volleyball;
+import com.example.clientapp.VolleyballEvent.Volleyball;
 
 import java.util.List;
 

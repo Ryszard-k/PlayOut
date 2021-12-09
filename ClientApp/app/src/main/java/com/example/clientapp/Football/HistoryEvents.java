@@ -8,12 +8,12 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.clientapp.basketball.Basketball;
+import com.example.clientapp.BasketballEvent.Basketball;
 import com.example.clientapp.EventClickListener;
 import com.example.clientapp.Football.Model.FootballEvent;
 import com.example.clientapp.R;
 import com.example.clientapp.RecyclerViewMyEventsHolder;
-import com.example.clientapp.volleyball.Volleyball;
+import com.example.clientapp.VolleyballEvent.Volleyball;
 
 import java.util.List;
 

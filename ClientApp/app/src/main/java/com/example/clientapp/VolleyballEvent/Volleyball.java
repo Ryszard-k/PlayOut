@@ -1,4 +1,4 @@
-package com.example.clientapp.volleyball;
+package com.example.clientapp.VolleyballEvent;
 
 import com.example.clientapp.Football.Model.AppUser;
 import com.example.clientapp.Football.Model.Comment;
@@ -12,12 +12,13 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
 import java.util.Set;
 
-public class Volleyball {
+public class Volleyball implements Serializable {
 
     @SerializedName("date")
     @JsonDeserialize(using = LocalDateDeserializer.class)

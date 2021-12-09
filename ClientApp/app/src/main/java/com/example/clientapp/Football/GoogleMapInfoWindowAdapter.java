@@ -23,7 +23,7 @@ public class GoogleMapInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
     }
 
     private void renderText(Marker marker, View view){
-        TextView dateTextView = view.findViewById(R.id.dateTextView);
+        TextView dateTextView = view.findViewById(R.id.dateTextViewDetails);
   /*      TextView timeTextView = view.findViewById(R.id.timeTextView);
         TextView locationTextView = view.findViewById(R.id.locationTextView);
         TextView lvlTextView = view.findViewById(R.id.lvlTextView);

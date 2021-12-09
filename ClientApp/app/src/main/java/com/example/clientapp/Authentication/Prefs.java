@@ -1,4 +1,4 @@
-package com.example.clientapp.auth;
+package com.example.clientapp.Authentication;
 
 import android.content.Context;
 import android.content.SharedPreferences;

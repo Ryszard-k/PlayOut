@@ -1,4 +1,4 @@
-package com.example.clientapp.basketball;
+package com.example.clientapp.BasketballEvent;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

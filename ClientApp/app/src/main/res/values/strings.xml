@@ -28,4 +28,8 @@
     <string name="Levels">Levels</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="title_activity_details">details</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 </resources>

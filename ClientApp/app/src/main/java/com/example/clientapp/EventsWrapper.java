@@ -1,8 +1,8 @@
 package com.example.clientapp;
 
-import com.example.clientapp.basketball.Basketball;
+import com.example.clientapp.BasketballEvent.Basketball;
 import com.example.clientapp.Football.Model.FootballEvent;
-import com.example.clientapp.volleyball.Volleyball;
+import com.example.clientapp.VolleyballEvent.Volleyball;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import java.util.Collections;

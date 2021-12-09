@@ -1,10 +1,11 @@
 package com.example.clientapp.Football.Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public enum EventLevel {
+public enum EventLevel implements Serializable {
 
     F("Beginner, never played before"),
     E("Recreational, with fundamentals of rules"),

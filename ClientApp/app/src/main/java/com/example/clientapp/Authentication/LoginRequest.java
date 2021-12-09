@@ -1,4 +1,4 @@
-package com.example.clientapp.auth;
+package com.example.clientapp.Authentication;
 
 public class LoginRequest {
 

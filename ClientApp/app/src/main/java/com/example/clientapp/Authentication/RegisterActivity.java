@@ -1,4 +1,4 @@
-package com.example.clientapp.auth;
+package com.example.clientapp.Authentication;
 
 import android.content.Intent;
 import android.os.Bundle;

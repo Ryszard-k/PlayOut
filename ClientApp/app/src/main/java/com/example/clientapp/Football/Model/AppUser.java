@@ -1,13 +1,14 @@
 package com.example.clientapp.Football.Model;
 
-import com.example.clientapp.basketball.Basketball;
-import com.example.clientapp.volleyball.Volleyball;
+import com.example.clientapp.BasketballEvent.Basketball;
+import com.example.clientapp.VolleyballEvent.Volleyball;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.Set;
 
-public class AppUser {
+public class AppUser implements Serializable {
 
     @SerializedName("id")
     private Long id;

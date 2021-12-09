@@ -1,8 +1,8 @@
 package com.example.clientapp;
 
-import static com.example.clientapp.auth.Prefs.MyPREFERENCES;
-import static com.example.clientapp.auth.Prefs.Password;
-import static com.example.clientapp.auth.Prefs.Username;
+import static com.example.clientapp.Authentication.Prefs.MyPREFERENCES;
+import static com.example.clientapp.Authentication.Prefs.Password;
+import static com.example.clientapp.Authentication.Prefs.Username;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,9 +13,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.clientapp.auth.AuthService;
-import com.example.clientapp.auth.RegisterActivity;
-import com.example.clientapp.auth.LoginActivity;
+import com.example.clientapp.Authentication.AuthService;
+import com.example.clientapp.Authentication.RegisterActivity;
+import com.example.clientapp.Authentication.LoginActivity;
 import com.example.clientapp.Football.APIClient;
 
 import javax.net.ssl.HttpsURLConnection;

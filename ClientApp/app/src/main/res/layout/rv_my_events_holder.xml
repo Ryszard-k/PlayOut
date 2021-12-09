@@ -6,16 +6,16 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/tvMEHLocation"
+        android:id="@+id/locationDetails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        app:layout_constraintStart_toEndOf="@+id/dateTextView"
+        app:layout_constraintStart_toEndOf="@+id/dateTextViewDetails"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/iconTextView"
+        android:id="@+id/iconTextViewDetails"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginStart="16dp"
@@ -24,47 +24,47 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/dateTextView"
+        android:id="@+id/dateTextViewDetails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
-        app:layout_constraintStart_toEndOf="@+id/iconTextView"
+        app:layout_constraintStart_toEndOf="@+id/iconTextViewDetails"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/timeTextView"
+        android:id="@+id/timeTextViewDetails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="77dp"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dateTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/dateTextViewDetails" />
 
     <TextView
-        android:id="@+id/lvlTextView"
+        android:id="@+id/lvlTextViewDetails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="120dp"
         android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="@+id/timeTextView"
-        app:layout_constraintTop_toBottomOf="@+id/tvMEHLocation" />
+        app:layout_constraintStart_toStartOf="@+id/timeTextViewDetails"
+        app:layout_constraintTop_toBottomOf="@+id/locationDetails" />
 
     <TextView
-        android:id="@+id/noteTextView"
+        android:id="@+id/noteTextViewDetails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timeTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/timeTextViewDetails" />
 
     <TextView
-        android:id="@+id/vacanciesTextView"
+        android:id="@+id/vacanciesTextViewDetails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        app:layout_constraintStart_toEndOf="@+id/lvlTextView"
-        app:layout_constraintTop_toBottomOf="@+id/tvMEHLocation" />
+        app:layout_constraintStart_toEndOf="@+id/lvlTextViewDetails"
+        app:layout_constraintTop_toBottomOf="@+id/locationDetails" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,7 +1,7 @@
-package com.example.clientapp.volleyball;
+package com.example.clientapp.VolleyballEvent;
 
-import static com.example.clientapp.auth.Prefs.MyPREFERENCES;
-import static com.example.clientapp.auth.Prefs.Username;
+import static com.example.clientapp.Authentication.Prefs.MyPREFERENCES;
+import static com.example.clientapp.Authentication.Prefs.Username;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;

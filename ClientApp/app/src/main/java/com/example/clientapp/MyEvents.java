@@ -1,8 +1,9 @@
 package com.example.clientapp;
 
-import static com.example.clientapp.auth.Prefs.MyPREFERENCES;
+import static com.example.clientapp.Authentication.Prefs.MyPREFERENCES;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -16,12 +17,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.clientapp.basketball.Basketball;
+import com.example.clientapp.BasketballEvent.Basketball;
 import com.example.clientapp.Football.APIClient;
 import com.example.clientapp.Football.ActiveEvents;
 import com.example.clientapp.Football.Model.FootballEvent;
-import com.example.clientapp.volleyball.Volleyball;
+import com.example.clientapp.VolleyballEvent.Volleyball;
 
+import java.io.Serializable;
 import java.util.List;
 
 import retrofit2.Call;
@@ -123,8 +125,9 @@ public class MyEvents extends Fragment implements EventClickListener{
     @Override
     public void onItemClick(int position, View view) {
         ActiveEvents activeEvents = (ActiveEvents) rvME.getAdapter();
+        assert activeEvents != null;
         Object o = activeEvents.getItemByPosition(position);
+        startActivity(new Intent(getContext(), MyEventDetails.class).putExtra("object", (Serializable) o));
         System.out.println(o);
-     //   startActivity(new Intent(getContext(), MyEventDetails.class).putExtra());
     }
 }

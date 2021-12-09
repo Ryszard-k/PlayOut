@@ -2,7 +2,7 @@ package com.example.clientapp.Football;
 
 import android.text.TextUtils;
 
-import com.example.clientapp.auth.AuthenticationInterceptor;
+import com.example.clientapp.Authentication.AuthenticationInterceptor;
 
 import okhttp3.Credentials;
 import okhttp3.OkHttpClient;

@@ -1,6 +1,6 @@
 package com.example.clientapp;
 
-import static com.example.clientapp.auth.Prefs.MyPREFERENCES;
+import static com.example.clientapp.Authentication.Prefs.MyPREFERENCES;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,15 +20,16 @@ import android.widget.Toast;
 
 import androidx.appcompat.widget.SearchView;
 
-import com.example.clientapp.basketball.Basketball;
-import com.example.clientapp.basketball.BasketballAPI;
+import com.example.clientapp.BasketballEvent.Basketball;
+import com.example.clientapp.BasketballEvent.BasketballAPI;
 import com.example.clientapp.Football.APIClient;
 import com.example.clientapp.Football.FootballEventAPI;
 import com.example.clientapp.Football.GoogleMapInfoWindowAdapter;
 import com.example.clientapp.Football.Model.EventLevel;
 import com.example.clientapp.Football.Model.FootballEvent;
-import com.example.clientapp.volleyball.Volleyball;
-import com.example.clientapp.volleyball.VolleyballAPI;
+import com.example.clientapp.VolleyballEvent.AddVolleyballEvent;
+import com.example.clientapp.VolleyballEvent.Volleyball;
+import com.example.clientapp.VolleyballEvent.VolleyballAPI;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -290,11 +291,11 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
                             .putExtra("latitude", latLng.latitude).putExtra("longitude", latLng.longitude));
                     break;
                 case 1:
-                    startActivity(new Intent(getContext(), com.example.clientapp.basketball.AddBasketballEvent.class)
+                    startActivity(new Intent(getContext(), com.example.clientapp.BasketballEvent.AddBasketballEvent.class)
                             .putExtra("latitude", latLng.latitude).putExtra("longitude", latLng.longitude));
                     break;
                 case 2:
-                    startActivity(new Intent(getContext(), com.example.clientapp.volleyball.AddVolleyballEvent.class)
+                    startActivity(new Intent(getContext(), AddVolleyballEvent.class)
                             .putExtra("latitude", latLng.latitude).putExtra("longitude", latLng.longitude));
                     break;
                 default:

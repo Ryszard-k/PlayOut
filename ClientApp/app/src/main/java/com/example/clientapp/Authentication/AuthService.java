@@ -1,4 +1,4 @@
-package com.example.clientapp.auth;
+package com.example.clientapp.Authentication;
 
 import com.example.clientapp.Football.Model.AppUser;
 
