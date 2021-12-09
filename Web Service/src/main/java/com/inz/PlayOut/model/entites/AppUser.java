@@ -72,6 +72,11 @@ public class AppUser implements Serializable, UserDetails {
     @JsonIgnoreProperties("participants")
     private Set<VolleyballEvent> volleyballEventsParticipants;
 
+    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("author")
+    private Set<Comment> comments;
+
     public AppUser(String name, String password, String email) {
         this.username = name;
         this.password = password;
@@ -189,6 +194,14 @@ public class AppUser implements Serializable, UserDetails {
 
     public void setVolleyballEventsParticipants(Set<VolleyballEvent> volleyballEventsParticipants) {
         this.volleyballEventsParticipants = volleyballEventsParticipants;
+    }
+
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
     }
 
     @Override

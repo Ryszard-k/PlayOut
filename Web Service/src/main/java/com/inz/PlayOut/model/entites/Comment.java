@@ -3,6 +3,8 @@ package com.inz.PlayOut.model.entites;
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Objects;
 
 @Entity
@@ -13,22 +15,35 @@ public class Comment {
     private Long id;
 
     @NotNull
+    private LocalDate date;
+
+    @NotNull
+    private LocalTime time;
+
+    @NotNull
     private String text;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "FootballEvent_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "footballEvent")
     private FootballEvent footballEvent;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "BasketballEvent", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "basketballEvent")
     private BasketballEvent basketballEvent;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "VolleyballEvent", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "volleyballEvent")
     private VolleyballEvent volleyballEvent;
 
-    public Comment(String text) {
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "author", nullable = false)
+    private AppUser author;
+
+    public Comment(LocalDate date, LocalTime time, String text, AppUser author) {
+        this.date = date;
+        this.time = time;
         this.text = text;
+        this.author = author;
     }
 
     public Comment() {
@@ -56,6 +71,46 @@ public class Comment {
 
     public void setFootballEvent(FootballEvent footballEvent) {
         this.footballEvent = footballEvent;
+    }
+
+    public BasketballEvent getBasketballEvent() {
+        return basketballEvent;
+    }
+
+    public void setBasketballEvent(BasketballEvent basketballEvent) {
+        this.basketballEvent = basketballEvent;
+    }
+
+    public VolleyballEvent getVolleyballEvent() {
+        return volleyballEvent;
+    }
+
+    public void setVolleyballEvent(VolleyballEvent volleyballEvent) {
+        this.volleyballEvent = volleyballEvent;
+    }
+
+    public AppUser getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(AppUser author) {
+        this.author = author;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public LocalTime getTime() {
+        return time;
+    }
+
+    public void setTime(LocalTime time) {
+        this.time = time;
     }
 
     @Override
