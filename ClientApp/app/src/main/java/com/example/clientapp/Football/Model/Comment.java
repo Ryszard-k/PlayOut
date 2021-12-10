@@ -35,11 +35,11 @@ public class Comment implements Serializable {
     @SerializedName("footballEvent")
     private FootballEvent footballEvent;
 
-    @SerializedName("basketball")
-    private Basketball basketball;
+    @SerializedName("basketballEvent")
+    private Basketball basketballEvent;
 
-    @SerializedName("basketball")
-    private Volleyball volleyball;
+    @SerializedName("volleyballEvent")
+    private Volleyball volleyballEvent;
 
     @SerializedName("author")
     private AppUser author;
@@ -102,19 +102,19 @@ public class Comment implements Serializable {
         this.author = author;
     }
 
-    public Basketball getBasketball() {
-        return basketball;
+    public Basketball getBasketballEvent() {
+        return basketballEvent;
     }
 
-    public void setBasketball(Basketball basketball) {
-        this.basketball = basketball;
+    public void setBasketballEvent(Basketball basketballEvent) {
+        this.basketballEvent = basketballEvent;
     }
 
-    public Volleyball getVolleyball() {
-        return volleyball;
+    public Volleyball getVolleyballEvent() {
+        return volleyballEvent;
     }
 
-    public void setVolleyball(Volleyball volleyball) {
-        this.volleyball = volleyball;
+    public void setVolleyballEvent(Volleyball volleyballEvent) {
+        this.volleyballEvent = volleyballEvent;
     }
 }

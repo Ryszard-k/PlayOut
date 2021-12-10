@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.clientapp.BasketballEvent.Basketball;
@@ -28,12 +30,19 @@ import com.example.clientapp.VolleyballEvent.Volleyball;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MyEventDetails extends AppCompatActivity {
+
+    private List<Comment> commentsList;
+    private MyEventDetailsAdapter adapter;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -50,7 +59,10 @@ public class MyEventDetails extends AppCompatActivity {
         TextView noteTextViewDetails = findViewById(R.id.TextViewTextComment);
         TextView vacanciesTextViewDetails = findViewById(R.id.authorTextViewComment);
         TextView textViewAuthorDetails = findViewById(R.id.textViewAuthorDetails);
+
         RecyclerView recyclerViewDetails = findViewById(R.id.recyclerViewDetails);
+        recyclerViewDetails.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewDetails.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
         Object extras = getIntent().getExtras().get("object");
 
@@ -63,7 +75,10 @@ public class MyEventDetails extends AppCompatActivity {
             noteTextViewDetails.setText("Note: " + ((FootballEvent) extras).getNote());
             vacanciesTextViewDetails.setText("Vacancies: " + ((FootballEvent) extras).getVacancies());
             textViewAuthorDetails.setText("Author: " + ((FootballEvent) extras).getAuthor().getUsername());
-            recyclerViewDetails.setAdapter(new MyEventDetailsAdapter(((FootballEvent) extras).getComments()));
+
+            commentsList = new ArrayList<>(((FootballEvent) extras).getComments());
+            adapter = new MyEventDetailsAdapter(commentsList);
+            recyclerViewDetails.setAdapter(adapter);
 
         } else if (extras instanceof Basketball){
             locationDetails.setText("Address: " + ((Basketball) extras).getLocation());
@@ -74,7 +89,10 @@ public class MyEventDetails extends AppCompatActivity {
             noteTextViewDetails.setText("Note: " + ((Basketball) extras).getNote());
             vacanciesTextViewDetails.setText("Vacancies: " + ((Basketball) extras).getVacancies());
             textViewAuthorDetails.setText("Author: " + ((Basketball) extras).getAuthorBasketball().getUsername());
-            recyclerViewDetails.setAdapter(new MyEventDetailsAdapter(((Basketball) extras).getComments()));
+
+            commentsList = new ArrayList<>(((Basketball) extras).getComments());
+            adapter = new MyEventDetailsAdapter(commentsList);
+            recyclerViewDetails.setAdapter(adapter);
 
         } else if (extras instanceof Volleyball){
             locationDetails.setText("Address: " + ((Volleyball) extras).getLocation());
@@ -85,7 +103,10 @@ public class MyEventDetails extends AppCompatActivity {
             noteTextViewDetails.setText("Note: " + ((Volleyball) extras).getNote());
             vacanciesTextViewDetails.setText("Vacancies: " + ((Volleyball) extras).getVacancies());
             textViewAuthorDetails.setText("Author: " + ((Volleyball) extras).getAuthorVolleyball().getUsername());
-            recyclerViewDetails.setAdapter(new MyEventDetailsAdapter(((Volleyball) extras).getComments()));
+
+            commentsList = new ArrayList<>(((Volleyball) extras).getComments());
+            adapter = new MyEventDetailsAdapter(commentsList);
+            recyclerViewDetails.setAdapter(adapter);
         }
 
         findViewById(R.id.imageButtonComment).setOnClickListener(v -> {
@@ -99,6 +120,10 @@ public class MyEventDetails extends AppCompatActivity {
                 String editTextValue = edittext.getText().toString();
                 AppUser appUser = new AppUser();
                 appUser.setUsername(sharedpreferences.getString(Username, Username));
+                if (editTextValue.isEmpty()){
+                    edittext.setError("Please, add comment");
+                    edittext.requestFocus();
+                }
                 Comment comment = new Comment(LocalDate.now(), LocalTime.now(), editTextValue, appUser);
 
                 if (extras instanceof FootballEvent){
@@ -108,7 +133,7 @@ public class MyEventDetails extends AppCompatActivity {
                 } else if (extras instanceof Basketball){
                     Basketball basketball = new Basketball();
                     basketball.setId(((Basketball) extras).getId());
-                    comment.setBasketball(basketball);
+                    comment.setBasketballEvent(basketball);
                 } else if (extras instanceof Volleyball){
                     Volleyball volleyball = new Volleyball();
                     volleyball.setId(((Volleyball) extras).getId());
@@ -116,10 +141,14 @@ public class MyEventDetails extends AppCompatActivity {
 
                 Call<Void> call = APIClient.createService(CommentAPI.class).addComment(comment);
                 call.enqueue(new Callback<Void>() {
+                    @SuppressLint("NotifyDataSetChanged")
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {
                         if (response.isSuccessful()){
                             Toast.makeText(getApplicationContext(), "Added comment", Toast.LENGTH_SHORT).show();
+                            commentsList.add(comment);
+                            adapter.notifyDataSetChanged();
+
                             dialog.dismiss();
                         }
                     }

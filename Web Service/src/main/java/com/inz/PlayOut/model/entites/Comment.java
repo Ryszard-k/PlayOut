@@ -4,12 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
 
 @Entity
-public class Comment {
+public class Comment implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,20 +25,25 @@ public class Comment {
     @NotNull
     private String text;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "footballEvent")
+    @JsonIgnoreProperties({"author", "participants", "comments"})
     private FootballEvent footballEvent;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "basketballEvent")
+    @JsonIgnoreProperties({"author", "participants", "comments"})
     private BasketballEvent basketballEvent;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "volleyballEvent")
+    @JsonIgnoreProperties({"author", "participants", "comments"})
     private VolleyballEvent volleyballEvent;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "author", nullable = false)
+    @JsonIgnoreProperties({"comments", "footballEventsAuthor", "footballEventsParticipants", "basketballEventsAuthor", "basketballEventsParticipants",
+            "volleyballEventsAuthor", "volleyballEventsParticipants", "hibernateLazyInitializer", "handler"})
     private AppUser author;
 
     public Comment(LocalDate date, LocalTime time, String text, AppUser author) {
@@ -113,6 +119,8 @@ public class Comment {
     public void setTime(LocalTime time) {
         this.time = time;
     }
+
+
 
     @Override
     public boolean equals(Object o) {

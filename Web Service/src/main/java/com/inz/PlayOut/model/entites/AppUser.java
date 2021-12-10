@@ -32,7 +32,7 @@ public class AppUser implements Serializable, UserDetails {
 
     @OneToMany(mappedBy = "author",
             cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("author")
+    @JsonIgnoreProperties({"author", "comments"})
     private Set<FootballEvent> footballEventsAuthor;
 
     @ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
@@ -41,12 +41,12 @@ public class AppUser implements Serializable, UserDetails {
             joinColumns = { @JoinColumn(name = "Appuser_id") },
             inverseJoinColumns = { @JoinColumn(name = "FootballEvent_id") }
     )
-    @JsonIgnoreProperties("participants")
+    @JsonIgnoreProperties({"participants", "comments"})
     private Set<FootballEvent> footballEventsParticipants;
 
     @OneToMany(mappedBy = "authorBasketball",
             cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("authorBasketball")
+    @JsonIgnoreProperties({"authorBasketball", "comments"})
     private Set<BasketballEvent> basketballEventsAuthor;
 
     @ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
@@ -55,12 +55,12 @@ public class AppUser implements Serializable, UserDetails {
             joinColumns = { @JoinColumn(name = "Appuser_id") },
             inverseJoinColumns = { @JoinColumn(name = "BasketballEvent_id") }
     )
-    @JsonIgnoreProperties("participants")
+    @JsonIgnoreProperties({"participants", "comments"})
     private Set<BasketballEvent> basketballEventsParticipants;
 
     @OneToMany(mappedBy = "authorVolleyball",
             cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("authorVolleyball")
+    @JsonIgnoreProperties({"authorVolleyball", "comments"})
     private Set<VolleyballEvent> volleyballEventsAuthor;
 
     @ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
@@ -69,10 +69,10 @@ public class AppUser implements Serializable, UserDetails {
             joinColumns = { @JoinColumn(name = "Appuser_id") },
             inverseJoinColumns = { @JoinColumn(name = "VolleyballEvent_id") }
     )
-    @JsonIgnoreProperties("participants")
+    @JsonIgnoreProperties({"participants", "comments"})
     private Set<VolleyballEvent> volleyballEventsParticipants;
 
-    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY,
+    @OneToMany(mappedBy = "author",
             cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties({"author", "comments"})
     private Set<Comment> comments;
@@ -203,6 +203,7 @@ public class AppUser implements Serializable, UserDetails {
     public void setComments(Set<Comment> comments) {
         this.comments = comments;
     }
+
 
     @Override
     public boolean equals(Object o) {

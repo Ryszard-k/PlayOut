@@ -18,9 +18,9 @@ public class FootballEvent extends SportEvent implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "User_id", nullable = false)
-    @JsonIgnoreProperties({"footballEventsAuthor", "basketballEventsAuthor", "volleyballEventsAuthor"})
+    @JsonIgnoreProperties({"footballEventsAuthor", "basketballEventsAuthor", "volleyballEventsAuthor", "comments"})
     private AppUser author;
 
     @ManyToMany(mappedBy = "footballEventsParticipants", fetch = FetchType.EAGER)
@@ -29,6 +29,7 @@ public class FootballEvent extends SportEvent implements Serializable {
 
     @OneToMany(mappedBy = "footballEvent", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties({"footballEvent"})
     private Set<Comment> comments;
 
     public FootballEvent(LocalDate date, LocalTime time, double latitude, double longitude, EventLevel eventLevel, int vacancies, String note, String location, AppUser author) {
@@ -65,6 +66,10 @@ public class FootballEvent extends SportEvent implements Serializable {
 
     public void setParticipants(Set<AppUser> participants) {
         this.participants = participants;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override
