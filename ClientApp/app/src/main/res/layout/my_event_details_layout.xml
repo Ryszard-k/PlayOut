@@ -51,16 +51,16 @@
         app:layout_constraintTop_toBottomOf="@+id/locationDetails" />
 
     <TextView
-        android:id="@+id/noteTextViewDetails"
+        android:id="@+id/TextViewTextComment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timeTextViewDetails" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewAuthorDetails" />
 
     <TextView
-        android:id="@+id/vacanciesTextViewDetails"
+        android:id="@+id/authorTextViewComment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -114,8 +114,18 @@
         android:id="@+id/recyclerViewDetails"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintBottom_toTopOf="@+id/imageButtonResign"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/noteTextViewDetails" />
+        app:layout_constraintTop_toBottomOf="@+id/TextViewTextComment" />
+
+    <TextView
+        android:id="@+id/textViewAuthorDetails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timeTextViewDetails" />
 </androidx.constraintlayout.widget.ConstraintLayout>

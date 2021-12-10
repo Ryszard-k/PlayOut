@@ -24,8 +24,8 @@ public class RecyclerViewMyEventsHolder extends RecyclerView.ViewHolder implemen
         dateTextView = itemView.findViewById(R.id.dateTextViewDetails);
         timeTextView = itemView.findViewById(R.id.timeTextViewDetails);
         lvlTextView = itemView.findViewById(R.id.lvlTextViewDetails);
-        noteTextView = itemView.findViewById(R.id.noteTextViewDetails);
-        vacanciesTextView = itemView.findViewById(R.id.vacanciesTextViewDetails);
+        noteTextView = itemView.findViewById(R.id.TextViewTextComment);
+        vacanciesTextView = itemView.findViewById(R.id.authorTextViewComment);
 
         this.eventClickListener = eventClickListener;
         itemView.setOnClickListener(this);

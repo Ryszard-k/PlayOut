@@ -51,7 +51,7 @@
         app:layout_constraintTop_toBottomOf="@+id/locationDetails" />
 
     <TextView
-        android:id="@+id/noteTextViewDetails"
+        android:id="@+id/TextViewTextComment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -60,7 +60,7 @@
         app:layout_constraintTop_toBottomOf="@+id/timeTextViewDetails" />
 
     <TextView
-        android:id="@+id/vacanciesTextViewDetails"
+        android:id="@+id/authorTextViewComment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"

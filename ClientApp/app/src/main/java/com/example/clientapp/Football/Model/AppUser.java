@@ -46,6 +46,10 @@ public class AppUser implements Serializable {
     @JsonIgnoreProperties("participantsVolleyball")
     private Set<Volleyball> volleyballEventsParticipants;
 
+    @SerializedName("comments")
+    @JsonIgnoreProperties("author")
+    private Set<Comment> comments;
+
     public AppUser() {
     }
 
@@ -127,5 +131,13 @@ public class AppUser implements Serializable {
 
     public void setVolleyballEventsParticipants(Set<Volleyball> volleyballEventsParticipants) {
         this.volleyballEventsParticipants = volleyballEventsParticipants;
+    }
+
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
     }
 }

@@ -74,7 +74,7 @@ public class AppUser implements Serializable, UserDetails {
 
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("author")
+    @JsonIgnoreProperties({"author", "comments"})
     private Set<Comment> comments;
 
     public AppUser(String name, String password, String email) {

@@ -52,7 +52,7 @@ public class Basketball implements Serializable {
     private String location;
 
     @SerializedName("authorBasketball")
-    @JsonIgnoreProperties({"footballEventsParticipants", "basketballEventsParticipants", "volleyballEventsParticipants"})
+    @JsonIgnoreProperties({"footballEventsParticipants", "basketballEventsParticipants", "volleyballEventsParticipants", "comments"})
     private AppUser authorBasketball;
 
     @SerializedName("participantsBasketball")
