@@ -12,6 +12,8 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,8 +21,10 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.clientapp.Authentication.Prefs;
 import com.example.clientapp.Football.APIClient;
 import com.example.clientapp.Football.FootballEventAPI;
 import com.example.clientapp.Football.Model.AppUser;
@@ -37,7 +41,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AddBasketballEvent extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+public class AddFootballEvent extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
     private final String[] lvlList = EventLevel.enumToStringArray();
     private final FootballEvent newFootballEvent = new FootballEvent();
@@ -90,17 +94,17 @@ public class AddBasketballEvent extends AppCompatActivity implements AdapterView
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {
                         if (response.isSuccessful()) {
-                            Toast.makeText(AddBasketballEvent.this, "Created event", Toast.LENGTH_LONG).show();
+                            Toast.makeText(AddFootballEvent.this, "Created event", Toast.LENGTH_LONG).show();
 
-                            stopService(new Intent(AddBasketballEvent.this, DashboardActivity.class));
-                            startActivity(new Intent(AddBasketballEvent.this, DashboardActivity.class));
+                            stopService(new Intent(AddFootballEvent.this, DashboardActivity.class));
+                            startActivity(new Intent(AddFootballEvent.this, DashboardActivity.class));
                             finish();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<Void> call, Throwable t) {
-                        Toast.makeText(AddBasketballEvent.this, "nie poszui", Toast.LENGTH_LONG).show();
+                        Toast.makeText(AddFootballEvent.this, "nie poszui", Toast.LENGTH_LONG).show();
                         Log.d("dodajemyFE", t.getMessage());
                         Log.d("dodajemyFE2", Log.getStackTraceString(t));
                     }
@@ -115,7 +119,7 @@ public class AddBasketballEvent extends AppCompatActivity implements AdapterView
             int day = cldr.get(Calendar.DAY_OF_MONTH);
             int month = cldr.get(Calendar.MONTH);
             int year = cldr.get(Calendar.YEAR);
-            picker = new DatePickerDialog(AddBasketballEvent.this,
+            picker = new DatePickerDialog(AddFootballEvent.this,
                     (view, year1, monthOfYear, dayOfMonth) -> date.setText(LocalDate.of(year1, monthOfYear + 1, dayOfMonth)
                             .toString()), year, month, day);
             picker.show();
@@ -125,7 +129,7 @@ public class AddBasketballEvent extends AppCompatActivity implements AdapterView
             final Calendar cldr = Calendar.getInstance();
             int hour = cldr.get(Calendar.HOUR);
             int minutes = cldr.get(Calendar.MINUTE);
-            timePicker = new TimePickerDialog(AddBasketballEvent.this, (view, hourOfDay, minute) ->
+            timePicker = new TimePickerDialog(AddFootballEvent.this, (view, hourOfDay, minute) ->
                 time.setText(LocalTime.of(hourOfDay, minute, 0).toString()), hour, minutes, true);
             timePicker.show();
         });
@@ -182,4 +186,23 @@ public class AddBasketballEvent extends AppCompatActivity implements AdapterView
         return true;
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.dashboard_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.logout) {
+            Prefs.getInstance(getApplicationContext()).clear();
+            stopService(new Intent(getApplicationContext(), DashboardActivity.class));
+            finish();
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 }

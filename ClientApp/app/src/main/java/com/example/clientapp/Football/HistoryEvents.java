@@ -80,4 +80,15 @@ public class HistoryEvents extends RecyclerView.Adapter<RecyclerViewMyEventsHold
     public int getItemCount() {
         return (footballs.size() + basketballs.size() + volleyballs.size());
     }
+
+    public Object getItemByPosition(int position){
+        if (position < footballs.size()) {
+            return footballs.get(position);
+        } else if ((position - footballs.size()) < basketballs.size()){
+            return basketballs.get(position - footballs.size());
+        } else if ((position - footballs.size() - basketballs.size()) < volleyballs.size()){
+            return volleyballs.get(position - footballs.size() - basketballs.size());
+        }
+        return null;
+    }
 }

@@ -61,7 +61,6 @@ public class MyEventDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_event_details_layout);
         SharedPreferences sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-        getSupportActionBar().setTitle("PlayOut");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         TextView locationDetails = findViewById(R.id.locationDetails);

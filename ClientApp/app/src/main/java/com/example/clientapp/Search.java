@@ -287,7 +287,7 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
         builder.setSingleChoiceItems(lvlList, -1, (dialog, which) -> {
             switch (which) {
                 case 0:
-                    startActivity(new Intent(getContext(), AddBasketballEvent.class)
+                    startActivity(new Intent(getContext(), AddFootballEvent.class)
                             .putExtra("latitude", latLng.latitude).putExtra("longitude", latLng.longitude));
                     break;
                 case 1:
@@ -326,9 +326,6 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
                         public void onResponse(Call<Void> call, Response<Void> response) {
                             if (response.isSuccessful()){
                                 Toast.makeText(getContext(), "Joined to event", Toast.LENGTH_LONG).show();
-
-                                getActivity().getApplicationContext().stopService(new Intent(getActivity(), DashboardActivity.class));
-                                startActivity(new Intent(getActivity(), DashboardActivity.class));
 
                                 getActivity().getApplicationContext().stopService(new Intent(getActivity(), DashboardActivity.class));
                                 startActivity(new Intent(getActivity(), DashboardActivity.class));

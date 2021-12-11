@@ -140,7 +140,6 @@ public class MyEvents extends Fragment implements EventClickListener{
         assert activeEvents != null;
         Object o = activeEvents.getItemByPosition(position);
         startActivity(new Intent(getContext(), MyEventDetails.class).putExtra("object", (Serializable) o));
-        System.out.println(o);
     }
 
 

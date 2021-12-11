@@ -12,6 +12,8 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,13 +21,16 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.clientapp.Authentication.Prefs;
 import com.example.clientapp.DashboardActivity;
 import com.example.clientapp.Football.APIClient;
 import com.example.clientapp.Football.Model.AppUser;
 import com.example.clientapp.Football.Model.EventLevel;
 import com.example.clientapp.Geocoder;
+import com.example.clientapp.MainActivity;
 import com.example.clientapp.R;
 
 import java.time.LocalDate;
@@ -181,5 +186,25 @@ public class AddVolleyballEvent extends AppCompatActivity implements AdapterView
         }
 
         return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.dashboard_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.logout) {
+            Prefs.getInstance(getApplicationContext()).clear();
+            stopService(new Intent(getApplicationContext(), DashboardActivity.class));
+            finish();
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

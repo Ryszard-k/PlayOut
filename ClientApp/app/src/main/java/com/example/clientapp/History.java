@@ -4,6 +4,7 @@ import static com.example.clientapp.Authentication.Prefs.MyPREFERENCES;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -20,9 +21,12 @@ import android.view.ViewGroup;
 import com.example.clientapp.BasketballEvent.Basketball;
 import com.example.clientapp.Football.APIClient;
 import com.example.clientapp.Football.ActiveEvents;
+import com.example.clientapp.Football.HistoryEvents;
 import com.example.clientapp.Football.Model.FootballEvent;
 import com.example.clientapp.VolleyballEvent.Volleyball;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -34,7 +38,7 @@ import retrofit2.Response;
  * Use the {@link History#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class History extends Fragment {
+public class History extends Fragment implements EventClickListener{
 
     private RecyclerView recyclerView;
 
@@ -46,8 +50,9 @@ public class History extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
-    private EventClickListener eventClickListener;
+    private List<FootballEvent> footballs = new ArrayList<>();
+    private List<Basketball> basketballs = new ArrayList<>();
+    private List<Volleyball> volleyballs = new ArrayList<>();
 
     public History() {
         // Required empty public constructor
@@ -89,6 +94,7 @@ public class History extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         recyclerView.setHasFixedSize(true);
         recyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.VERTICAL));
+        EventClickListener eventClickListener = this;
 
         SharedPreferences sharedpreferences = container.getContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 
@@ -98,12 +104,16 @@ public class History extends Fragment {
             @Override
             public void onResponse(Call<EventsWrapper> call, Response<EventsWrapper> response) {
                 if(response.body() != null) {
-                    List<FootballEvent> footballs = response.body().getEventsWrapperWithFootball();
-                    List<Basketball> basketballs = response.body().getEventsWrapperWithBasketball();
-                    List<Volleyball> volleyballs = response.body().getEventsWrapperWithVolleyball();
+
+                    footballs.clear();
+                    basketballs.clear();
+                    volleyballs.clear();
+
+                    footballs = response.body().getEventsWrapperWithFootball();
+                    basketballs = response.body().getEventsWrapperWithBasketball();
+                    volleyballs = response.body().getEventsWrapperWithVolleyball();
 
                     recyclerView.setAdapter(new ActiveEvents(footballs, basketballs, volleyballs, eventClickListener));
-
                     Log.d("HistoryFootballEvents", "Registered Successfully");
                 }
             }
@@ -116,5 +126,13 @@ public class History extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onItemClick(int position, View view) {
+        ActiveEvents activeEvents = (ActiveEvents) recyclerView.getAdapter();
+        assert activeEvents != null;
+        Object o = activeEvents.getItemByPosition(position);
+        startActivity(new Intent(getContext(), MyHistoryDetails.class).putExtra("object", (Serializable) o));
     }
 }

@@ -89,7 +89,6 @@ public class ActiveEvents extends RecyclerView.Adapter<RecyclerViewMyEventsHolde
         return (footballs.size() + basketballs.size() + volleyballs.size());
     }
 
-
     public Object getItemByPosition(int position){
         if (position < footballs.size()) {
             return footballs.get(position);
