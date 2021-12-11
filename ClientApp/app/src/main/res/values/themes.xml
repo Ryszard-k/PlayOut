@@ -22,4 +22,10 @@
     <style name="Theme.ClientApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.ClientApp.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="BottomNavigation" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="itemTextColor">@color/white</item>
+        <item name="itemIconTint">@color/white</item>
+
+    </style>
 </resources>

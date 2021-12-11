@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/commentMenu"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_forum_24"
+        android:title="@string/commentMenu"/>
+    <item
+        android:id="@+id/resignMenu"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_logout_24"
+        android:title="@string/resignMenu"/>
+    <item
+        android:id="@+id/participantsMenu"
+        android:enabled="true"
+        android:icon="@drawable/ic_participants"
+        android:title="@string/participantsMenu"/>
+</menu>

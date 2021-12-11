@@ -52,10 +52,18 @@
         <activity
             android:name=".Authentication.RegisterActivity"
             android:theme="@style/Theme.Design.NoActionBar"/>
-        <activity android:name=".BasketballEvent.AddBasketballEvent" />
-        <activity android:name=".AddBasketballEvent" />
-        <activity android:name=".VolleyballEvent.AddVolleyballEvent" />
-        <activity android:name=".MyEventDetails" />
+        <activity
+            android:name=".BasketballEvent.AddBasketballEvent"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"/>
+        <activity
+            android:name=".AddBasketballEvent"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"/>
+        <activity
+            android:name=".VolleyballEvent.AddVolleyballEvent"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"/>
+        <activity
+            android:name=".MyEventDetails"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"/>
     </application>
 
 </manifest>

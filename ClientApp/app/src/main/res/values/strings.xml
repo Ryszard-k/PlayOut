@@ -37,4 +37,8 @@
     <string name="backarrow">backArrow</string>
     <string name="logut">logout</string>
     <string name="logout">logout</string>
+    <string name="back">back</string>
+    <string name="commentMenu">Comment</string>
+    <string name="resignMenu">Resign</string>
+    <string name="participantsMenu">Participants</string>
 </resources>

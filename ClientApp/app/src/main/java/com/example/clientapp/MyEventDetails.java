@@ -11,11 +11,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -23,6 +26,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.clientapp.Authentication.Prefs;
 import com.example.clientapp.BasketballEvent.Basketball;
 import com.example.clientapp.Football.APIClient;
 import com.example.clientapp.Football.CommentAPI;
@@ -30,6 +34,9 @@ import com.example.clientapp.Football.Model.AppUser;
 import com.example.clientapp.Football.Model.Comment;
 import com.example.clientapp.Football.Model.FootballEvent;
 import com.example.clientapp.VolleyballEvent.Volleyball;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
+import com.google.android.material.navigation.NavigationView;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -46,13 +53,16 @@ public class MyEventDetails extends AppCompatActivity {
 
     private List<Comment> commentsList;
     private MyEventDetailsAdapter adapter;
+    private BottomNavigationView bottomNavigationView;
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "NonConstantResourceId"})
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_event_details_layout);
         SharedPreferences sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        getSupportActionBar().setTitle("PlayOut");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         TextView locationDetails = findViewById(R.id.locationDetails);
         TextView iconTextViewDetails = findViewById(R.id.iconTextViewDetails);
@@ -62,6 +72,7 @@ public class MyEventDetails extends AppCompatActivity {
         TextView noteTextViewDetails = findViewById(R.id.TextViewTextComment);
         TextView vacanciesTextViewDetails = findViewById(R.id.authorTextViewComment);
         TextView textViewAuthorDetails = findViewById(R.id.textViewAuthorDetails);
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
         RecyclerView recyclerViewDetails = findViewById(R.id.recyclerViewDetails);
         recyclerViewDetails.setLayoutManager(new LinearLayoutManager(this));
@@ -112,87 +123,108 @@ public class MyEventDetails extends AppCompatActivity {
             recyclerViewDetails.setAdapter(adapter);
         }
 
-        findViewById(R.id.imageButtonComment).setOnClickListener(v -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(MyEventDetails.this);
-            final EditText edittext = new EditText(getApplicationContext());
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            switch (item.getItemId()){
+                case R.id.commentMenu:
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MyEventDetails.this);
+                    final EditText edittext = new EditText(getApplicationContext());
 
-            builder.setTitle("Add comment");
-            builder.setView(edittext);
+                    builder.setTitle("Add comment");
+                    builder.setView(edittext);
 
-            builder.setPositiveButton(R.string.add, (dialog, which) -> {
-                String editTextValue = edittext.getText().toString();
-                AppUser appUser = new AppUser();
-                appUser.setUsername(sharedpreferences.getString(Username, Username));
-                if (editTextValue.isEmpty()){
-                    edittext.setError("Please, add comment");
-                    edittext.requestFocus();
-                }
-                Comment comment = new Comment(LocalDate.now(), LocalTime.now(), editTextValue, appUser);
-
-                if (extras instanceof FootballEvent){
-                    FootballEvent footballEvent = new FootballEvent();
-                    footballEvent.setId(((FootballEvent) extras).getId());
-                    comment.setFootballEvent(footballEvent);
-                } else if (extras instanceof Basketball){
-                    Basketball basketball = new Basketball();
-                    basketball.setId(((Basketball) extras).getId());
-                    comment.setBasketballEvent(basketball);
-                } else if (extras instanceof Volleyball){
-                    Volleyball volleyball = new Volleyball();
-                    volleyball.setId(((Volleyball) extras).getId());
-                    comment.setVolleyballEvent(volleyball);
-                }
-
-                Call<Void> call = APIClient.createService(CommentAPI.class).addComment(comment);
-                call.enqueue(new Callback<Void>() {
-                    @SuppressLint("NotifyDataSetChanged")
-                    @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
-                        if (response.isSuccessful()){
-                            Toast.makeText(getApplicationContext(), "Added comment", Toast.LENGTH_SHORT).show();
-                            commentsList.add(comment);
-                            adapter.notifyItemInserted(commentsList.size() - 1);
-
-                            dialog.dismiss();
+                    builder.setPositiveButton(R.string.add, (dialog, which) -> {
+                        String editTextValue = edittext.getText().toString();
+                        AppUser appUser = new AppUser();
+                        appUser.setUsername(sharedpreferences.getString(Username, Username));
+                        if (editTextValue.isEmpty()){
+                            edittext.setError("Please, add comment");
+                            edittext.requestFocus();
                         }
-                    }
+                        Comment comment = new Comment(LocalDate.now(), LocalTime.now(), editTextValue, appUser);
 
-                    @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
-                        Log.d("joinBasketball", Log.getStackTraceString(t));
-                        Toast.makeText(getApplicationContext(), "Pleas add text to comment", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                        if (extras instanceof FootballEvent){
+                            FootballEvent footballEvent = new FootballEvent();
+                            footballEvent.setId(((FootballEvent) extras).getId());
+                            comment.setFootballEvent(footballEvent);
+                        } else if (extras instanceof Basketball){
+                            Basketball basketball = new Basketball();
+                            basketball.setId(((Basketball) extras).getId());
+                            comment.setBasketballEvent(basketball);
+                        } else if (extras instanceof Volleyball){
+                            Volleyball volleyball = new Volleyball();
+                            volleyball.setId(((Volleyball) extras).getId());
+                            comment.setVolleyballEvent(volleyball);
+                        }
 
-            });
+                        Call<Void> call = APIClient.createService(CommentAPI.class).addComment(comment);
+                        call.enqueue(new Callback<Void>() {
+                            @SuppressLint("NotifyDataSetChanged")
+                            @Override
+                            public void onResponse(Call<Void> call, Response<Void> response) {
+                                if (response.isSuccessful()){
+                                    Toast.makeText(getApplicationContext(), "Added comment", Toast.LENGTH_SHORT).show();
+                                    commentsList.add(comment);
+                                    adapter.notifyItemInserted(commentsList.size() - 1);
 
-            builder.setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel());
+                                    dialog.dismiss();
+                                }
+                            }
 
-            AlertDialog alertDialog = builder.create();
-            alertDialog.show();
-        });
+                            @Override
+                            public void onFailure(Call<Void> call, Throwable t) {
+                                Log.d("joinBasketball", Log.getStackTraceString(t));
+                                Toast.makeText(getApplicationContext(), "Pleas add text to comment", Toast.LENGTH_SHORT).show();
+                            }
+                        });
 
-        findViewById(R.id.imageButtonParticipants).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                    });
+
+                    builder.setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel());
+
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+                    return true;
+
+                case R.id.resignMenu:
+                    Toast.makeText(getApplicationContext(), "resign", Toast.LENGTH_SHORT).show();
+                    return true;
+
+                case R.id.participantsMenu:
+                    Toast.makeText(getApplicationContext(), "participantsMenu", Toast.LENGTH_SHORT).show();
+                    return true;
 
             }
-        });
-
-        findViewById(R.id.imageButtonResign).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
+            return false;
         });
     }
 
     @Override
-    protected void onStop() {
-        stopService(new Intent(getApplicationContext(), DashboardActivity.class));
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.dashboard_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.logout) {
+            Prefs.getInstance(getApplicationContext()).clear();
+            stopService(new Intent(getApplicationContext(), DashboardActivity.class));
+            finish();
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        stopService(new Intent(getApplicationContext(), MyEventDetails.class));
         finish();
         startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
-        overridePendingTransition(0, 0);
-        super.onStop();
+
+        return super.onSupportNavigateUp();
     }
+
 }
