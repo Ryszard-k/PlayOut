@@ -5,7 +5,9 @@ import static com.example.clientapp.Authentication.Prefs.Username;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -137,6 +140,7 @@ public class MyEventDetails extends AppCompatActivity {
                 } else if (extras instanceof Volleyball){
                     Volleyball volleyball = new Volleyball();
                     volleyball.setId(((Volleyball) extras).getId());
+                    comment.setVolleyballEvent(volleyball);
                 }
 
                 Call<Void> call = APIClient.createService(CommentAPI.class).addComment(comment);
@@ -147,7 +151,7 @@ public class MyEventDetails extends AppCompatActivity {
                         if (response.isSuccessful()){
                             Toast.makeText(getApplicationContext(), "Added comment", Toast.LENGTH_SHORT).show();
                             commentsList.add(comment);
-                            adapter.notifyDataSetChanged();
+                            adapter.notifyItemInserted(commentsList.size() - 1);
 
                             dialog.dismiss();
                         }
@@ -181,5 +185,14 @@ public class MyEventDetails extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    protected void onStop() {
+        stopService(new Intent(getApplicationContext(), DashboardActivity.class));
+        finish();
+        startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+        overridePendingTransition(0, 0);
+        super.onStop();
     }
 }

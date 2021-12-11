@@ -3,6 +3,7 @@ package com.example.clientapp.Authentication;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -14,6 +15,8 @@ import com.example.clientapp.Football.Model.AppUser;
 import com.example.clientapp.R;
 
 import java.util.List;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -45,11 +48,11 @@ public class LoginActivity extends AppCompatActivity {
         String username = etUsername.getText().toString();
         String password = etPassword.getText().toString();
 
-        Call<List<AppUser>> call = APIClient.createService(AuthService.class, username, password).getAllAppUsers();
-        call.enqueue(new Callback<List<AppUser>>() {
+        Call<String> call1 = APIClient.createService(AuthService.class, username, password).checkAppUser(username);
+        call1.enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<List<AppUser>> call, Response<List<AppUser>> response) {
-                if (response.isSuccessful()) {
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (response.raw().code() == HttpsURLConnection.HTTP_MOVED_TEMP) {
                     Prefs.getInstance(getApplicationContext()).save(username, password);
                     Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_LONG).show();
                     startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
@@ -59,10 +62,12 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<AppUser>> call, Throwable t) {
+            public void onFailure(Call<String> call, Throwable t) {
                 Toast.makeText(LoginActivity.this, "Wrong credentials ", Toast.LENGTH_LONG).show();
+                Log.d("Login", Log.getStackTraceString(t));
             }
-
         });
+
+
     }
 }

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,8 +15,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.clientapp.BasketballEvent.Basketball;
 import com.example.clientapp.Football.APIClient;
@@ -24,6 +28,7 @@ import com.example.clientapp.Football.Model.FootballEvent;
 import com.example.clientapp.VolleyballEvent.Volleyball;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -47,6 +52,9 @@ public class MyEvents extends Fragment implements EventClickListener{
     private String mParam2;
 
     private RecyclerView rvME;
+    private List<FootballEvent> footballs = new ArrayList<>();
+    private List<Basketball> basketballs = new ArrayList<>();
+    private List<Volleyball> volleyballs = new ArrayList<>();
 
     public MyEvents() {
         // Required empty public constructor
@@ -102,9 +110,13 @@ public class MyEvents extends Fragment implements EventClickListener{
                 if (response.isSuccessful()) {
                     assert response.body() != null;
 
-                    List<FootballEvent> footballs = response.body().getEventsWrapperWithFootball();
-                    List<Basketball> basketballs = response.body().getEventsWrapperWithBasketball();
-                    List<Volleyball> volleyballs = response.body().getEventsWrapperWithVolleyball();
+                    footballs.clear();
+                    basketballs.clear();
+                    volleyballs.clear();
+
+                    footballs = response.body().getEventsWrapperWithFootball();
+                    basketballs = response.body().getEventsWrapperWithBasketball();
+                    volleyballs = response.body().getEventsWrapperWithVolleyball();
 
                     rvME.setAdapter(new ActiveEvents(footballs, basketballs, volleyballs, eventClickListener));
                     Log.d("ActiveFootballEvents", "Registered Successfully");
@@ -130,4 +142,6 @@ public class MyEvents extends Fragment implements EventClickListener{
         startActivity(new Intent(getContext(), MyEventDetails.class).putExtra("object", (Serializable) o));
         System.out.println(o);
     }
+
+
 }

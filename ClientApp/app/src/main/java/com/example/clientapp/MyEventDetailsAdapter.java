@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 public class MyEventDetailsAdapter extends RecyclerView.Adapter<MyEventDetailsAdapter.MyEventDetailsItem> {
 
     private List<Comment> commentsList;
+    private List<Comment> resultOfSort;
 
     public MyEventDetailsAdapter( List<Comment> commentsList) {
         this.commentsList = commentsList;
@@ -29,17 +30,17 @@ public class MyEventDetailsAdapter extends RecyclerView.Adapter<MyEventDetailsAd
     public MyEventDetailsItem onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.my_event_details_holder, parent, false);
 
-        commentsList = commentsList.stream().sorted(Comparator.comparing(Comment::getDate).thenComparing(Comment::getTime)).collect(Collectors.toList());
+        resultOfSort = commentsList.stream().sorted(Comparator.comparing(Comment::getDate).thenComparing(Comment::getTime)).collect(Collectors.toList());
         return new MyEventDetailsItem(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyEventDetailsItem holder, int position) {
 
-        holder.getDateTextViewDetails().setText(commentsList.get(position).getDate().toString());
-        holder.getAuthorTextViewComment().setText(commentsList.get(position).getAuthor().getUsername());
-        holder.getTimeTextViewDetails().setText(commentsList.get(position).getTime().toString());
-        holder.getTextViewTextComment().setText(commentsList.get(position).getText());
+        holder.getDateTextViewDetails().setText(resultOfSort.get(position).getDate().toString());
+        holder.getAuthorTextViewComment().setText(resultOfSort.get(position).getAuthor().getUsername());
+        holder.getTimeTextViewDetails().setText(resultOfSort.get(position).getTime().toString());
+        holder.getTextViewTextComment().setText(resultOfSort.get(position).getText());
     }
 
     @Override

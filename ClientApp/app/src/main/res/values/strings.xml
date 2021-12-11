@@ -33,4 +33,8 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="add">Add</string>
+    <string name="empty">" "</string>
+    <string name="backarrow">backArrow</string>
+    <string name="logut">logout</string>
+    <string name="logout">logout</string>
 </resources>

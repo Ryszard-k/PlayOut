@@ -29,4 +29,8 @@ public class Prefs {
         editor.commit();
 
     }
+
+    public void clear(){
+        editor.clear().commit();
+    }
 }

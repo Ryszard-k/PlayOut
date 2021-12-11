@@ -35,19 +35,23 @@
         <activity
             android:name=".DashboardActivity"
             android:exported="true"
-            android:label="@string/title_activity_dashboard"
-            android:theme="@style/Theme.ClientApp.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
         <activity
             android:name=".MainActivity"
-            android:exported="true" >
+            android:exported="true"
+            android:theme="@style/Theme.Design.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Authentication.LoginActivity" />
-        <activity android:name=".Authentication.RegisterActivity" />
+        <activity
+            android:name=".Authentication.LoginActivity"
+            android:theme="@style/Theme.Design.NoActionBar"/>
+        <activity
+            android:name=".Authentication.RegisterActivity"
+            android:theme="@style/Theme.Design.NoActionBar"/>
         <activity android:name=".BasketballEvent.AddBasketballEvent" />
         <activity android:name=".AddBasketballEvent" />
         <activity android:name=".VolleyballEvent.AddVolleyballEvent" />
