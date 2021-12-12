@@ -5,7 +5,6 @@ import static com.example.clientapp.Authentication.Prefs.Username;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,7 +20,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,25 +33,23 @@ import com.example.clientapp.Football.Model.Comment;
 import com.example.clientapp.Football.Model.FootballEvent;
 import com.example.clientapp.VolleyballEvent.Volleyball;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
-import com.google.android.material.navigation.NavigationView;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MyEventDetails extends AppCompatActivity {
+public class MyEventDetails extends AppCompatActivity implements EventClickListener{
 
     private List<Comment> commentsList;
     private MyEventDetailsAdapter adapter;
     private BottomNavigationView bottomNavigationView;
+    private RecyclerView recyclerViewDetails;
+    private String username;
 
     @SuppressLint({"SetTextI18n", "NonConstantResourceId"})
     @Override
@@ -61,6 +57,7 @@ public class MyEventDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_event_details_layout);
         SharedPreferences sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        username = sharedpreferences.getString(Username, Username);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         TextView locationDetails = findViewById(R.id.locationDetails);
@@ -73,7 +70,7 @@ public class MyEventDetails extends AppCompatActivity {
         TextView textViewAuthorDetails = findViewById(R.id.textViewAuthorDetails);
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
-        RecyclerView recyclerViewDetails = findViewById(R.id.recyclerViewDetails);
+        recyclerViewDetails = findViewById(R.id.recyclerViewDetails);
         recyclerViewDetails.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewDetails.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
@@ -90,7 +87,7 @@ public class MyEventDetails extends AppCompatActivity {
             textViewAuthorDetails.setText("Author: " + ((FootballEvent) extras).getAuthor().getUsername());
 
             commentsList = new ArrayList<>(((FootballEvent) extras).getComments());
-            adapter = new MyEventDetailsAdapter(commentsList);
+            adapter = new MyEventDetailsAdapter(commentsList, this);
             recyclerViewDetails.setAdapter(adapter);
 
         } else if (extras instanceof Basketball){
@@ -104,7 +101,7 @@ public class MyEventDetails extends AppCompatActivity {
             textViewAuthorDetails.setText("Author: " + ((Basketball) extras).getAuthorBasketball().getUsername());
 
             commentsList = new ArrayList<>(((Basketball) extras).getComments());
-            adapter = new MyEventDetailsAdapter(commentsList);
+            adapter = new MyEventDetailsAdapter(commentsList, this);
             recyclerViewDetails.setAdapter(adapter);
 
         } else if (extras instanceof Volleyball){
@@ -118,7 +115,7 @@ public class MyEventDetails extends AppCompatActivity {
             textViewAuthorDetails.setText("Author: " + ((Volleyball) extras).getAuthorVolleyball().getUsername());
 
             commentsList = new ArrayList<>(((Volleyball) extras).getComments());
-            adapter = new MyEventDetailsAdapter(commentsList);
+            adapter = new MyEventDetailsAdapter(commentsList, this);
             recyclerViewDetails.setAdapter(adapter);
         }
 
@@ -134,7 +131,7 @@ public class MyEventDetails extends AppCompatActivity {
                     builder.setPositiveButton(R.string.add, (dialog, which) -> {
                         String editTextValue = edittext.getText().toString();
                         AppUser appUser = new AppUser();
-                        appUser.setUsername(sharedpreferences.getString(Username, Username));
+                        appUser.setUsername(username);
                         if (editTextValue.isEmpty()){
                             edittext.setError("Please, add comment");
                             edittext.requestFocus();
@@ -155,22 +152,26 @@ public class MyEventDetails extends AppCompatActivity {
                             comment.setVolleyballEvent(volleyball);
                         }
 
-                        Call<Void> call = APIClient.createService(CommentAPI.class).addComment(comment);
-                        call.enqueue(new Callback<Void>() {
+                        Call<Long> call = APIClient.createService(CommentAPI.class).addComment(comment);
+                        call.enqueue(new Callback<Long>() {
                             @SuppressLint("NotifyDataSetChanged")
                             @Override
-                            public void onResponse(Call<Void> call, Response<Void> response) {
+                            public void onResponse(Call<Long> call, Response<Long> response) {
                                 if (response.isSuccessful()){
                                     Toast.makeText(getApplicationContext(), "Added comment", Toast.LENGTH_SHORT).show();
+                                    Long id = response.body();
+                                    Log.d("id", String.valueOf(id));
+                                    comment.setId(id);
                                     commentsList.add(comment);
-                                    adapter.notifyItemInserted(commentsList.size() - 1);
+                                    adapter.notifyItemInserted(commentsList.size());
+                                    Log.d("insert", String.valueOf(commentsList.size()));
 
                                     dialog.dismiss();
                                 }
                             }
 
                             @Override
-                            public void onFailure(Call<Void> call, Throwable t) {
+                            public void onFailure(Call<Long> call, Throwable t) {
                                 Log.d("joinBasketball", Log.getStackTraceString(t));
                                 Toast.makeText(getApplicationContext(), "Pleas add text to comment", Toast.LENGTH_SHORT).show();
                             }
@@ -226,4 +227,42 @@ public class MyEventDetails extends AppCompatActivity {
         return super.onSupportNavigateUp();
     }
 
+    @Override
+    public void onItemClick(int position, View view) {
+        MyEventDetailsAdapter myEventDetailsAdapter = (MyEventDetailsAdapter) recyclerViewDetails.getAdapter();
+        assert myEventDetailsAdapter != null;
+        Comment comment = myEventDetailsAdapter.getCommentByPosition(position);
+
+        if (comment.getAuthor().getUsername().equals(username)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(MyEventDetails.this);
+
+            builder.setTitle("Are you sure you want to delete comment?");
+
+            builder.setPositiveButton(R.string.ok, (dialog, which) -> {
+
+                Call<Void> call = APIClient.createService(CommentAPI.class).deleteComment(comment.getId());
+                call.enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if (response.isSuccessful()) {
+                            Toast.makeText(getApplicationContext(), "Deleted comment", Toast.LENGTH_SHORT).show();
+                            commentsList.remove(comment);
+                            adapter.notifyItemRemoved(position);
+                            dialog.dismiss();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        Log.d("joinBasketball", Log.getStackTraceString(t));
+                    }
+                });
+            });
+
+            builder.setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel());
+
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+        }
+    }
 }
