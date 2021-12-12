@@ -41,4 +41,5 @@
     <string name="commentMenu">Comment</string>
     <string name="resignMenu">Resign</string>
     <string name="participantsMenu">Participants</string>
+    <string name="close">Close</string>
 </resources>

@@ -8,8 +8,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/comments")
@@ -48,8 +50,20 @@ public record CommentController (CommentService commentService, AppUserService a
                 volleyballEvent.ifPresent(object::setVolleyballEvent);
             }
             commentService.save(object);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            found = appUserService.findByUsername(object.getAuthor().getUsername());
+            Optional<Comment> optionalComment = found.get().getComments().stream().max(Comparator.comparing(Comment::getDate).thenComparing(Comment::getTime));
+            return new ResponseEntity<>(optionalComment.get().getId(), HttpStatus.CREATED);
         } else
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> delete(@PathVariable Long id) {
+        Optional<Comment> found = commentService.findById(id);
+        if (found.isPresent()) {
+            commentService.delete(id);
+            return new ResponseEntity<>(found,HttpStatus.OK);
+        } else
+            return new ResponseEntity<>("Not found object to delete!", HttpStatus.NOT_FOUND);
     }
 }

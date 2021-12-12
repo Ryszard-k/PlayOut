@@ -1,6 +1,5 @@
 package com.inz.PlayOut.service;
 
-import com.inz.PlayOut.model.entites.AppUser;
 import com.inz.PlayOut.model.entites.Comment;
 import com.inz.PlayOut.model.repositories.CommentRepo;
 import org.springframework.stereotype.Service;
@@ -13,6 +12,10 @@ public record CommentService(CommentRepo commentRepo) {
 
     public List<Comment> findAll() {
         return commentRepo.findAll();
+    }
+
+    public Optional<Comment> findById(Long id){
+        return commentRepo.findById(id);
     }
 
     public Comment save(Comment comment){

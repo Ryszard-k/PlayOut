@@ -6,6 +6,7 @@ import static com.example.clientapp.Authentication.Prefs.Username;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -37,6 +38,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import retrofit2.Call;
@@ -50,6 +52,7 @@ public class MyEventDetails extends AppCompatActivity implements EventClickListe
     private BottomNavigationView bottomNavigationView;
     private RecyclerView recyclerViewDetails;
     private String username;
+    private List<AppUser> participantsList;
 
     @SuppressLint({"SetTextI18n", "NonConstantResourceId"})
     @Override
@@ -86,6 +89,7 @@ public class MyEventDetails extends AppCompatActivity implements EventClickListe
             vacanciesTextViewDetails.setText("Vacancies: " + ((FootballEvent) extras).getVacancies());
             textViewAuthorDetails.setText("Author: " + ((FootballEvent) extras).getAuthor().getUsername());
 
+            participantsList = new ArrayList<>(((FootballEvent) extras).getParticipants());
             commentsList = new ArrayList<>(((FootballEvent) extras).getComments());
             adapter = new MyEventDetailsAdapter(commentsList, this);
             recyclerViewDetails.setAdapter(adapter);
@@ -100,6 +104,7 @@ public class MyEventDetails extends AppCompatActivity implements EventClickListe
             vacanciesTextViewDetails.setText("Vacancies: " + ((Basketball) extras).getVacancies());
             textViewAuthorDetails.setText("Author: " + ((Basketball) extras).getAuthorBasketball().getUsername());
 
+            participantsList = new ArrayList<>(((Basketball) extras).getParticipantsBasketball());
             commentsList = new ArrayList<>(((Basketball) extras).getComments());
             adapter = new MyEventDetailsAdapter(commentsList, this);
             recyclerViewDetails.setAdapter(adapter);
@@ -114,6 +119,7 @@ public class MyEventDetails extends AppCompatActivity implements EventClickListe
             vacanciesTextViewDetails.setText("Vacancies: " + ((Volleyball) extras).getVacancies());
             textViewAuthorDetails.setText("Author: " + ((Volleyball) extras).getAuthorVolleyball().getUsername());
 
+            participantsList = new ArrayList<>(((Volleyball) extras).getParticipantsVolleyball());
             commentsList = new ArrayList<>(((Volleyball) extras).getComments());
             adapter = new MyEventDetailsAdapter(commentsList, this);
             recyclerViewDetails.setAdapter(adapter);
@@ -164,7 +170,6 @@ public class MyEventDetails extends AppCompatActivity implements EventClickListe
                                     comment.setId(id);
                                     commentsList.add(comment);
                                     adapter.notifyItemInserted(commentsList.size());
-                                    Log.d("insert", String.valueOf(commentsList.size()));
 
                                     dialog.dismiss();
                                 }
@@ -186,11 +191,24 @@ public class MyEventDetails extends AppCompatActivity implements EventClickListe
                     return true;
 
                 case R.id.resignMenu:
-                    Toast.makeText(getApplicationContext(), "resign", Toast.LENGTH_SHORT).show();
                     return true;
 
                 case R.id.participantsMenu:
-                    Toast.makeText(getApplicationContext(), "participantsMenu", Toast.LENGTH_SHORT).show();
+                    AlertDialog.Builder builder1 = new AlertDialog.Builder(MyEventDetails.this);
+                    String[] listOfParticipants = new String[participantsList.size()];
+                    for (int a = 0; a <= participantsList.size() - 1    ; a++){
+                        listOfParticipants[a] = participantsList.get(a).getUsername();
+                    }
+
+                    builder1.setTitle("List of participants");
+                    builder1.setItems(listOfParticipants, (dialog, which) -> {
+
+                    });
+
+                    builder1.setNegativeButton(R.string.close, (dialog, id) -> dialog.cancel());
+
+                    AlertDialog alertDialog1 = builder1.create();
+                    alertDialog1.show();
                     return true;
 
             }

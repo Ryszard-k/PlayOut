@@ -19,11 +19,13 @@ public class VolleyballEvent extends SportEvent {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "User_id", nullable = false)
-    @JsonIgnoreProperties({"footballEventsAuthor", "basketballEventsAuthor", "volleyballEventsAuthor", "comments"})
+    @JsonIgnoreProperties({"footballEventsAuthor", "basketballEventsAuthor", "volleyballEventsAuthor", "comments",
+            "footballEventsParticipants", "basketballEventsParticipants", "volleyballEventsParticipants"})
     private AppUser authorVolleyball;
 
     @ManyToMany(mappedBy = "volleyballEventsParticipants", fetch = FetchType.EAGER)
-    @JsonIgnoreProperties({"footballEventsParticipants", "basketballEventsParticipants", "volleyballEventsParticipants"})
+    @JsonIgnoreProperties({"footballEventsAuthor", "basketballEventsAuthor", "volleyballEventsAuthor", "comments",
+            "footballEventsParticipants", "basketballEventsParticipants", "volleyballEventsParticipants"})
     private Set<AppUser> participantsVolleyball;
 
     @OneToMany(mappedBy = "volleyballEvent", fetch = FetchType.LAZY,
