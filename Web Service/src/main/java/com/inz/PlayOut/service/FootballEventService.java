@@ -114,6 +114,11 @@ public record FootballEventService(FootballEventRepo footballEventRepo, AppUserS
     public Optional<FootballEvent> delete(Long id) {
         Optional<FootballEvent> deleted = footballEventRepo.findById(id);
         if (deleted.isPresent()){
+            deleted.get().getParticipants().forEach(k -> {
+                AppUser appUser = appUserService.findById(k.getId()).get();
+                appUser.removeFootballParticipants(deleted.get());
+                appUserService.save(appUser);
+            });
             footballEventRepo.deleteById(id);
             return deleted;
         } else throw new IllegalArgumentException("Not found event");

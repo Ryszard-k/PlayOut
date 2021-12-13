@@ -27,12 +27,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.clientapp.Authentication.Prefs;
 import com.example.clientapp.BasketballEvent.Basketball;
+import com.example.clientapp.BasketballEvent.BasketballAPI;
 import com.example.clientapp.Football.APIClient;
 import com.example.clientapp.Football.CommentAPI;
+import com.example.clientapp.Football.FootballEventAPI;
 import com.example.clientapp.Football.Model.AppUser;
 import com.example.clientapp.Football.Model.Comment;
 import com.example.clientapp.Football.Model.FootballEvent;
 import com.example.clientapp.VolleyballEvent.Volleyball;
+import com.example.clientapp.VolleyballEvent.VolleyballAPI;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.time.LocalDate;
@@ -53,6 +56,7 @@ public class MyEventDetails extends AppCompatActivity implements EventClickListe
     private RecyclerView recyclerViewDetails;
     private String username;
     private List<AppUser> participantsList;
+    private AppUser author;
 
     @SuppressLint({"SetTextI18n", "NonConstantResourceId"})
     @Override
@@ -93,6 +97,7 @@ public class MyEventDetails extends AppCompatActivity implements EventClickListe
             commentsList = new ArrayList<>(((FootballEvent) extras).getComments());
             adapter = new MyEventDetailsAdapter(commentsList, this);
             recyclerViewDetails.setAdapter(adapter);
+            author = ((FootballEvent) extras).getAuthor();
 
         } else if (extras instanceof Basketball){
             locationDetails.setText("Address: " + ((Basketball) extras).getLocation());
@@ -108,6 +113,7 @@ public class MyEventDetails extends AppCompatActivity implements EventClickListe
             commentsList = new ArrayList<>(((Basketball) extras).getComments());
             adapter = new MyEventDetailsAdapter(commentsList, this);
             recyclerViewDetails.setAdapter(adapter);
+            author = ((Basketball) extras).getAuthorBasketball();
 
         } else if (extras instanceof Volleyball){
             locationDetails.setText("Address: " + ((Volleyball) extras).getLocation());
@@ -123,6 +129,7 @@ public class MyEventDetails extends AppCompatActivity implements EventClickListe
             commentsList = new ArrayList<>(((Volleyball) extras).getComments());
             adapter = new MyEventDetailsAdapter(commentsList, this);
             recyclerViewDetails.setAdapter(adapter);
+            author = ((Volleyball) extras).getAuthorVolleyball();
         }
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
@@ -191,6 +198,71 @@ public class MyEventDetails extends AppCompatActivity implements EventClickListe
                     return true;
 
                 case R.id.resignMenu:
+                    if (author.getUsername().equals(username)){
+                        AlertDialog.Builder builder2 = new AlertDialog.Builder(MyEventDetails.this);
+                        builder2.setTitle("Are you sure you want to delete your event?");
+
+                        builder2.setPositiveButton(R.string.yes, (dialog, which) -> {
+                            if (extras instanceof FootballEvent) {
+                                Call<Void> call = APIClient.createService(FootballEventAPI.class).deleteEvent(((FootballEvent) extras).getId());
+                                call.enqueue(new Callback<Void>() {
+                                    @Override
+                                    public void onResponse(Call<Void> call, Response<Void> response) {
+                                        if (response.isSuccessful()) {
+                                            Toast.makeText(getApplicationContext(), "Event deleted", Toast.LENGTH_SHORT).show();
+                                            stopService(new Intent(getApplicationContext(), MyEventDetails.class));
+                                            finish();
+                                            startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<Void> call, Throwable t) {
+                                        Log.d("removeFootball", Log.getStackTraceString(t));
+                                    }
+                                });
+                            } else if (extras instanceof Basketball) {
+                                Call<Void> call = APIClient.createService(BasketballAPI.class).deleteEvent(((Basketball) extras).getId());
+                                call.enqueue(new Callback<Void>() {
+                                    @Override
+                                    public void onResponse(Call<Void> call, Response<Void> response) {
+                                        Toast.makeText(getApplicationContext(), "Event deleted", Toast.LENGTH_SHORT).show();
+                                        stopService(new Intent(getApplicationContext(), MyEventDetails.class));
+                                        finish();
+                                        startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<Void> call, Throwable t) {
+                                        Log.d("removeBasketball", Log.getStackTraceString(t));
+                                    }
+                                });
+                            } else if (extras instanceof Volleyball) {
+                                Call<Void> call = APIClient.createService(VolleyballAPI.class).deleteEvent(((Volleyball) extras).getId());
+                                call.enqueue(new Callback<Void>() {
+                                    @Override
+                                    public void onResponse(Call<Void> call, Response<Void> response) {
+                                        Toast.makeText(getApplicationContext(), "Event deleted", Toast.LENGTH_SHORT).show();
+                                        stopService(new Intent(getApplicationContext(), MyEventDetails.class));
+                                        finish();
+                                        startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<Void> call, Throwable t) {
+                                        Log.d("removeVolleyball", Log.getStackTraceString(t));
+                                    }
+                                });
+                            }
+                            });
+
+                        builder2.setNegativeButton(R.string.cancel, (dialog2, id) -> dialog2.cancel());
+
+                        AlertDialog alertDialog2 = builder2.create();
+                        alertDialog2.show();
+                    } else {
+
+                    }
                     return true;
 
                 case R.id.participantsMenu:
@@ -202,7 +274,6 @@ public class MyEventDetails extends AppCompatActivity implements EventClickListe
 
                     builder1.setTitle("List of participants");
                     builder1.setItems(listOfParticipants, (dialog, which) -> {
-
                     });
 
                     builder1.setNegativeButton(R.string.close, (dialog, id) -> dialog.cancel());

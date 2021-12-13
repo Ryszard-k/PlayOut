@@ -35,7 +35,7 @@ public class AppUser implements Serializable, UserDetails {
     @JsonIgnoreProperties({"author", "comments"})
     private Set<FootballEvent> footballEventsAuthor;
 
-    @ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinTable(
             name = "Appuser_FootballEvent",
             joinColumns = { @JoinColumn(name = "Appuser_id") },
@@ -204,6 +204,20 @@ public class AppUser implements Serializable, UserDetails {
         this.comments = comments;
     }
 
+    public void removeFootballParticipants(FootballEvent footballEvent){
+        footballEventsParticipants.remove(footballEvent);
+        footballEvent.getParticipants().remove(this);
+    }
+
+    public void removeBasketballParticipants(BasketballEvent basketballEvent){
+        basketballEventsParticipants.remove(basketballEvent);
+        basketballEvent.getParticipantsBasketball().remove(this);
+    }
+
+    public void removeVolleyballParticipants(VolleyballEvent volleyballEvent){
+        volleyballEventsParticipants.remove(volleyballEvent);
+        volleyballEvent.getParticipantsVolleyball().remove(this);
+    }
 
     @Override
     public boolean equals(Object o) {
