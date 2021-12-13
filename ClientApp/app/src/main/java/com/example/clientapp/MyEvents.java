@@ -1,6 +1,7 @@
 package com.example.clientapp;
 
 import static com.example.clientapp.Authentication.Prefs.MyPREFERENCES;
+import static com.example.clientapp.Authentication.Prefs.Username;
 
 import android.content.Context;
 import android.content.Intent;
@@ -102,8 +103,7 @@ public class MyEvents extends Fragment implements EventClickListener{
         SharedPreferences sharedpreferences = container.getContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 
         Call<EventsWrapper> call = APIClient.createService(EventAPI.class)
-                .getMyActiveEvent("Piotr");   //sharedpreferences.getString(Username, Username));
-
+                .getMyActiveEvent(sharedpreferences.getString(Username, Username));
         call.enqueue(new Callback<EventsWrapper>() {
             @Override
             public void onResponse(Call<EventsWrapper> call, Response<EventsWrapper> response) {

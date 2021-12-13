@@ -1,6 +1,7 @@
 package com.example.clientapp;
 
 import static com.example.clientapp.Authentication.Prefs.MyPREFERENCES;
+import static com.example.clientapp.Authentication.Prefs.Username;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -56,6 +57,7 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
     List<String> filterEventResultList = new ArrayList<>();
     private SearchView searchView;
     private GoogleMap map;
+    private String username;
 
     @Nullable
     @Override
@@ -74,6 +76,7 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
         searchView = view.findViewById(R.id.idSearchView);
 
         SharedPreferences sharedpreferences = view.getContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        username = sharedpreferences.getString(Username, Username);
 
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
@@ -166,7 +169,7 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
         googleMap.setOnMapLongClickListener(this);
         googleMap.setOnInfoWindowClickListener(this);
 
-        Call<EventsWrapper> call = APIClient.createService(EventAPI.class, "Piotr", "piotr123").findAllActiveEvent();
+        Call<EventsWrapper> call = APIClient.createService(EventAPI.class).findAllActiveEvent();
         call.enqueue(new Callback<EventsWrapper>() {
             @Override
             public void onResponse(Call<EventsWrapper> call, Response<EventsWrapper> response) {
@@ -320,7 +323,7 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
         builder.setPositiveButton(R.string.yes, (dialog, which) -> {
             switch (a){
                 case "Football":
-                    Call<Void> call = APIClient.createService(FootballEventAPI.class).joinToEvent(eventId, "Piotr"); //sharedpreferences.getString(Username, Username)
+                    Call<Void> call = APIClient.createService(FootballEventAPI.class).joinToEvent(eventId, username);
                     call.enqueue(new Callback<Void>() {
                         @Override
                         public void onResponse(Call<Void> call, Response<Void> response) {
@@ -343,7 +346,7 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
                     break;
 
                 case "Basketball":
-                    Call<Void> call1 = APIClient.createService(BasketballAPI.class).joinToEvent(eventId, "Piotr"); //sharedpreferences.getString(Username, Username)
+                    Call<Void> call1 = APIClient.createService(BasketballAPI.class).joinToEvent(eventId, username);
                     call1.enqueue(new Callback<Void>() {
                         @Override
                         public void onResponse(Call<Void> call, Response<Void> response) {
@@ -366,7 +369,7 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
                     break;
 
                 case "Volleyball":
-                    Call<Void> call2 = APIClient.createService(VolleyballAPI.class).joinToEvent(eventId, "Piotr"); //sharedpreferences.getString(Username, Username)
+                    Call<Void> call2 = APIClient.createService(VolleyballAPI.class).joinToEvent(eventId, username);
                     call2.enqueue(new Callback<Void>() {
                         @Override
                         public void onResponse(Call<Void> call, Response<Void> response) {

@@ -1,6 +1,7 @@
 package com.example.clientapp;
 
 import static com.example.clientapp.Authentication.Prefs.MyPREFERENCES;
+import static com.example.clientapp.Authentication.Prefs.Username;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -98,8 +99,7 @@ public class History extends Fragment implements EventClickListener{
 
         SharedPreferences sharedpreferences = container.getContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 
-        Call<EventsWrapper> call = APIClient.createService(EventAPI.class).getMyHistoryEvent("Piotr");
-        //sharedpreferences.getString(Username, Username));
+        Call<EventsWrapper> call = APIClient.createService(EventAPI.class).getMyHistoryEvent(sharedpreferences.getString(Username, Username));
         call.enqueue(new Callback<EventsWrapper>() {
             @Override
             public void onResponse(Call<EventsWrapper> call, Response<EventsWrapper> response) {

@@ -42,4 +42,5 @@
     <string name="resignMenu">Resign</string>
     <string name="participantsMenu">Participants</string>
     <string name="close">Close</string>
+    <string name="refresh">Refresh</string>
 </resources>
