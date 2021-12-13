@@ -49,4 +49,13 @@ public record VolleyballEventController(AppUserService appUserService, Volleybal
         } else
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+    @PutMapping("/resign/{eventId}/{username}")
+        public ResponseEntity<Object> resignForEvent(@PathVariable String username, @PathVariable Long eventId){
+        boolean updatedEvent = volleyballEventService.resignForEvent(eventId, username);
+        if (updatedEvent) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+    }
 }

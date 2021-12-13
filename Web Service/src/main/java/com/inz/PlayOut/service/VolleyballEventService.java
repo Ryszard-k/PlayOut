@@ -1,6 +1,7 @@
 package com.inz.PlayOut.service;
 
 import com.inz.PlayOut.model.entites.AppUser;
+import com.inz.PlayOut.model.entites.FootballEvent;
 import com.inz.PlayOut.model.entites.VolleyballEvent;
 import com.inz.PlayOut.model.repositories.VolleyballEventRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -123,5 +124,17 @@ public record VolleyballEventService(VolleyballEventRepo volleyballEventRepo,
             volleyballEventRepo.deleteById(id);
             return deleted;
         } else throw new IllegalArgumentException("Not found event");
+    }
+
+    public boolean resignForEvent(Long id, String username){
+        Optional<VolleyballEvent> deleted = volleyballEventRepo.findById(id);
+        Optional<AppUser> appUser = appUserService.findByUsername(username);
+        if (deleted.isPresent() && appUser.isPresent()){
+            appUser.get().removeVolleyballParticipants(deleted.get());
+            appUserService.save(appUser.get());
+            deleted.get().getParticipantsVolleyball().remove(appUser);
+            volleyballEventRepo.save(deleted.get());
+            return true;
+        } else return false;
     }
 }

@@ -130,7 +130,6 @@ public record FootballEventService(FootballEventRepo footballEventRepo, AppUserS
         Optional<AppUser> appUser = appUserService.findByUsername(username);
         if (deleted.isPresent() && appUser.isPresent()){
             appUser.get().removeFootballParticipants(deleted.get());
-            appUserService.save(appUser.get());
             deleted.get().getParticipants().remove(appUser);
             footballEventRepo.save(deleted.get());
             return true;

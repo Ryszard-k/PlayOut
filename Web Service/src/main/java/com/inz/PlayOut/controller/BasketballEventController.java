@@ -53,4 +53,13 @@ public record BasketballEventController(BasketballEventService basketballEventSe
         } else
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+    @PutMapping("/resign/{eventId}/{username}")
+    public ResponseEntity<Object> resignForEvent(@PathVariable String username, @PathVariable Long eventId){
+        boolean updatedEvent = basketballEventService.resignForEvent(eventId, username);
+        if (updatedEvent) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+    }
 }

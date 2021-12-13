@@ -26,4 +26,7 @@ public interface FootballEventAPI {
     @Headers("Content-Type: application/json")
     Call<Void> deleteEvent(@Path("id") Long id);
 
+    @PUT("/footballEvent/resign/{eventId}/{username}")
+    @Headers("Content-Type: application/json")
+    Call<Void> resignForEvent(@Path("eventId") Long eventId, @Path("username") String username);
 }

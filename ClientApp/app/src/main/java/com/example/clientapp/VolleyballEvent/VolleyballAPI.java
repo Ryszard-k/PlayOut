@@ -21,4 +21,8 @@ public interface VolleyballAPI {
     @DELETE("/volleyball/{id}")
     @Headers("Content-Type: application/json")
     Call<Void> deleteEvent(@Path("id") Long id);
+
+    @PUT("/volleyball/resign/{eventId}/{username}")
+    @Headers("Content-Type: application/json")
+    Call<Void> resignForEvent(@Path("eventId") Long eventId, @Path("username") String username);
 }

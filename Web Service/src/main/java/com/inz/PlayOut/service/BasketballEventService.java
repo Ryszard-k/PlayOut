@@ -124,4 +124,16 @@ public record BasketballEventService(BasketballEventRepo basketballEventRepo, Ap
             return deleted;
         } else throw new IllegalArgumentException("Not found event");
     }
+
+    public boolean resignForEvent(Long id, String username){
+        Optional<BasketballEvent> deleted = basketballEventRepo.findById(id);
+        Optional<AppUser> appUser = appUserService.findByUsername(username);
+        if (deleted.isPresent() && appUser.isPresent()){
+            appUser.get().removeBasketballParticipants(deleted.get());
+            appUserService.save(appUser.get());
+            deleted.get().getParticipantsBasketball().remove(appUser);
+            basketballEventRepo.save(deleted.get());
+            return true;
+        } else return false;
+    }
 }
