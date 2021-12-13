@@ -1,12 +1,14 @@
 package com.inz.PlayOut.controller;
 
 import com.inz.PlayOut.model.entites.AppUser;
+import com.inz.PlayOut.model.entites.FootballEvent;
 import com.inz.PlayOut.model.entites.VolleyballEvent;
 import com.inz.PlayOut.service.AppUserService;
 import com.inz.PlayOut.service.VolleyballEventService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -36,5 +38,15 @@ public record VolleyballEventController(AppUserService appUserService, Volleybal
             return new ResponseEntity<>(HttpStatus.OK);
         } else
             return new ResponseEntity<>(HttpStatus.CONFLICT);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> delete(@PathVariable Long id) {
+        Optional<VolleyballEvent> found = volleyballEventService.findById(id);
+        if (found.isPresent()) {
+            volleyballEventService.delete(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

@@ -2,12 +2,13 @@ package com.inz.PlayOut.controller;
 
 import com.inz.PlayOut.model.entites.AppUser;
 import com.inz.PlayOut.model.entites.BasketballEvent;
-import com.inz.PlayOut.model.entites.FootballEvent;
 import com.inz.PlayOut.service.AppUserService;
 import com.inz.PlayOut.service.BasketballEventService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -15,6 +16,10 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/basketball")
 public record BasketballEventController(BasketballEventService basketballEventService, AppUserService appUserService) {
+
+    @Autowired
+    public BasketballEventController {
+    }
 
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -39,4 +44,13 @@ public record BasketballEventController(BasketballEventService basketballEventSe
             return new ResponseEntity<>(HttpStatus.CONFLICT);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> delete(@PathVariable Long id) {
+        Optional<BasketballEvent> found = basketballEventService.findById(id);
+        if (found.isPresent()) {
+            basketballEventService.delete(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 }

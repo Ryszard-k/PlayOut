@@ -261,7 +261,17 @@ public class MyEventDetails extends AppCompatActivity implements EventClickListe
                         AlertDialog alertDialog2 = builder2.create();
                         alertDialog2.show();
                     } else {
+                        AlertDialog.Builder builder2 = new AlertDialog.Builder(MyEventDetails.this);
+                        builder2.setTitle("Are you sure you want to resign for event?");
 
+                        builder2.setPositiveButton(R.string.yes, (dialog, which) -> {
+
+                        });
+
+                        builder2.setNegativeButton(R.string.cancel, (dialog2, id) -> dialog2.cancel());
+
+                        AlertDialog alertDialog2 = builder2.create();
+                        alertDialog2.show();
                     }
                     return true;
 

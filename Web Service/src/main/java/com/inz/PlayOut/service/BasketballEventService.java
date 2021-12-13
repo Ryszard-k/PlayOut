@@ -2,6 +2,7 @@ package com.inz.PlayOut.service;
 
 import com.inz.PlayOut.model.entites.AppUser;
 import com.inz.PlayOut.model.entites.BasketballEvent;
+import com.inz.PlayOut.model.entites.FootballEvent;
 import com.inz.PlayOut.model.repositories.BasketballEventRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -114,6 +115,11 @@ public record BasketballEventService(BasketballEventRepo basketballEventRepo, Ap
     public Optional<BasketballEvent> delete(Long id) {
         Optional<BasketballEvent> deleted = basketballEventRepo.findById(id);
         if (deleted.isPresent()){
+            deleted.get().getParticipantsBasketball().forEach(k -> {
+                AppUser appUser = appUserService.findById(k.getId()).get();
+                appUser.removeBasketballParticipants(deleted.get());
+                appUserService.save(appUser);
+            });
             basketballEventRepo.deleteById(id);
             return deleted;
         } else throw new IllegalArgumentException("Not found event");

@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -122,5 +123,17 @@ public record FootballEventService(FootballEventRepo footballEventRepo, AppUserS
             footballEventRepo.deleteById(id);
             return deleted;
         } else throw new IllegalArgumentException("Not found event");
+    }
+
+    public boolean resignForEvent(Long id, String username){
+        Optional<FootballEvent> deleted = footballEventRepo.findById(id);
+        Optional<AppUser> appUser = appUserService.findByUsername(username);
+        if (deleted.isPresent() && appUser.isPresent()){
+            appUser.get().removeFootballParticipants(deleted.get());
+            appUserService.save(appUser.get());
+            deleted.get().getParticipants().remove(appUser);
+            footballEventRepo.save(deleted.get());
+            return true;
+        } else return false;
     }
 }

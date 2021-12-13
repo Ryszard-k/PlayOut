@@ -115,6 +115,11 @@ public record VolleyballEventService(VolleyballEventRepo volleyballEventRepo,
     public Optional<VolleyballEvent> delete(Long id) {
         Optional<VolleyballEvent> deleted = volleyballEventRepo.findById(id);
         if (deleted.isPresent()){
+            deleted.get().getParticipantsVolleyball().forEach(k -> {
+                AppUser appUser = appUserService.findById(k.getId()).get();
+                appUser.removeVolleyballParticipants(deleted.get());
+                appUserService.save(appUser);
+            });
             volleyballEventRepo.deleteById(id);
             return deleted;
         } else throw new IllegalArgumentException("Not found event");

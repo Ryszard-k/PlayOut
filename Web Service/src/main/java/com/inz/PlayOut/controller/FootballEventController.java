@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -72,8 +73,17 @@ public record FootballEventController(FootballEventService footballEventService,
         Optional<FootballEvent> found = footballEventService.findById(id);
         if (found.isPresent()) {
             footballEventService.delete(id);
-            return new ResponseEntity<>(found, HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } else
-            return new ResponseEntity<>("Not found object to delete!", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @PutMapping("/resign/{eventId}/{username}")
+    public ResponseEntity<Object> resignForEvent(@PathVariable String username, @PathVariable Long eventId){
+        boolean updatedEvent = footballEventService.resignForEvent(eventId, username);
+        if (updatedEvent) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
     }
 }

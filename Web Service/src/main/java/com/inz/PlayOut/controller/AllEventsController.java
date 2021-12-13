@@ -61,7 +61,7 @@ public record AllEventsController(FootballEventService footballEventService, Bas
         List<BasketballEvent> basketballEvents = basketballEventService.getMyActiveEvent(username);
         eventWrapper.setEventsWrapperWithBasketball(basketballEvents);
 
-        List<VolleyballEvent> volleyballEvents = volleyballEventService.findAllActiveEvent();
+        List<VolleyballEvent> volleyballEvents = volleyballEventService.getMyActiveEvent(username);
         eventWrapper.setEventsWrapperWithVolleyball(volleyballEvents);
 
         if (eventWrapper.isEmpty()) {
@@ -83,7 +83,7 @@ public record AllEventsController(FootballEventService footballEventService, Bas
         List<BasketballEvent> basketballEvents = basketballEventService.getMyHistoryEvent(username);
         eventWrapper.setEventsWrapperWithBasketball(basketballEvents);
 
-        List<VolleyballEvent> volleyballEvents = volleyballEventService.findAllActiveEvent();
+        List<VolleyballEvent> volleyballEvents = volleyballEventService.getMyHistoryEvent(username);
         eventWrapper.setEventsWrapperWithVolleyball(volleyballEvents);
 
         if (eventWrapper.isEmpty()) {
