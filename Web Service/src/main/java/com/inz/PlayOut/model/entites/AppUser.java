@@ -77,6 +77,9 @@ public class AppUser implements Serializable, UserDetails {
     @JsonIgnoreProperties({"author", "comments"})
     private Set<Comment> comments;
 
+    @JsonIgnore
+    private String firebaseToken;
+
     public AppUser(String name, String password, String email) {
         this.username = name;
         this.password = password;
@@ -217,6 +220,14 @@ public class AppUser implements Serializable, UserDetails {
     public void removeVolleyballParticipants(VolleyballEvent volleyballEvent){
         volleyballEventsParticipants.remove(volleyballEvent);
         volleyballEvent.getParticipantsVolleyball().remove(this);
+    }
+
+    public String getFirebaseToken() {
+        return firebaseToken;
+    }
+
+    public void setFirebaseToken(String firebaseToken) {
+        this.firebaseToken = firebaseToken;
     }
 
     @Override

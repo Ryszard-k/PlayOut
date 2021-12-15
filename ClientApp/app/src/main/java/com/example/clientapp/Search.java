@@ -94,9 +94,7 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
             boolean[] checkedEventItems = new boolean[eventList.length];
             List<String> selectedEventItems = Arrays.asList(eventList);
 
-            builder.setMultiChoiceItems(eventList, checkedEventItems, (dialog, which, isChecked) ->{
-                checkedEventItems[which] = isChecked;
-            });
+            builder.setMultiChoiceItems(eventList, checkedEventItems, (dialog, which, isChecked) -> checkedEventItems[which] = isChecked);
 
             builder.setPositiveButton(R.string.ok, (dialog, id) -> {
                 for (int i = 0; i < checkedEventItems.length; i++) {
@@ -108,9 +106,7 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
                 mapFragment.getMapAsync(callbackWithFilters);
             });
 
-            builder.setNegativeButton(R.string.cancel, (dialog, id) -> {
-                dialog.cancel();
-            });
+            builder.setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel());
 
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
@@ -138,9 +134,7 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
                 mapFragment.getMapAsync(callbackWithFilters);
             });
 
-            builder.setNegativeButton(R.string.cancel, (dialog, id) -> {
-                dialog.cancel();
-            });
+            builder.setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel());
 
             AlertDialog alertDialog = builder.create();
             alertDialog.show();

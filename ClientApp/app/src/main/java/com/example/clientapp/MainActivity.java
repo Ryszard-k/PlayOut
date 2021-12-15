@@ -6,9 +6,12 @@ import static com.example.clientapp.Authentication.Prefs.Username;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -16,6 +19,7 @@ import android.widget.Toast;
 import com.example.clientapp.Authentication.AuthService;
 import com.example.clientapp.Authentication.RegisterActivity;
 import com.example.clientapp.Authentication.LoginActivity;
+import com.example.clientapp.Firebase.MyFirebaseMessagingService;
 import com.example.clientapp.Football.APIClient;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -37,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
                 String username = sharedpreferences.getString(Username, Username);
                 String password = sharedpreferences.getString(Password, Password);
                 Log.d("mainActivity", sharedpreferences.getString(Username, Username));
+                MyFirebaseMessagingService myFirebaseMessagingService = new MyFirebaseMessagingService(username);
 
                 Call<String> call = APIClient.createService(AuthService.class, username, password).checkAppUser(username);
                 call.enqueue(new Callback<String>() {
@@ -44,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(Call<String> call, Response<String> response) {
                         if (response.raw().code() == HttpsURLConnection.HTTP_MOVED_TEMP) {
                             Toast.makeText(MainActivity.this, "Login Successful", Toast.LENGTH_LONG).show();
+                            myFirebaseMessagingService.getCurrentToken(username);
                             startActivity(new Intent(MainActivity.this, DashboardActivity.class));
                         } else {
                             Toast.makeText(MainActivity.this, "Login Failed", Toast.LENGTH_LONG).show();
@@ -64,4 +70,5 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.RegisterButton).setOnClickListener(v -> startActivity(new Intent(
                 MainActivity.this, RegisterActivity.class)));
     }
+
 }
