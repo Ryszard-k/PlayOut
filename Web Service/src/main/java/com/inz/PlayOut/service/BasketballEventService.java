@@ -105,7 +105,6 @@ public record BasketballEventService(BasketballEventRepo basketballEventRepo, Ap
                 foundEvent.get().setVacancies(foundEvent.get().getVacancies() - 1);
                 foundAppUser.get().getBasketballEventsParticipants().add(foundEvent.get());
                 basketballEventRepo.save(foundEvent.get());
-                appUserService.save(foundAppUser.get());
                 return true;
             }
         } else throw new IllegalArgumentException("Not found event to join");

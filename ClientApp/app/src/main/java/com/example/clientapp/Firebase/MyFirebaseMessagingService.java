@@ -46,19 +46,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         Log.d(TAG, "From: " + remoteMessage.getFrom());
-
-        // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
-
-
         }
 
-        // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
         }
-sendNotification(remoteMessage.getNotification().getBody());
+        sendNotification(remoteMessage.getNotification().getBody(), remoteMessage.getNotification().getTitle(),
+                remoteMessage.getData().get("icon"));
     }
 
     public void sendRegistrationToServer(String token, String username){
@@ -88,18 +84,32 @@ sendNotification(remoteMessage.getNotification().getBody());
         });
     }
 
-    private void sendNotification(String messageBody) {
+    private void sendNotification(String messageBody, String title, String icon) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT);
+        int notificationIcon;
 
+        switch (icon){
+            case "Football":
+                notificationIcon = R.drawable.ic_baseline_sports_soccer_24;
+                break;
+            case "Basketball":
+                notificationIcon = R.drawable.ic_baseline_sports_basketball_24;
+                break;
+            case "Volleyball":
+                notificationIcon = R.drawable.ic_baseline_sports_volleyball_24;
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + icon);
+        }
         String channelId = "channel_id";
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, channelId)
-                        .setSmallIcon(R.drawable.ic_baseline_sports_volleyball_24)
-                        .setContentTitle("wiadomosc")
+                        .setSmallIcon(notificationIcon)
+                        .setContentTitle(title)
                         .setContentText(messageBody)
                         .setAutoCancel(true)
                         .setSound(defaultSoundUri)
@@ -108,14 +118,13 @@ sendNotification(remoteMessage.getNotification().getBody());
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        // Since android Oreo notification channel is needed.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(channelId,
-                    "Channel human readable title",
-                    NotificationManager.IMPORTANCE_DEFAULT);
-            notificationManager.createNotificationChannel(channel);
-        }
+        NotificationChannel channel = new NotificationChannel(channelId,
+                "Channel human readable title",
+                NotificationManager.IMPORTANCE_DEFAULT);
+        notificationManager.createNotificationChannel(channel);
 
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+        notificationManager.notify(0, notificationBuilder.build());
     }
+
+
 }

@@ -1,5 +1,7 @@
 package com.inz.PlayOut.controller;
 
+import com.google.firebase.messaging.FirebaseMessagingException;
+import com.inz.PlayOut.firebase.FirebaseMessagingService;
 import com.inz.PlayOut.model.entites.*;
 import com.inz.PlayOut.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +19,8 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/comments")
 public record CommentController (CommentService commentService, AppUserService appUserService, FootballEventService footballEventService,
-                                 BasketballEventService basketballEventService, VolleyballEventService volleyballEventService){
+                                 BasketballEventService basketballEventService, VolleyballEventService volleyballEventService,
+                                 FirebaseMessagingService firebaseMessagingService){
 
     @Autowired
     public CommentController{}
@@ -34,20 +38,42 @@ public record CommentController (CommentService commentService, AppUserService a
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<Object> add(@RequestBody Comment object) {
+    public ResponseEntity<Object> add(@RequestBody Comment object) throws FirebaseMessagingException {
         Optional<AppUser> found = appUserService.findByUsername(object.getAuthor().getUsername());
+        List<String> tokensOfParticipants = new ArrayList<>();
 
         if (found.isPresent()) {
             object.setAuthor(found.get());
             if (object.getFootballEvent() != null){
                 Optional<FootballEvent> footballEvent = footballEventService.findById(object.getFootballEvent().getId());
                 footballEvent.ifPresent(object::setFootballEvent);
+                footballEvent.get().getParticipants().forEach(k -> tokensOfParticipants.add(k.getFirebaseToken()));
+                tokensOfParticipants.add(footballEvent.get().getAuthor().getFirebaseToken());
+                tokensOfParticipants.remove(object.getAuthor().getFirebaseToken());
+                if (!tokensOfParticipants.isEmpty()) {
+                    firebaseMessagingService.sendMulticast(tokensOfParticipants, footballEvent.get().getNote(), found.get().getUsername() +
+                            " add comment: " + object.getText(), "Football");
+                }
             } else if (object.getBasketballEvent() != null){
                 Optional<BasketballEvent> basketballEvent = basketballEventService.findById(object.getBasketballEvent().getId());
                 basketballEvent.ifPresent(object::setBasketballEvent);
+                basketballEvent.get().getParticipantsBasketball().forEach(k -> tokensOfParticipants.add(k.getFirebaseToken()));
+                tokensOfParticipants.add(basketballEvent.get().getAuthorBasketball().getFirebaseToken());
+                tokensOfParticipants.remove(object.getAuthor().getFirebaseToken());
+                if (!tokensOfParticipants.isEmpty()) {
+                    firebaseMessagingService.sendMulticast(tokensOfParticipants, basketballEvent.get().getNote(), found.get().getUsername() +
+                            " add comment: " + object.getText(), "Basketball");
+                }
             } else if (object.getVolleyballEvent() != null){
                 Optional<VolleyballEvent> volleyballEvent = volleyballEventService.findById(object.getVolleyballEvent().getId());
                 volleyballEvent.ifPresent(object::setVolleyballEvent);
+                volleyballEvent.get().getParticipantsVolleyball().forEach(k -> tokensOfParticipants.add(k.getFirebaseToken()));
+                tokensOfParticipants.add(volleyballEvent.get().getAuthorVolleyball().getFirebaseToken());
+                tokensOfParticipants.remove(object.getAuthor().getFirebaseToken());
+                if (!tokensOfParticipants.isEmpty()) {
+                    firebaseMessagingService.sendMulticast(tokensOfParticipants, volleyballEvent.get().getNote(), found.get().getUsername() +
+                            " add comment: " + object.getText(), "Volleyball");
+                }
             }
             commentService.save(object);
             found = appUserService.findByUsername(object.getAuthor().getUsername());

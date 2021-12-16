@@ -106,7 +106,6 @@ public record VolleyballEventService(VolleyballEventRepo volleyballEventRepo,
                 foundEvent.get().setVacancies(foundEvent.get().getVacancies() - 1);
                 foundAppUser.get().getVolleyballEventsParticipants().add(foundEvent.get());
                 volleyballEventRepo.save(foundEvent.get());
-                appUserService.save(foundAppUser.get());
                 return true;
             }
         } else throw new IllegalArgumentException("Not found event to join");

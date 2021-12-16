@@ -1,6 +1,8 @@
 package com.inz.PlayOut.controller;
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import com.inz.PlayOut.EventWrapper;
+import com.inz.PlayOut.firebase.FirebaseMessagingService;
 import com.inz.PlayOut.model.entites.BasketballEvent;
 import com.inz.PlayOut.model.entites.FootballEvent;
 import com.inz.PlayOut.model.entites.VolleyballEvent;
@@ -16,11 +18,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("/events")
-public record AllEventsController(FootballEventService footballEventService, BasketballEventService basketballEventService, VolleyballEventService volleyballEventService) {
+public record AllEventsController(FootballEventService footballEventService, BasketballEventService basketballEventService,
+                                  VolleyballEventService volleyballEventService, FirebaseMessagingService firebaseMessagingService) {
 
     @Autowired
     public AllEventsController {
@@ -63,6 +67,7 @@ public record AllEventsController(FootballEventService footballEventService, Bas
 
         List<VolleyballEvent> volleyballEvents = volleyballEventService.getMyActiveEvent(username);
         eventWrapper.setEventsWrapperWithVolleyball(volleyballEvents);
+
 
         if (eventWrapper.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
