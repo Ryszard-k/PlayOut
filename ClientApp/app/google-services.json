@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "48479867110",
+    "project_id": "inzclientapp",
+    "storage_bucket": "inzclientapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:48479867110:android:8e01424f5b04e2f2b32b27",
+        "android_client_info": {
+          "package_name": "com.example.clientapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "48479867110-k540f9ntlufn8905i782usp1vfo0m355.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4bF35tTLTFQGWH-IS7e_8LjN0R030_50"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "48479867110-k540f9ntlufn8905i782usp1vfo0m355.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

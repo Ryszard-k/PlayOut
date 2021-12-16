@@ -21,6 +21,7 @@ import com.example.clientapp.Authentication.RegisterActivity;
 import com.example.clientapp.Authentication.LoginActivity;
 import com.example.clientapp.Firebase.MyFirebaseMessagingService;
 import com.example.clientapp.Football.APIClient;
+import com.google.android.gms.common.GoogleApiAvailability;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -34,6 +35,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        GoogleApiAvailability googleApiAvailability = new GoogleApiAvailability();
+        googleApiAvailability.makeGooglePlayServicesAvailable(this);
+        createNotificationChannel();
         SharedPreferences sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 
         findViewById(R.id.LoginGoogleButton).setOnClickListener(v -> {
@@ -71,4 +75,16 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.this, RegisterActivity.class)));
     }
 
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "channel_id";
+            String description = "remainder channel";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("channel_id", name, importance);
+            channel.setDescription(description);
+            channel.enableVibration(true);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
 }
