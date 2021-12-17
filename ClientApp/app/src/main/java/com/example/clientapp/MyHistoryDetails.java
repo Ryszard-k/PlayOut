@@ -63,7 +63,7 @@ public class MyHistoryDetails extends AppCompatActivity implements EventClickLis
             timeTextViewDetailsHistory.setText("Time: " + ((FootballEvent) extras).getTime().toString());
             lvlTextViewDetailsHistory.setText("Level: " + ((FootballEvent) extras).getEventLevel().toString());
             noteTextViewDetailsHistory.setText("Note: " + ((FootballEvent) extras).getNote());
-            vacanciesTextViewDetailsHistory.setText("Vacancies: " + ((FootballEvent) extras).getVacancies());
+            vacanciesTextViewDetailsHistory.setText("Participants: " + ((FootballEvent) extras).getParticipants().size());
             textViewAuthorDetailsHistory.setText("Author: " + ((FootballEvent) extras).getAuthor().getUsername());
 
             participantsList = new ArrayList<>(((FootballEvent) extras).getParticipants());
@@ -78,7 +78,7 @@ public class MyHistoryDetails extends AppCompatActivity implements EventClickLis
             timeTextViewDetailsHistory.setText("Time: " + ((Basketball) extras).getTime().toString());
             lvlTextViewDetailsHistory.setText("Level: " + ((Basketball) extras).getEventLevel().toString());
             noteTextViewDetailsHistory.setText("Note: " + ((Basketball) extras).getNote());
-            vacanciesTextViewDetailsHistory.setText("Vacancies: " + ((Basketball) extras).getVacancies());
+            vacanciesTextViewDetailsHistory.setText("Participants: " + ((Basketball) extras).getParticipantsBasketball().size());
             textViewAuthorDetailsHistory.setText("Author: " + ((Basketball) extras).getAuthorBasketball().getUsername());
 
             participantsList = new ArrayList<>(((Basketball) extras).getParticipantsBasketball());
@@ -93,7 +93,7 @@ public class MyHistoryDetails extends AppCompatActivity implements EventClickLis
             timeTextViewDetailsHistory.setText("Time: " + ((Volleyball) extras).getTime().toString());
             lvlTextViewDetailsHistory.setText("Level: " + ((Volleyball) extras).getEventLevel().toString());
             noteTextViewDetailsHistory.setText("Note: " + ((Volleyball) extras).getNote());
-            vacanciesTextViewDetailsHistory.setText("Vacancies: " + ((Volleyball) extras).getVacancies());
+            vacanciesTextViewDetailsHistory.setText("Participants: " + ((Volleyball) extras).getParticipantsVolleyball().size());
             textViewAuthorDetailsHistory.setText("Author: " + ((Volleyball) extras).getAuthorVolleyball().getUsername());
 
             participantsList = new ArrayList<>(((Volleyball) extras).getParticipantsVolleyball());
@@ -101,25 +101,29 @@ public class MyHistoryDetails extends AppCompatActivity implements EventClickLis
             adapter = new MyEventDetailsAdapter(commentsList, this);
             recyclerViewDetailsHistory.setAdapter(adapter);
         }
+
+        iconTextViewDetailsHistory.setOnClickListener(v -> {
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(MyHistoryDetails.this);
+            String[] listOfParticipants = new String[participantsList.size()];
+            for (int a = 0; a <= participantsList.size() - 1    ; a++){
+                listOfParticipants[a] = participantsList.get(a).getUsername();
+            }
+
+            builder1.setTitle("List of participants");
+            builder1.setItems(listOfParticipants, (dialog, which) -> {
+
+            });
+
+            builder1.setNegativeButton(R.string.close, (dialog, id) -> dialog.cancel());
+
+            AlertDialog alertDialog1 = builder1.create();
+            alertDialog1.show();
+        });
     }
 
     @Override
     public void onItemClick(int position, View view) {
-        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
-        String[] listOfParticipants = new String[participantsList.size()];
-        for (int a = 0; a <= participantsList.size() - 1    ; a++){
-            listOfParticipants[a] = participantsList.get(a).getUsername();
-        }
 
-        builder1.setTitle("List of participants");
-        builder1.setItems(listOfParticipants, (dialog, which) -> {
-
-        });
-
-        builder1.setNegativeButton(R.string.close, (dialog, id) -> dialog.cancel());
-
-        AlertDialog alertDialog1 = builder1.create();
-        alertDialog1.show();
     }
 
     @Override
