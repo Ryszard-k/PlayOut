@@ -9,13 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class RunnableTask implements Runnable{
+public class RunnableTaskFootball implements Runnable{
 
     private final FootballEventService footballEventService;
     private final Long id;
     private final FirebaseMessagingService firebaseMessagingService;
 
-    public RunnableTask(FootballEventService footballEventService, Long id, FirebaseMessagingService firebaseMessagingService) {
+    public RunnableTaskFootball(FootballEventService footballEventService, Long id, FirebaseMessagingService firebaseMessagingService) {
         this.footballEventService = footballEventService;
         this.id = id;
         this.firebaseMessagingService = firebaseMessagingService;

@@ -3,7 +3,7 @@ package com.inz.PlayOut.controller;
 import com.inz.PlayOut.firebase.FirebaseMessagingService;
 import com.inz.PlayOut.model.entites.AppUser;
 import com.inz.PlayOut.model.entites.FootballEvent;
-import com.inz.PlayOut.schedule.RunnableTask;
+import com.inz.PlayOut.schedule.RunnableTaskFootball;
 import com.inz.PlayOut.schedule.ScheduleTaskConfig;
 import com.inz.PlayOut.service.AppUserService;
 import com.inz.PlayOut.service.FootballEventService;
@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
@@ -68,7 +67,7 @@ public record FootballEventController(FootballEventService footballEventService,
 
             ScheduleTaskConfig scheduleTaskConfig = new ScheduleTaskConfig();
             scheduleTaskConfig.threadPoolTaskScheduler().schedule(
-                    new RunnableTask(footballEventService, footballEvent.getId(), firebaseMessagingService),
+                    new RunnableTaskFootball(footballEventService, footballEvent.getId(), firebaseMessagingService),
                     Date.from(result));
             System.out.println(Date.from(result));
             return new ResponseEntity<>(HttpStatus.CREATED);

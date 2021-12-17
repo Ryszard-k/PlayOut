@@ -1,21 +1,29 @@
 package com.inz.PlayOut.controller;
 
+import com.inz.PlayOut.firebase.FirebaseMessagingService;
 import com.inz.PlayOut.model.entites.AppUser;
-import com.inz.PlayOut.model.entites.FootballEvent;
 import com.inz.PlayOut.model.entites.VolleyballEvent;
+import com.inz.PlayOut.schedule.RunnableTaskFootball;
+import com.inz.PlayOut.schedule.RunnableTaskVolleyball;
+import com.inz.PlayOut.schedule.ScheduleTaskConfig;
 import com.inz.PlayOut.service.AppUserService;
 import com.inz.PlayOut.service.VolleyballEventService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/volleyball")
-public record VolleyballEventController(AppUserService appUserService, VolleyballEventService volleyballEventService) {
+public record VolleyballEventController(AppUserService appUserService, VolleyballEventService volleyballEventService,
+                                        FirebaseMessagingService firebaseMessagingService) {
 
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -25,7 +33,17 @@ public record VolleyballEventController(AppUserService appUserService, Volleybal
         Optional<AppUser> found = appUserService.findByUsername(object.getAuthorVolleyball().getUsername());
         if (found.isPresent()) {
             object.setAuthorVolleyball(found.get());
-            volleyballEventService.save(object);
+            VolleyballEvent volleyballEvent = volleyballEventService.save(object);
+
+            LocalDateTime localDateTime = LocalDateTime.of(object.getDate(), object.getTime()).minusHours(1);
+            ZonedDateTime zonedDateTime = ZonedDateTime.of(localDateTime, ZoneId.systemDefault());
+            Instant result = Instant.from(zonedDateTime);
+
+            ScheduleTaskConfig scheduleTaskConfig = new ScheduleTaskConfig();
+            scheduleTaskConfig.threadPoolTaskScheduler().schedule(
+                    new RunnableTaskVolleyball(volleyballEventService, volleyballEvent.getId(), firebaseMessagingService),
+                    Date.from(result));
+            System.out.println(Date.from(result));
             return new ResponseEntity<>(HttpStatus.CREATED);
         } else
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

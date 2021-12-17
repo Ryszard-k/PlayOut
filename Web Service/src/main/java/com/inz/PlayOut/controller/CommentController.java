@@ -3,8 +3,6 @@ package com.inz.PlayOut.controller;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.inz.PlayOut.firebase.FirebaseMessagingService;
 import com.inz.PlayOut.model.entites.*;
-import com.inz.PlayOut.schedule.RunnableTask;
-import com.inz.PlayOut.schedule.ScheduleTaskConfig;
 import com.inz.PlayOut.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
