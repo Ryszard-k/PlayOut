@@ -91,26 +91,29 @@ public class AddBasketballEvent extends AppCompatActivity implements AdapterView
                 newBasketballEvent.setLocation(locationName);
                 newBasketballEvent.setAuthorBasketball(appUser);
 
-                Call<Void> call = APIClient.createService(BasketballAPI.class).addEvent(newBasketballEvent);
-                call.enqueue(new Callback<Void>() {
-                    @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
-                        if (response.isSuccessful()) {
-                            Toast.makeText(AddBasketballEvent.this, "Created event", Toast.LENGTH_LONG).show();
+                Thread thread = new Thread(() -> {
+                    Call<Void> call = APIClient.createService(BasketballAPI.class).addEvent(newBasketballEvent);
+                    call.enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            if (response.isSuccessful()) {
+                                Toast.makeText(AddBasketballEvent.this, "Created event", Toast.LENGTH_LONG).show();
 
-                            stopService(new Intent(AddBasketballEvent.this, DashboardActivity.class));
-                            startActivity(new Intent(AddBasketballEvent.this, DashboardActivity.class));
-                            finish();
+                                stopService(new Intent(AddBasketballEvent.this, DashboardActivity.class));
+                                startActivity(new Intent(AddBasketballEvent.this, DashboardActivity.class));
+                                finish();
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
-                        Toast.makeText(AddBasketballEvent.this, "nie poszui", Toast.LENGTH_LONG).show();
-                        Log.d("dodajemyFE", t.getMessage());
-                        Log.d("dodajemyFE2", Log.getStackTraceString(t));
-                    }
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+                            Toast.makeText(AddBasketballEvent.this, "nie poszui", Toast.LENGTH_LONG).show();
+                            Log.d("dodajemyFE", t.getMessage());
+                            Log.d("dodajemyFE2", Log.getStackTraceString(t));
+                        }
+                    });
                 });
+                thread.start();
             }
         });
 

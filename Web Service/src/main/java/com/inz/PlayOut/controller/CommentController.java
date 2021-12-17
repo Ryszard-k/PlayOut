@@ -3,6 +3,8 @@ package com.inz.PlayOut.controller;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.inz.PlayOut.firebase.FirebaseMessagingService;
 import com.inz.PlayOut.model.entites.*;
+import com.inz.PlayOut.schedule.RunnableTask;
+import com.inz.PlayOut.schedule.ScheduleTaskConfig;
 import com.inz.PlayOut.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,11 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @RestController
 @RequestMapping("/comments")
@@ -75,6 +73,7 @@ public record CommentController (CommentService commentService, AppUserService a
                             " add comment: " + object.getText(), "Volleyball");
                 }
             }
+
             commentService.save(object);
             found = appUserService.findByUsername(object.getAuthor().getUsername());
             Optional<Comment> optionalComment = found.get().getComments().stream().max(Comparator.comparing(Comment::getDate).thenComparing(Comment::getTime));

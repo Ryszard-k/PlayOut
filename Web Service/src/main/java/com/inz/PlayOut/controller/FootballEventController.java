@@ -1,7 +1,10 @@
 package com.inz.PlayOut.controller;
 
+import com.inz.PlayOut.firebase.FirebaseMessagingService;
 import com.inz.PlayOut.model.entites.AppUser;
 import com.inz.PlayOut.model.entites.FootballEvent;
+import com.inz.PlayOut.schedule.RunnableTask;
+import com.inz.PlayOut.schedule.ScheduleTaskConfig;
 import com.inz.PlayOut.service.AppUserService;
 import com.inz.PlayOut.service.FootballEventService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +14,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/footballEvent")
-public record FootballEventController(FootballEventService footballEventService,
-                                      AppUserService appUserService) implements CRUDController<FootballEvent> {
+public record FootballEventController(FootballEventService footballEventService, AppUserService appUserService,
+                                      FirebaseMessagingService firebaseMessagingService) implements CRUDController<FootballEvent> {
 
     @Autowired
     public FootballEventController {
@@ -52,7 +60,17 @@ public record FootballEventController(FootballEventService footballEventService,
         Optional<AppUser> found = appUserService.findByUsername(object.getAuthor().getUsername());
         if (found.isPresent()) {
             object.setAuthor(found.get());
-            footballEventService.save(object);
+            FootballEvent footballEvent = footballEventService.save(object);
+
+            LocalDateTime localDateTime = LocalDateTime.of(object.getDate(), object.getTime()).minusHours(1);
+            ZonedDateTime zonedDateTime = ZonedDateTime.of(localDateTime, ZoneId.systemDefault());
+            Instant result = Instant.from(zonedDateTime);
+
+            ScheduleTaskConfig scheduleTaskConfig = new ScheduleTaskConfig();
+            scheduleTaskConfig.threadPoolTaskScheduler().schedule(
+                    new RunnableTask(footballEventService, footballEvent.getId(), firebaseMessagingService),
+                    Date.from(result));
+            System.out.println(Date.from(result));
             return new ResponseEntity<>(HttpStatus.CREATED);
         } else
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

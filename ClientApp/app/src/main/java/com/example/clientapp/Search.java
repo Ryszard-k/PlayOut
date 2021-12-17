@@ -163,6 +163,11 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
         googleMap.setOnMapLongClickListener(this);
         googleMap.setOnInfoWindowClickListener(this);
 
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+
+
         Call<EventsWrapper> call = APIClient.createService(EventAPI.class).findAllActiveEvent();
         call.enqueue(new Callback<EventsWrapper>() {
             @Override
@@ -273,6 +278,9 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
                 Log.d("googleMap", Log.getStackTraceString(t));
             }
         });
+            }
+        };
+        thread.start();
     };
 
     @Override
@@ -312,9 +320,10 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
         builder.setTitle("Are you sure you want to join the event?");
         String markerTitle = marker.getTitle();
         String a = Objects.requireNonNull(markerTitle).substring(0, markerTitle.indexOf(" "));
-        Long eventId = Long.valueOf(markerTitle.substring(markerTitle.lastIndexOf(" ", 15) + 1));
+        Long eventId = Long.valueOf(markerTitle.substring(markerTitle.lastIndexOf(" ", 17) + 1));
 
         builder.setPositiveButton(R.string.yes, (dialog, which) -> {
+            Thread thread = new Thread(() -> {
             switch (a){
                 case "Football":
                     Call<Void> call = APIClient.createService(FootballEventAPI.class).joinToEvent(eventId, username);
@@ -388,6 +397,7 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
             }
 
             dialog.dismiss();
+            });
         });
 
         builder.setNegativeButton(R.string.no, (dialog, id) -> dialog.cancel());
@@ -423,7 +433,7 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
         map.setInfoWindowAdapter(new GoogleMapInfoWindowAdapter(getContext()));
         map.addMarker(new MarkerOptions()
                 .position(new LatLng(f.getLatitude(), f.getLongitude()))
-                .title("Football Event " + f.getId())
+                .title("Basketball Event " + f.getId())
                 .snippet(snippet))
         .setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
 
@@ -440,7 +450,7 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
         map.setInfoWindowAdapter(new GoogleMapInfoWindowAdapter(getContext()));
         map.addMarker(new MarkerOptions()
                 .position(new LatLng(f.getLatitude(), f.getLongitude()))
-                .title("Football Event " + f.getId())
+                .title("Volleyball Event " + f.getId())
                 .snippet(snippet))
                 .setIcon(BitmapDescriptorFactory.defaultMarker(250f));
     }

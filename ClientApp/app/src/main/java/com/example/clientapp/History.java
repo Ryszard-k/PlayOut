@@ -99,32 +99,34 @@ public class History extends Fragment implements EventClickListener{
 
         SharedPreferences sharedpreferences = container.getContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 
-        Call<EventsWrapper> call = APIClient.createService(EventAPI.class).getMyHistoryEvent(sharedpreferences.getString(Username, Username));
-        call.enqueue(new Callback<EventsWrapper>() {
-            @Override
-            public void onResponse(Call<EventsWrapper> call, Response<EventsWrapper> response) {
-                if(response.body() != null) {
+        Thread thread = new Thread(() -> {
+            Call<EventsWrapper> call = APIClient.createService(EventAPI.class).getMyHistoryEvent(sharedpreferences.getString(Username, Username));
+            call.enqueue(new Callback<EventsWrapper>() {
+                @Override
+                public void onResponse(Call<EventsWrapper> call, Response<EventsWrapper> response) {
+                    if (response.body() != null) {
 
-                    footballs.clear();
-                    basketballs.clear();
-                    volleyballs.clear();
+                        footballs.clear();
+                        basketballs.clear();
+                        volleyballs.clear();
 
-                    footballs = response.body().getEventsWrapperWithFootball();
-                    basketballs = response.body().getEventsWrapperWithBasketball();
-                    volleyballs = response.body().getEventsWrapperWithVolleyball();
+                        footballs = response.body().getEventsWrapperWithFootball();
+                        basketballs = response.body().getEventsWrapperWithBasketball();
+                        volleyballs = response.body().getEventsWrapperWithVolleyball();
 
-                    recyclerView.setAdapter(new ActiveEvents(footballs, basketballs, volleyballs, eventClickListener));
-                    Log.d("HistoryFootballEvents", "Registered Successfully");
+                        recyclerView.setAdapter(new ActiveEvents(footballs, basketballs, volleyballs, eventClickListener));
+                        Log.d("HistoryFootballEvents", "Registered Successfully");
+                    }
                 }
-            }
 
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onFailure(Call<EventsWrapper> call, Throwable t) {
-                Log.d("HistoryFootballEventsFailure", Log.getStackTraceString(t));
-            }
+                @SuppressLint("LongLogTag")
+                @Override
+                public void onFailure(Call<EventsWrapper> call, Throwable t) {
+                    Log.d("HistoryFootballEventsFailure", Log.getStackTraceString(t));
+                }
+            });
         });
-
+        thread.start();
         return view;
     }
 

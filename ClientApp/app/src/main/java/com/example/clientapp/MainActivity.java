@@ -45,27 +45,32 @@ public class MainActivity extends AppCompatActivity {
                 String username = sharedpreferences.getString(Username, Username);
                 String password = sharedpreferences.getString(Password, Password);
                 Log.d("mainActivity", sharedpreferences.getString(Username, Username));
-                MyFirebaseMessagingService myFirebaseMessagingService = new MyFirebaseMessagingService(username);
 
-                Call<String> call = APIClient.createService(AuthService.class, username, password).checkAppUser(username);
-                call.enqueue(new Callback<String>() {
-                    @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
-                        if (response.raw().code() == HttpsURLConnection.HTTP_MOVED_TEMP) {
-                            Toast.makeText(MainActivity.this, "Login Successful", Toast.LENGTH_LONG).show();
-                            myFirebaseMessagingService.getCurrentToken(username);
-                            startActivity(new Intent(MainActivity.this, DashboardActivity.class));
-                        } else {
-                            Toast.makeText(MainActivity.this, "Login Failed", Toast.LENGTH_LONG).show();
+                Thread thread = new Thread(() -> {
+
+                    MyFirebaseMessagingService myFirebaseMessagingService = new MyFirebaseMessagingService(username);
+
+                    Call<String> call = APIClient.createService(AuthService.class, username, password).checkAppUser(username);
+                    call.enqueue(new Callback<String>() {
+                        @Override
+                        public void onResponse(Call<String> call, Response<String> response) {
+                            if (response.raw().code() == HttpsURLConnection.HTTP_MOVED_TEMP) {
+                                Toast.makeText(MainActivity.this, "Login Successful", Toast.LENGTH_LONG).show();
+                                myFirebaseMessagingService.getCurrentToken(username);
+                                startActivity(new Intent(MainActivity.this, DashboardActivity.class));
+                            } else {
+                                Toast.makeText(MainActivity.this, "Login Failed", Toast.LENGTH_LONG).show();
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<String> call, Throwable t) {
-                        Toast.makeText(MainActivity.this, "Wrong credentials ", Toast.LENGTH_LONG).show();
-                    }
+                        @Override
+                        public void onFailure(Call<String> call, Throwable t) {
+                            Toast.makeText(MainActivity.this, "Wrong credentials ", Toast.LENGTH_LONG).show();
+                        }
 
+                    });
                 });
+                thread.start();
             } else {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
             }

@@ -102,32 +102,35 @@ public class MyEvents extends Fragment implements EventClickListener{
 
         SharedPreferences sharedpreferences = container.getContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 
-        Call<EventsWrapper> call = APIClient.createService(EventAPI.class)
-                .getMyActiveEvent(sharedpreferences.getString(Username, Username));
-        call.enqueue(new Callback<EventsWrapper>() {
-            @Override
-            public void onResponse(Call<EventsWrapper> call, Response<EventsWrapper> response) {
-                if (response.isSuccessful()) {
-                    assert response.body() != null;
+        Thread thread = new Thread(() -> {
+            Call<EventsWrapper> call = APIClient.createService(EventAPI.class)
+                    .getMyActiveEvent(sharedpreferences.getString(Username, Username));
+            call.enqueue(new Callback<EventsWrapper>() {
+                @Override
+                public void onResponse(Call<EventsWrapper> call, Response<EventsWrapper> response) {
+                    if (response.isSuccessful()) {
+                        assert response.body() != null;
 
-                    footballs.clear();
-                    basketballs.clear();
-                    volleyballs.clear();
+                        footballs.clear();
+                        basketballs.clear();
+                        volleyballs.clear();
 
-                    footballs = response.body().getEventsWrapperWithFootball();
-                    basketballs = response.body().getEventsWrapperWithBasketball();
-                    volleyballs = response.body().getEventsWrapperWithVolleyball();
+                        footballs = response.body().getEventsWrapperWithFootball();
+                        basketballs = response.body().getEventsWrapperWithBasketball();
+                        volleyballs = response.body().getEventsWrapperWithVolleyball();
 
-                    rvME.setAdapter(new ActiveEvents(footballs, basketballs, volleyballs, eventClickListener));
-                    Log.d("ActiveFootballEvents", "Registered Successfully");
+                        rvME.setAdapter(new ActiveEvents(footballs, basketballs, volleyballs, eventClickListener));
+                        Log.d("ActiveFootballEvents", "Registered Successfully");
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<EventsWrapper> call, Throwable t) {
-                Log.d("myEvents", Log.getStackTraceString(t));
-            }
+                @Override
+                public void onFailure(Call<EventsWrapper> call, Throwable t) {
+                    Log.d("myEvents", Log.getStackTraceString(t));
+                }
+            });
         });
+        thread.start();
 
         return view;
     }

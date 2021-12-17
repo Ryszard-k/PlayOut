@@ -133,224 +133,234 @@ public class MyEventDetails extends AppCompatActivity implements EventClickListe
         }
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
-            switch (item.getItemId()){
-                case R.id.commentMenu:
-                    AlertDialog.Builder builder = new AlertDialog.Builder(MyEventDetails.this);
-                    final EditText edittext = new EditText(getApplicationContext());
+                switch (item.getItemId()) {
+                    case R.id.commentMenu:
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MyEventDetails.this);
+                        final EditText edittext = new EditText(getApplicationContext());
 
-                    builder.setTitle("Add comment");
-                    builder.setView(edittext);
+                        builder.setTitle("Add comment");
+                        builder.setView(edittext);
 
-                    builder.setPositiveButton(R.string.add, (dialog, which) -> {
-                        String editTextValue = edittext.getText().toString();
-                        AppUser appUser = new AppUser();
-                        appUser.setUsername(username);
-                        if (editTextValue.isEmpty()){
-                            edittext.setError("Please, add comment");
-                            edittext.requestFocus();
-                        }
-                        Comment comment = new Comment(LocalDate.now(), LocalTime.now(), editTextValue, appUser);
-
-                        if (extras instanceof FootballEvent){
-                            FootballEvent footballEvent = new FootballEvent();
-                            footballEvent.setId(((FootballEvent) extras).getId());
-                            comment.setFootballEvent(footballEvent);
-                        } else if (extras instanceof Basketball){
-                            Basketball basketball = new Basketball();
-                            basketball.setId(((Basketball) extras).getId());
-                            comment.setBasketballEvent(basketball);
-                        } else if (extras instanceof Volleyball){
-                            Volleyball volleyball = new Volleyball();
-                            volleyball.setId(((Volleyball) extras).getId());
-                            comment.setVolleyballEvent(volleyball);
-                        }
-
-                        Call<Long> call = APIClient.createService(CommentAPI.class).addComment(comment);
-                        call.enqueue(new Callback<Long>() {
-                            @SuppressLint("NotifyDataSetChanged")
-                            @Override
-                            public void onResponse(Call<Long> call, Response<Long> response) {
-                                if (response.isSuccessful()){
-                                    Toast.makeText(getApplicationContext(), "Added comment", Toast.LENGTH_SHORT).show();
-                                    Long id = response.body();
-                                    Log.d("id", String.valueOf(id));
-                                    comment.setId(id);
-                                    commentsList.add(comment);
-                                    adapter.notifyItemInserted(commentsList.size());
-
-                                    dialog.dismiss();
-                                }
+                        builder.setPositiveButton(R.string.add, (dialog, which) -> {
+                            String editTextValue = edittext.getText().toString();
+                            AppUser appUser = new AppUser();
+                            appUser.setUsername(username);
+                            if (editTextValue.isEmpty()) {
+                                edittext.setError("Please, add comment");
+                                edittext.requestFocus();
                             }
+                            Comment comment = new Comment(LocalDate.now(), LocalTime.now(), editTextValue, appUser);
 
-                            @Override
-                            public void onFailure(Call<Long> call, Throwable t) {
-                                Log.d("joinBasketball", Log.getStackTraceString(t));
-                                Toast.makeText(getApplicationContext(), "Pleas add text to comment", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-
-                    });
-
-                    builder.setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel());
-
-                    AlertDialog alertDialog = builder.create();
-                    alertDialog.show();
-                    return true;
-
-                case R.id.resignMenu:
-                    if (author.getUsername().equals(username)){
-                        AlertDialog.Builder builder2 = new AlertDialog.Builder(MyEventDetails.this);
-                        builder2.setTitle("Are you sure you want to delete your event?");
-
-                        builder2.setPositiveButton(R.string.yes, (dialog, which) -> {
                             if (extras instanceof FootballEvent) {
-                                Call<Void> call2 = APIClient.createService(FootballEventAPI.class).deleteEvent(((FootballEvent) extras).getId());
-                                call2.enqueue(new Callback<Void>() {
+                                FootballEvent footballEvent = new FootballEvent();
+                                footballEvent.setId(((FootballEvent) extras).getId());
+                                comment.setFootballEvent(footballEvent);
+                            } else if (extras instanceof Basketball) {
+                                Basketball basketball = new Basketball();
+                                basketball.setId(((Basketball) extras).getId());
+                                comment.setBasketballEvent(basketball);
+                            } else if (extras instanceof Volleyball) {
+                                Volleyball volleyball = new Volleyball();
+                                volleyball.setId(((Volleyball) extras).getId());
+                                comment.setVolleyballEvent(volleyball);
+                            }
+
+                            Thread thread = new Thread(() -> {
+                                Call<Long> call = APIClient.createService(CommentAPI.class).addComment(comment);
+                                call.enqueue(new Callback<Long>() {
+                                    @SuppressLint("NotifyDataSetChanged")
                                     @Override
-                                    public void onResponse(Call<Void> call2, Response<Void> response2) {
-                                        if (response2.isSuccessful()) {
-                                            Toast.makeText(getApplicationContext(), "Event deleted", Toast.LENGTH_SHORT).show();
-                                            stopService(new Intent(getApplicationContext(), MyEventDetails.class));
-                                            finish();
-                                            startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+                                    public void onResponse(Call<Long> call, Response<Long> response) {
+                                        if (response.isSuccessful()) {
+                                            Toast.makeText(getApplicationContext(), "Added comment", Toast.LENGTH_SHORT).show();
+                                            Long id = response.body();
+                                            Log.d("id", String.valueOf(id));
+                                            comment.setId(id);
+                                            commentsList.add(comment);
+                                            adapter.notifyItemInserted(commentsList.size());
+
+                                            dialog.dismiss();
                                         }
                                     }
 
                                     @Override
-                                    public void onFailure(Call<Void> call2, Throwable t) {
-                                        Log.d("removeFootball", Log.getStackTraceString(t));
+                                    public void onFailure(Call<Long> call, Throwable t) {
+                                        Log.d("joinBasketball", Log.getStackTraceString(t));
+                                        Toast.makeText(getApplicationContext(), "Pleas add text to comment", Toast.LENGTH_SHORT).show();
                                     }
                                 });
-                            } else if (extras instanceof Basketball) {
-                                Call<Void> call3 = APIClient.createService(BasketballAPI.class).deleteEvent(((Basketball) extras).getId());
-                                call3.enqueue(new Callback<Void>() {
-                                    @Override
-                                    public void onResponse(Call<Void> call3, Response<Void> response3) {
-                                        if (response3.isSuccessful())
-                                        Toast.makeText(getApplicationContext(), "Event deleted", Toast.LENGTH_SHORT).show();
-                                        stopService(new Intent(getApplicationContext(), MyEventDetails.class));
-                                        finish();
-                                        startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
-                                    }
+                            });
+                            thread.start();
+                        });
 
-                                    @Override
-                                    public void onFailure(Call<Void> call3, Throwable t) {
-                                        Log.d("removeBasketball", Log.getStackTraceString(t));
-                                    }
-                                });
-                            } else if (extras instanceof Volleyball) {
-                                Call<Void> call4 = APIClient.createService(VolleyballAPI.class).deleteEvent(((Volleyball) extras).getId());
-                                call4.enqueue(new Callback<Void>() {
-                                    @Override
-                                    public void onResponse(Call<Void> call4, Response<Void> response4) {
-                                        if (response4.isSuccessful())
-                                        Toast.makeText(getApplicationContext(), "Event deleted", Toast.LENGTH_SHORT).show();
-                                        stopService(new Intent(getApplicationContext(), MyEventDetails.class));
-                                        finish();
-                                        startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
-                                    }
+                        builder.setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel());
 
-                                    @Override
-                                    public void onFailure(Call<Void> call4, Throwable t) {
-                                        Log.d("removeVolleyball", Log.getStackTraceString(t));
-                                    }
+                        AlertDialog alertDialog = builder.create();
+                        alertDialog.show();
+                        return true;
+
+                    case R.id.resignMenu:
+                        if (author.getUsername().equals(username)) {
+                            AlertDialog.Builder builder2 = new AlertDialog.Builder(MyEventDetails.this);
+                            builder2.setTitle("Are you sure you want to delete your event?");
+
+                            builder2.setPositiveButton(R.string.yes, (dialog, which) -> {
+                                Thread thread = new Thread(() -> {
+                                if (extras instanceof FootballEvent) {
+                                    Call<Void> call2 = APIClient.createService(FootballEventAPI.class).deleteEvent(((FootballEvent) extras).getId());
+                                    call2.enqueue(new Callback<Void>() {
+                                        @Override
+                                        public void onResponse(Call<Void> call2, Response<Void> response2) {
+                                            if (response2.isSuccessful()) {
+                                                Toast.makeText(getApplicationContext(), "Event deleted", Toast.LENGTH_SHORT).show();
+                                                stopService(new Intent(getApplicationContext(), MyEventDetails.class));
+                                                finish();
+                                                startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<Void> call2, Throwable t) {
+                                            Log.d("removeFootball", Log.getStackTraceString(t));
+                                        }
+                                    });
+                                } else if (extras instanceof Basketball) {
+                                    Call<Void> call3 = APIClient.createService(BasketballAPI.class).deleteEvent(((Basketball) extras).getId());
+                                    call3.enqueue(new Callback<Void>() {
+                                        @Override
+                                        public void onResponse(Call<Void> call3, Response<Void> response3) {
+                                            if (response3.isSuccessful())
+                                                Toast.makeText(getApplicationContext(), "Event deleted", Toast.LENGTH_SHORT).show();
+                                            stopService(new Intent(getApplicationContext(), MyEventDetails.class));
+                                            finish();
+                                            startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<Void> call3, Throwable t) {
+                                            Log.d("removeBasketball", Log.getStackTraceString(t));
+                                        }
+                                    });
+                                } else if (extras instanceof Volleyball) {
+                                    Call<Void> call4 = APIClient.createService(VolleyballAPI.class).deleteEvent(((Volleyball) extras).getId());
+                                    call4.enqueue(new Callback<Void>() {
+                                        @Override
+                                        public void onResponse(Call<Void> call4, Response<Void> response4) {
+                                            if (response4.isSuccessful())
+                                                Toast.makeText(getApplicationContext(), "Event deleted", Toast.LENGTH_SHORT).show();
+                                            stopService(new Intent(getApplicationContext(), MyEventDetails.class));
+                                            finish();
+                                            startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<Void> call4, Throwable t) {
+                                            Log.d("removeVolleyball", Log.getStackTraceString(t));
+                                        }
+                                    });
+                                }
                                 });
-                            }
+                                thread.start();
                             });
 
-                        builder2.setNegativeButton(R.string.cancel, (dialog2, id) -> dialog2.cancel());
+                            builder2.setNegativeButton(R.string.cancel, (dialog2, id) -> dialog2.cancel());
 
-                        AlertDialog alertDialog2 = builder2.create();
-                        alertDialog2.show();
-                    } else {
-                        AlertDialog.Builder builder3 = new AlertDialog.Builder(MyEventDetails.this);
-                        builder3.setTitle("Are you sure you want to resign for event?");
+                            AlertDialog alertDialog2 = builder2.create();
+                            alertDialog2.show();
+                        } else {
+                            AlertDialog.Builder builder3 = new AlertDialog.Builder(MyEventDetails.this);
+                            builder3.setTitle("Are you sure you want to resign for event?");
 
-                        builder3.setPositiveButton(R.string.yes, (dialog, which) -> {
-                            if (extras instanceof FootballEvent) {
-                                Call<Void> call5 = APIClient.createService(FootballEventAPI.class).resignForEvent(((FootballEvent) extras).getId(), username);
-                                call5.enqueue(new Callback<Void>() {
-                                    @Override
-                                    public void onResponse(Call<Void> call5, Response<Void> response5) {
-                                        if (response5.isSuccessful()){
-                                            Toast.makeText(getApplicationContext(), "Resign for event", Toast.LENGTH_SHORT).show();
-                                            stopService(new Intent(getApplicationContext(), MyEventDetails.class));
-                                            finish();
-                                            startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
-                                        }
-                                    }
+                            builder3.setPositiveButton(R.string.yes, (dialog, which) -> {
+                                Thread thread = new Thread(() -> {
+                                    if (extras instanceof FootballEvent) {
+                                        Call<Void> call5 = APIClient.createService(FootballEventAPI.class).resignForEvent(((FootballEvent) extras).getId(), username);
+                                        call5.enqueue(new Callback<Void>() {
+                                            @Override
+                                            public void onResponse(Call<Void> call5, Response<Void> response5) {
+                                                if (response5.isSuccessful()) {
+                                                    Toast.makeText(getApplicationContext(), "Resign for event", Toast.LENGTH_SHORT).show();
+                                                    stopService(new Intent(getApplicationContext(), MyEventDetails.class));
+                                                    finish();
+                                                    startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+                                                }
+                                            }
 
-                                    @Override
-                                    public void onFailure(Call<Void> call5, Throwable t) {
-                                        Log.d("removeVolleyball", Log.getStackTraceString(t));
+                                            @Override
+                                            public void onFailure(Call<Void> call5, Throwable t) {
+                                                Log.d("removeVolleyball", Log.getStackTraceString(t));
+                                            }
+                                        });
+                                    } else if (extras instanceof Basketball) {
+                                        Call<Void> call6 = APIClient.createService(BasketballAPI.class).resignForEvent(((Basketball) extras).getId(), username);
+                                        call6.enqueue(new Callback<Void>() {
+                                            @Override
+                                            public void onResponse(Call<Void> call6, Response<Void> response6) {
+                                                if (response6.isSuccessful()) {
+                                                    Toast.makeText(getApplicationContext(), "Resign for event", Toast.LENGTH_SHORT).show();
+                                                    stopService(new Intent(getApplicationContext(), MyEventDetails.class));
+                                                    finish();
+                                                    startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<Void> call6, Throwable t) {
+                                                Log.d("removeVolleyball", Log.getStackTraceString(t));
+                                            }
+                                        });
+
+                                    } else if (extras instanceof Volleyball) {
+                                        Call<Void> call7 = APIClient.createService(FootballEventAPI.class).resignForEvent(((Volleyball) extras).getId(), username);
+                                        call7.enqueue(new Callback<Void>() {
+                                            @Override
+                                            public void onResponse(Call<Void> call7, Response<Void> response7) {
+                                                if (response7.isSuccessful()) {
+                                                    Toast.makeText(getApplicationContext(), "Resign for event", Toast.LENGTH_SHORT).show();
+                                                    stopService(new Intent(getApplicationContext(), MyEventDetails.class));
+                                                    finish();
+                                                    startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<Void> call7, Throwable t) {
+                                                Log.d("removeVolleyball", Log.getStackTraceString(t));
+                                            }
+                                        });
                                     }
                                 });
-                            } else if (extras instanceof Basketball) {
-                                Call<Void> call6 = APIClient.createService(BasketballAPI.class).resignForEvent(((Basketball) extras).getId(), username);
-                                call6.enqueue(new Callback<Void>() {
-                                    @Override
-                                    public void onResponse(Call<Void> call6, Response<Void> response6) {
-                                        if (response6.isSuccessful()){
-                                            Toast.makeText(getApplicationContext(), "Resign for event", Toast.LENGTH_SHORT).show();
-                                            stopService(new Intent(getApplicationContext(), MyEventDetails.class));
-                                            finish();
-                                            startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
-                                        }
-                                    }
+                                thread.start();
+                            });
 
-                                    @Override
-                                    public void onFailure(Call<Void> call6, Throwable t) {
-                                        Log.d("removeVolleyball", Log.getStackTraceString(t));
-                                    }
-                                });
+                            builder3.setNegativeButton(R.string.cancel, (dialog2, id) -> dialog2.cancel());
 
-                            } else if (extras instanceof Volleyball) {
-                                Call<Void> call7 = APIClient.createService(FootballEventAPI.class).resignForEvent(((Volleyball) extras).getId(), username);
-                                call7.enqueue(new Callback<Void>() {
-                                    @Override
-                                    public void onResponse(Call<Void> call7, Response<Void> response7) {
-                                        if (response7.isSuccessful()){
-                                            Toast.makeText(getApplicationContext(), "Resign for event", Toast.LENGTH_SHORT).show();
-                                            stopService(new Intent(getApplicationContext(), MyEventDetails.class));
-                                            finish();
-                                            startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
-                                        }
-                                    }
+                            AlertDialog alertDialog3 = builder3.create();
+                            alertDialog3.show();
+                        }
+                        return true;
 
-                                    @Override
-                                    public void onFailure(Call<Void> call7, Throwable t) {
-                                        Log.d("removeVolleyball", Log.getStackTraceString(t));
-                                    }
-                                });
-                            }
+                    case R.id.participantsMenu:
+                        AlertDialog.Builder builder1 = new AlertDialog.Builder(MyEventDetails.this);
+                        String[] listOfParticipants = new String[participantsList.size()];
+                        for (int a = 0; a <= participantsList.size() - 1; a++) {
+                            listOfParticipants[a] = participantsList.get(a).getUsername();
+                        }
+
+                        builder1.setTitle("List of participants");
+                        builder1.setItems(listOfParticipants, (dialog, which) -> {
                         });
 
-                        builder3.setNegativeButton(R.string.cancel, (dialog2, id) -> dialog2.cancel());
+                        builder1.setNegativeButton(R.string.close, (dialog, id) -> dialog.cancel());
 
-                        AlertDialog alertDialog3 = builder3.create();
-                        alertDialog3.show();
-                    }
-                    return true;
+                        AlertDialog alertDialog1 = builder1.create();
+                        alertDialog1.show();
+                        return true;
 
-                case R.id.participantsMenu:
-                    AlertDialog.Builder builder1 = new AlertDialog.Builder(MyEventDetails.this);
-                    String[] listOfParticipants = new String[participantsList.size()];
-                    for (int a = 0; a <= participantsList.size() - 1    ; a++){
-                        listOfParticipants[a] = participantsList.get(a).getUsername();
-                    }
+                }
 
-                    builder1.setTitle("List of participants");
-                    builder1.setItems(listOfParticipants, (dialog, which) -> {
-                    });
+                return false;
 
-                    builder1.setNegativeButton(R.string.close, (dialog, id) -> dialog.cancel());
-
-                    AlertDialog alertDialog1 = builder1.create();
-                    alertDialog1.show();
-                    return true;
-
-            }
-            return false;
         });
     }
 
@@ -395,24 +405,26 @@ public class MyEventDetails extends AppCompatActivity implements EventClickListe
             builder.setTitle("Are you sure you want to delete comment?");
 
             builder.setPositiveButton(R.string.ok, (dialog, which) -> {
-
-                Call<Void> call = APIClient.createService(CommentAPI.class).deleteComment(comment.getId());
-                call.enqueue(new Callback<Void>() {
-                    @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
-                        if (response.isSuccessful()) {
-                            Toast.makeText(getApplicationContext(), "Deleted comment", Toast.LENGTH_SHORT).show();
-                            commentsList.remove(comment);
-                            adapter.notifyItemRemoved(position);
-                            dialog.dismiss();
+                Thread thread = new Thread(() -> {
+                    Call<Void> call = APIClient.createService(CommentAPI.class).deleteComment(comment.getId());
+                    call.enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            if (response.isSuccessful()) {
+                                Toast.makeText(getApplicationContext(), "Deleted comment", Toast.LENGTH_SHORT).show();
+                                commentsList.remove(comment);
+                                adapter.notifyItemRemoved(position);
+                                dialog.dismiss();
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
-                        Log.d("joinBasketball", Log.getStackTraceString(t));
-                    }
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+                            Log.d("joinBasketball", Log.getStackTraceString(t));
+                        }
+                    });
                 });
+                thread.start();
             });
 
             builder.setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel());

@@ -91,26 +91,29 @@ public class AddVolleyballEvent extends AppCompatActivity implements AdapterView
                 newVolleyballEvent.setLocation(locationName);
                 newVolleyballEvent.setAuthorVolleyball(appUser);
 
-                Call<Void> call = APIClient.createService(VolleyballAPI.class).addEvent(newVolleyballEvent);
-                call.enqueue(new Callback<Void>() {
-                    @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
-                        if (response.isSuccessful()) {
-                            Toast.makeText(AddVolleyballEvent.this, "Created event", Toast.LENGTH_LONG).show();
+                Thread thread = new Thread(() -> {
+                    Call<Void> call = APIClient.createService(VolleyballAPI.class).addEvent(newVolleyballEvent);
+                    call.enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            if (response.isSuccessful()) {
+                                Toast.makeText(AddVolleyballEvent.this, "Created event", Toast.LENGTH_LONG).show();
 
-                            stopService(new Intent(AddVolleyballEvent.this, DashboardActivity.class));
-                            startActivity(new Intent(AddVolleyballEvent.this, DashboardActivity.class));
-                            finish();
+                                stopService(new Intent(AddVolleyballEvent.this, DashboardActivity.class));
+                                startActivity(new Intent(AddVolleyballEvent.this, DashboardActivity.class));
+                                finish();
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
-                        Toast.makeText(AddVolleyballEvent.this, "nie poszui", Toast.LENGTH_LONG).show();
-                        Log.d("dodajemyFE", t.getMessage());
-                        Log.d("dodajemyFE2", Log.getStackTraceString(t));
-                    }
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+                            Toast.makeText(AddVolleyballEvent.this, "nie poszui", Toast.LENGTH_LONG).show();
+                            Log.d("dodajemyFE", t.getMessage());
+                            Log.d("dodajemyFE2", Log.getStackTraceString(t));
+                        }
+                    });
                 });
+                thread.start();
             }
         });
 
