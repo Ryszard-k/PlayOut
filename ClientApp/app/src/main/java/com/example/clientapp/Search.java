@@ -407,7 +407,8 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
     }
 
     private void markersSetUpFootball(FootballEvent f, GoogleMap map) {
-        String snippet = "Date: " + f.getDate() + "\n" +
+        String snippet = "Country: " + Geocoder.countryNameFromLatLon(getContext(), f.getLatitude(), f.getLongitude()) + "\n" +
+                "Date: " + f.getDate() + "\n" +
                 "Time: " + f.getTime() + "\n" +
                 "Address: " + f.getLocation() + "\n" +
                 "Level: " + f.getEventLevel() + "\n" +
@@ -423,7 +424,8 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
     }
 
     private void markersSetUpBasketball(Basketball f, GoogleMap map) {
-        String snippet = "Date: " + f.getDate() + "\n" +
+        String snippet = "Country: " + Geocoder.countryNameFromLatLon(getContext(), f.getLatitude(), f.getLongitude()) + "\n" +
+                "Date: " + f.getDate() + "\n" +
                 "Time: " + f.getTime() + "\n" +
                 "Address: " + f.getLocation() + "\n" +
                 "Level: " + f.getEventLevel() + "\n" +
@@ -440,7 +442,8 @@ public class Search extends Fragment implements GoogleMap.OnMapLongClickListener
     }
 
     private void markersSetUpVolleyball(Volleyball f, GoogleMap map) {
-        String snippet = "Date: " + f.getDate() + "\n" +
+        String snippet = "Country: " + Geocoder.countryNameFromLatLon(getContext(), f.getLatitude(), f.getLongitude()) + "\n" +
+                "Date: " + f.getDate() + "\n" +
                 "Time: " + f.getTime() + "\n" +
                 "Address: " + f.getLocation() + "\n" +
                 "Level: " + f.getEventLevel() + "\n" +

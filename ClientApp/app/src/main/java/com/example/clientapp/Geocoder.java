@@ -35,4 +35,16 @@ public class Geocoder {
             return null;
         }
     }
+
+    public static String countryNameFromLatLon(Context context, double latitude, double longitude) {
+        android.location.Geocoder geocoder = new android.location.Geocoder(context, Locale.getDefault());
+        List<Address> addresses = null;
+        try {
+            addresses = geocoder.getFromLocation(latitude, longitude, 1);
+            return addresses.get(0).getCountryName();
+        } catch (IOException e) {
+            Log.d("Geocoder", e.getMessage());
+            return null;
+        }
+    }
 }
