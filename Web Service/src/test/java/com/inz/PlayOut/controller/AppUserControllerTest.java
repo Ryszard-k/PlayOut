@@ -3,12 +3,14 @@ package com.inz.PlayOut.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.inz.PlayOut.model.entites.AppUser;
 import com.inz.PlayOut.model.repositories.UserRepo;
+import com.inz.PlayOut.security.AppUserDetailService;
 import com.inz.PlayOut.service.AppUserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
@@ -29,6 +31,7 @@ import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(AppUserController.class)
+@AutoConfigureMockMvc(addFilters = false)
 class AppUserControllerTest {
 
     @Autowired
@@ -42,6 +45,9 @@ class AppUserControllerTest {
 
     @MockBean
     private AppUserService appUserService;
+
+    @MockBean
+    private AppUserDetailService appUserDetailService;
 
     @BeforeEach
     void setUp() {
@@ -69,7 +75,7 @@ class AppUserControllerTest {
         String expectedResponseBody = mapper.writeValueAsString(appUserList());
 
         assertEquals(HttpStatus.OK.value(), response.getStatus());
-        assertEquals(actualResponseBody, expectedResponseBody);
+        assertEquals(expectedResponseBody, actualResponseBody);
 
         verify(appUserService, times(1)).findAll();
     }
@@ -145,11 +151,8 @@ class AppUserControllerTest {
 
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
         MockHttpServletResponse response = result.getResponse();
-        String actualResponseBody = result.getResponse().getContentAsString();
-        String expectedResponseBody = mapper.writeValueAsString(Optional.ofNullable(appUserList().get(0)));
 
         assertEquals(HttpStatus.CREATED.value(), response.getStatus());
-        assertEquals(actualResponseBody, expectedResponseBody);
 
         verify(appUserService, times(1)).save(any(AppUser.class));
     }

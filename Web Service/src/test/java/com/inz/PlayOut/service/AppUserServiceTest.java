@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -25,6 +26,9 @@ class AppUserServiceTest {
 
     @Mock
     private UserRepo userRepo;
+
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
     @InjectMocks
     private AppUserService appUserService;
@@ -110,12 +114,13 @@ class AppUserServiceTest {
 
     @Test
     void delete_not_found_id() {
-        when(userRepo.findById(1L)).thenReturn(isNull());
+        when(userRepo.findById(1L)).thenReturn(Optional.empty());
 
-        Optional<AppUser> appUser = appUserService.delete(1L);
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> appUserService.delete(1L));
 
-        assertNull(appUser);
-        verify(userRepo, times(1)).findById(1L);
-        verify(userRepo, times(1)).deleteById(1L);
+        String expectedMessage = "Not found User";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
     }
 }
